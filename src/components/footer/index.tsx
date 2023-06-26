@@ -8,7 +8,7 @@ export default function Footer() {
             <li><a href="">Smart contract</a></li>
         </ul>
         <div className={styles.right}>
-            <span>Support our project:</span>
+            <span>Support our project: </span>
             3MvEkw2C78pz2dKAppkhh1mRH6HuJGwRCSk
         </div>
     </div>

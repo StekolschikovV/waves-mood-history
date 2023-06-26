@@ -3,7 +3,7 @@ import SVG from "../SVG";
 
 export default function TopBurners() {
 
-    return <div className={"container"}>
+    return <div className={"container"} id={"top-burners"}>
         <div className="title">Top burners</div>
         <ul className={styles.list}>
             <li className={styles.element}>

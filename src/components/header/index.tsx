@@ -18,17 +18,16 @@ export default function Header() {
     return <div className={`container ${styles.header}`}>
         <div className={styles.logoContainer}>
             <div className={styles.logo}>
-                <div className={styles.logoSymbol}>H</div>
+                <div className={styles.logoSymbolH}>H</div>
+                <div className={styles.logoSymbolM}>M</div>
             </div>
             <div className={styles.logoText}>mood history</div>
         </div>
         <ul className={styles.menu} style={{right: !isMobOpen ? "-1000px" : "-10px"}}>
-            <li className={styles.menuElement}>Mood canvas</li>
-            <li className={styles.menuElement}>Time machine</li>
-            <li className={styles.menuElement}>Top burners</li>
-            <li className={styles.menuElement}>FAQ</li>
+            <li className={styles.menuElement}><a href="#mood-canvas">Mood canvas</a></li>
+            <li className={styles.menuElement}><a href="#top-burners">Top burners</a></li>
+            <li className={styles.menuElement}><a href="#FAQ">FAQ</a></li>
         </ul>
-
         <div className={styles.menuMob} onClick={() => setIsMobOpen(true)}>
             <svg  viewBox="0 0 100 80" width="30" height="20">
                 <rect fill={"#eeeeee"} width="100" height="10" rx="8"></rect>
@@ -36,9 +35,5 @@ export default function Header() {
                 <rect fill={"#eeeeee"} y="50" width="100" height="10" rx="8"></rect>
             </svg>
         </div>
-
-
-
     </div>
-
 }

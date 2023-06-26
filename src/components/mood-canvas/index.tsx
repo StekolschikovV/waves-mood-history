@@ -159,11 +159,9 @@ export default function MoodCanvas() {
 
 
     }
-    return <div className={styles.moodCanvasWrapper}>
-
+    return <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
         <div className={`container ${styles.moodCanvas}`}>
             <div className={"title"}>Mood canvas</div>
-
             <div className={styles.innerContainer}>
                 <div className={styles.text}>
                     This drawing will be permanently stored in the blockchain on behalf of your account. Try to express your emotions by answering the following questions:

@@ -21,14 +21,33 @@
   align-items: center;
   align-content: center;
   align-self: center;
+  position: relative;
 }
-.logoSymbol {
+.logoSymbolH {
   width: 100%;
   text-align: center;
   transform: rotate(-50deg);
   color: #eeeeee;
-  font-size: 45px;
+  font-size: 25px;
   font-family: ui-monospace;
+  position: absolute;
+  left: 10px;
+
+  left: 10px;
+  bottom: 14px;
+  top: 15px;
+}
+.logoSymbolM {
+  width: 100%;
+  text-align: center;
+  transform: rotate(-50deg);
+  color: #eeeeee;
+  font-size: 25px;
+  font-family: ui-monospace;
+  position: absolute;
+  left: -9px;
+  //background: red;
+
 }
 .logoText {
   font-size: 30px;
@@ -66,6 +85,10 @@
   transition: 0.3s;
   &:hover {
     border-bottom: 1px solid #eeeeee;
+  }
+  a {
+    color: #eeeeee;
+    text-decoration: none;
   }
 }
 

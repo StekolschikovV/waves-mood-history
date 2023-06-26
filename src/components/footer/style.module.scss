@@ -23,6 +23,10 @@
     a {
       color: #eeeeee;
       text-decoration: none;
+      transition: 0.3s;
+      &:hover {
+        border-bottom: 1px solid #eeeeee;
+      }
     }
   }
 }

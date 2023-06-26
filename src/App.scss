@@ -2,7 +2,9 @@
 * {
   user-select: none;
 }
-
+html{
+  scroll-behavior: smooth;
+}
 body {
   display: flex;
   font-family: 'IBM Plex Sans', sans-serif;
