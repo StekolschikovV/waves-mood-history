@@ -17,10 +17,11 @@ export default function Header() {
 
     return <div className={`container ${styles.header}`}>
         <div className={styles.logoContainer}>
-            <div className={styles.logo}>
-                <div className={styles.logoSymbolH}>H</div>
-                <div className={styles.logoSymbolM}>M</div>
-            </div>
+            {/*<div className={styles.logo}>*/}
+            {/*    <div className={styles.logoSymbolH}>H</div>*/}
+            {/*    <div className={styles.logoSymbolM}>M</div>*/}
+            {/*</div>*/}
+            <img alt={"logo"} src={"logo.svg"}/>
             <div className={styles.logoText}>mood history</div>
         </div>
         <ul className={styles.menu} style={{right: !isMobOpen ? "-1000px" : "-10px"}}>

@@ -146,6 +146,10 @@
   &:active{
     background: #344c88;
   }
+  &:disabled {
+    background: #2e4377;
+    cursor: not-allowed;
+  }
 }
 .pixelUsed {
   display: flex;

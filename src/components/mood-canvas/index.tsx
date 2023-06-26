@@ -15,14 +15,15 @@ export default function MoodCanvas({data}: {data: any}) {
     const colors = ['aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow']
 
     const [selectedToken, setSelectedToken] = useState<"USDT" | "USDC">("USDT")
-    const [selectedColor, setSelectedColor] = useState("red")
+    const [selectedColor, setSelectedColor] = useState("blue")
     const [selectedPixel, setSelectedPixel] = useState<IPixel[]>([])
     const [selectedPixelNew, setSelectedPixelNew] = useState<IPixel[]>([])
     const [isMouseDown, setIsMouseDown] = useState(false)
     const [log, setLog] = useState<IBlockchainData[]>([])
+    const [selectedLog, setSelectedLog]= useState<string | number>("now")
 
     const signer = new Signer({
-        NODE_URL: 'https://nodes-testnet.wavesnodes.com',
+        NODE_URL: 'https://nodes.wavesnodes.com',
     });
     const keeper = new ProviderKeeper();
     signer.setProvider(keeper);
@@ -48,16 +49,9 @@ export default function MoodCanvas({data}: {data: any}) {
         return result ? result : false
     }
 
-    const onClickExportHandler = () => { // |red-17-67|red-18-67|red-19-67|red-20-67
-        let result = ""
-        selectedPixelNew.forEach(c => {
-            result += `|${c.color}-${c.width}-${c.height}`
-        })
-        console.log(result)
-    }
     const onClickSaveHandler = async () => {
         const data: InvokeArgs = {
-            dApp: "3Mxkh7f6KwxmC83NvQ71Mcpk7B7tXBCNsLY",
+            dApp: "3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
             fee: 500000,
             payment: [],
             call: {
@@ -77,15 +71,65 @@ export default function MoodCanvas({data}: {data: any}) {
                 ]
             },
         }
-        const broadcastResult = await signer
+        await signer
             .invoke(data)
             .broadcast()
-            .then(e => e)
-            .catch((e) => e)
-        console.log("broadcastResult", broadcastResult)
+            .then(e => {
+                if ( e && e[0]?.type === 16) {
+                    toast('Request sent successfully!', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                    });
+                } else {
+                    toast('An error occurred, please check your wallet!', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                    });
+                }
+                console.log(e)
+            })
+            .catch((e) => {
+                console.log("error", e)
+                if (e?.message?.includes("WavesKeeper is not installed.. This is not error of signer")) {
+                    toast("WavesKeeper not found! You need to install a WavesKeeper to use the app!", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                    });
+                } else {
+                    toast(e?.message, {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                    });
+                }
+                setSelectedPixelNew([])
+            })
         setTimeout(() => {
             setSelectedPixelNew([])
-        }, 4000)
+        }, 7000)
     }
 
     const onClickCanselHandler = () => {
@@ -113,12 +157,42 @@ export default function MoodCanvas({data}: {data: any}) {
 
     useEffect(() => {
         if (data) {
+            let logData = data
+                .filter((e: IBlockchainData) => e.key.includes("log_"))
+                .map((e: IBlockchainData) => {
+                    if (e.key.replaceAll('_', '').length > 0) {
+                        return  {...e, key: `${e.key.split("_")[0]}_${e.key.split("_")[1]}`}
+                    } else {
+                        return  e
+                    }
+                }  )
+                .reduce( (acc: IBlockchainData[] = [],  next: IBlockchainData, ) => {
+                    let ifExist = false
+                if (acc.length === undefined) return []
+                    // console.log("+++acc", acc.length, next)
+                    acc?.forEach( a => {
+                        if (a.key === next.key) {
+                            ifExist = true
+                        }
+                    })
+                    if (!ifExist) {
+                        return [...acc, next]
+                    } else {
+                        return acc.map(e=> {
+                            if (e.key !== next.key) {
+                                return e
+                            } else  {
+                               return  {...e, value: e.value + "|" + next.value }
+                            }
+                        })
+                    }
+                })
             setSelectedPixel(decompressData(
                 data
                     .filter((e: IBlockchainData) => e.key.includes("-"))
                     .map((e: IBlockchainData) => `|${e.value}-${e.key}`).join(""))
             )
-            setLog(data.filter((e: IBlockchainData) => e.key.includes("log_")))
+            setLog(logData)
             let element: any = document.querySelector(`.historyLine`)
 
             if (!isInit && element) {
@@ -130,9 +204,7 @@ export default function MoodCanvas({data}: {data: any}) {
         }
     }, [data])
 
-    const logPoints = log.map(e => +(e.key.split("_")[1])).sort((a, b) => a - b)
-
-    const [selectedLog, setSelectedLog]= useState<string | number>("now")
+    const logPoints = log?.map(e => +(e?.key?.split("_")[1])).sort((a, b) => a - b)
 
     function onClickLogHandler(id: number | string) {
             let result: IPixel[]= []
@@ -150,11 +222,7 @@ export default function MoodCanvas({data}: {data: any}) {
             setSelectedPixel(result)
     }
 
-
-
     return <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
-
-
         <div className={`container ${styles.moodCanvas}`}>
             <div className={"title"}>Mood canvas</div>
             <div className={styles.innerContainer}>
@@ -240,7 +308,7 @@ export default function MoodCanvas({data}: {data: any}) {
                     <div className={styles.btnGroup}>
                         <button className={styles.btn}>Refresh</button>
                         <button className={styles.btn} onClick={() => onClickCanselHandler()}>Undo last </button>
-                        <button className={styles.btn} onClick={() => onClickSaveHandler()}>Save and burn WXG</button>
+                        <button disabled={selectedPixelNew.length === 0} className={styles.btn} onClick={() => onClickSaveHandler()}>Save and burn WXG</button>
                     </div>
                 </div>
             </div>

@@ -14,7 +14,6 @@ export default function TopBurners({data}: {data: any}) {
         else return []
     }
 
-
     return <div className={"container"} id={"top-burners"}>
         <div className="title">Top burners</div>
         <ul className={styles.list}>

@@ -38,6 +38,14 @@ export default function FAQ() {
         {
             question: "How much does it cost to draw 1 pixel?",
             answer: "The cost of drawing 1 pixel is 0.01 WXG. Unleash your creativity and bring your artwork to life, pixel by pixel, at an affordable price. Start painting and let your imagination run wild without worrying about excessive expenses."
+        },
+        {
+            question: "What are the requirements to begin using the app?",
+            answer: "To begin using our app, there are two key elements you'll need. Firstly, you'll need to install the WavesKeeper browser extension, which enables secure interactions with the blockchain. Secondly, you'll need to acquire WXG tokens, as they serve as the currency for engaging in collaborative drawing, burning, and expressing emotions within our app. With these essentials in place, you can dive into a world of creative exploration and connection."
+        },
+        {
+            question: "Is there a limit on the number of pixels I can draw?",
+            answer: "Yes, there is a limit to ensure smooth transaction processing. Currently, the maximum number of pixels you can draw in a single transaction is 60. This limit allows for efficient handling of the drawing operations while still allowing you to create intricate and meaningful artworks. Let your creativity flow within this pixel-perfect boundary."
         }
     ]
 

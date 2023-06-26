@@ -17,7 +17,7 @@ const fetcher = (url: string) => fetch(url)
 function App() {
 
     const {data, error, isLoading, mutate} = useSWR(
-        "https://nodes-testnet.wavesnodes.com/addresses/data/3Mxkh7f6KwxmC83NvQ71Mcpk7B7tXBCNsLY",
+        "https://nodes.wavesnodes.com/addresses/data/3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
         fetcher,
         {refreshInterval: 1000}
     );

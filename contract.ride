@@ -1,0 +1,80 @@
+{-# STDLIB_VERSION 5 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+let colorList = ["aqua", "black", "blue", "fuchsia", "gray", "green", "lime", "maroon", "navy", "olive", "purple", "red", "silver", "teal", "white", "yellow"]
+
+func mapStrToStr(accum: List[String], next: String) =  next :: accum
+
+func paintOver(accum: List[StringEntry], next: String) = {
+    let array = next.split("-")
+    # if(parseIntValue(array[1]) < 100 && parseIntValue(array[2]) < 100) then
+    if(containsElement(colorList,array[0]) && parseIntValue(array[1]) < 100  && parseIntValue(array[2]) < 100) then
+        accum ++ [ StringEntry(array[1] + "-" + array[2], array[0]) ]
+    else throw("Is't walid")
+}
+
+func getLogID() = {
+    let logID = getInteger("logID")
+    if(logID != unit) then {
+        getIntegerValue("logID")
+    } else 0
+}
+
+func listStringToListString(arr: List[String]) = {
+    FOLD<60>(arr, [], mapStrToStr)
+}
+
+func listIntCompressToString(arr: List[String]) = {
+    makeString(listStringToListString(arr), "|")
+}
+
+func getUserPixelCount(address: String) = {
+    let pc = getInteger(address + "_pixelCount")
+    if(pc != unit) then {
+        getIntegerValue(address + "_pixelCount")
+    } else 0
+}
+
+func setUserPixelCount(address: String, pixelCount: Int) = {
+    IntegerEntry(address + "_pixelCount", pixelCount)
+}
+
+func isPaymentOk(i: Invocation, sum: Int) = {
+let acceptableAssetId = base58'WAVES'
+let USDTWXG = base58'34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ'
+let USDCWXG = base58'6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ'
+let p = i.payments[0]
+match p.assetId {
+case assetId: ByteVector => (assetId == USDTWXG || assetId == USDCWXG) && p.amount >= sum
+case _ => false
+}
+}
+
+@Callable(i)
+func draw(pixels: List[String]) = {
+
+let address = toString(i.caller)
+let userPixelCount = getUserPixelCount(address) + size(pixels)
+let targetSum = size(pixels) * 10000
+
+if(isPaymentOk(i, targetSum)) then {
+let timestamp = match blockInfoByHeight(height) {
+case block:BlockInfo =>
+block.timestamp
+case _ => 0
+}
+let newLogID = getLogID() + 1
+FOLD<60>(pixels, [], paintOver)
+++ [
+StringEntry("log_" + toString(timestamp) + "_" + toString(newLogID), listIntCompressToString(pixels)),
+IntegerEntry("logID", newLogID),
+setUserPixelCount(address, userPixelCount)
+]
+} else {
+throw("Payment amount error!")
+}
+
+}
+
+
