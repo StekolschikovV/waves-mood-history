@@ -4,32 +4,11 @@ import useSWR from "swr";
 import {InvokeArgs, Signer} from "@waves/signer";
 import {ProviderKeeper} from "@waves/provider-keeper";
 import Moment from 'react-moment';
-interface IPixel {
-    color: string
-    width: number
-    height: number
-}
+import { ToastContainer, toast } from 'react-toastify';
+import {IBlockchainData, ILogData, IPixel} from "../../interface";
 
-interface IBlockchainData {
-    key: string
-    type?: string
-    value: string
-}
+export default function MoodCanvas({data}: {data: any}) {
 
-interface ILogData extends IBlockchainData{
-    id: number
-}
-
-const fetcher = (url: string) => fetch(url)
-    .then((res) => res.json())
-
-export default function MoodCanvas() {
-
-    const {data, error, isLoading, mutate} = useSWR(
-        "https://nodes-testnet.wavesnodes.com/addresses/data/3Mxkh7f6KwxmC83NvQ71Mcpk7B7tXBCNsLY",
-        fetcher,
-        {refreshInterval: 1000}
-    );
 
     const width = 100
     const height = 100
@@ -106,15 +85,28 @@ export default function MoodCanvas() {
         console.log("broadcastResult", broadcastResult)
         setTimeout(() => {
             setSelectedPixelNew([])
-        }, 1000)
+        }, 4000)
     }
 
     const onClickCanselHandler = () => {
         setSelectedPixelNew(selectedPixelNew.filter((_, i, a) => i !== (a.length - 1)))
     }
     const addNewPixelHandler = (pixel: IPixel) => {
-        let oldPixels = selectedPixelNew.filter(p => !(p.height === pixel.height && p.width === pixel.width))
-        setSelectedPixelNew([...oldPixels, pixel])
+        if (selectedPixelNew.length < 60) {
+            let oldPixels = selectedPixelNew.filter(p => !(p.height === pixel.height && p.width === pixel.width))
+            setSelectedPixelNew([...oldPixels, pixel])
+        } else {
+            toast('60 pixels max per transaction!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
     }
 
     const [isInit, setInit] = useState(false)
@@ -156,10 +148,13 @@ export default function MoodCanvas() {
                 })
             setSelectedLog(id)
             setSelectedPixel(result)
-
-
     }
+
+
+
     return <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
+
+
         <div className={`container ${styles.moodCanvas}`}>
             <div className={"title"}>Mood canvas</div>
             <div className={styles.innerContainer}>

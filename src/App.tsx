@@ -1,20 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import logo from './logo.svg';
 import './App.scss';
-import {ProviderKeeper} from "@waves/provider-keeper";
-import {InvokeArgs, Signer} from "@waves/signer";
-import useSWR from "swr";
 import Header from "./components/header";
 import Footer from "./components/footer";
 import MoodCanvas from "./components/mood-canvas";
 import Promo from "./components/promo";
-import TimeMachine from "./components/time-machine";
 import FAQ from "./components/FAQ";
 import TopBurners from "./components/top-burners";
 import {Helmet} from "react-helmet";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import useSWR from "swr";
 
+const fetcher = (url: string) => fetch(url)
+    .then((res) => res.json())
 
 function App() {
+
+    const {data, error, isLoading, mutate} = useSWR(
+        "https://nodes-testnet.wavesnodes.com/addresses/data/3Mxkh7f6KwxmC83NvQ71Mcpk7B7tXBCNsLY",
+        fetcher,
+        {refreshInterval: 1000}
+    );
+
     return (
         <>
             <Helmet>
@@ -33,11 +40,11 @@ function App() {
             </Helmet>
             <Header/>
             <Promo/>
-            <MoodCanvas/>
-            {/*/!*<TimeMachine/>*!/*/}
-            <TopBurners/>
+            <MoodCanvas data={data}/>
+            <TopBurners data={data}/>
             <FAQ/>
             <Footer/>
+            <ToastContainer />
         </>
     )
 }
