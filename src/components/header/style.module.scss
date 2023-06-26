@@ -1,0 +1,79 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.logoContainer {
+  display: flex;
+  gap: 30px;
+}
+.logo {
+  margin-top: 10px;
+  margin-left: 10px;
+  background: #5981EA;
+  width: 55px;
+  height: 55px;
+  transform: rotate(50deg);
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+  align-self: center;
+}
+.logoSymbol {
+  width: 100%;
+  text-align: center;
+  transform: rotate(-50deg);
+  color: #eeeeee;
+  font-size: 45px;
+  font-family: ui-monospace;
+}
+.logoText {
+  font-size: 30px;
+  width: 140px;
+  line-height: 1;
+  text-transform: uppercase;
+  display: flex;
+  align-self: center;
+}
+
+.menu {
+  list-style: none;
+  padding: 0 1px 0 0;
+  margin: 0;
+  display: flex;
+  align-self: center;
+  gap: 30px;
+  transition: 0.3s;
+  @media (max-width: 900px) {
+    //display: none;
+    position: absolute;
+    top: -40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px;
+    background: black;
+  }
+}
+.menuElement {
+  font-size: 18px;
+  border-bottom: 1px solid rgba(238, 238, 238, 0);
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    border-bottom: 1px solid #eeeeee;
+  }
+}
+
+.menuMob{
+  cursor: pointer;
+  height: 100%;
+  display: none;
+  @media (max-width: 900px) {
+    display: block;
+  }
+}

@@ -1,0 +1,235 @@
+.moodCanvasWrapper {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+}
+.moodCanvas {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  margin: auto;
+}
+
+
+
+.innerContainer {
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 1200px) {
+    flex-direction: column;
+    margin: auto;
+  }
+}
+
+.text {
+  width: 300px;
+  @media (max-width: 1200px) {
+    width: 100%;
+  }
+  font-size: 16px;
+  ul {
+    padding: 0 0 0 20px;
+    li {
+
+    }
+  }
+}
+
+.colorList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  @media (max-width: 600px) {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+}
+.colorElement {
+  padding: 0;
+  margin-bottom: 5.57px;
+  width: 25px;
+  height: 26px;
+  //border: 1px solid white;
+  cursor: pointer;
+  outline: 1px solid #808080;
+  //padding: 10px;
+  //margin: 10px;
+  border-radius: 3px;
+
+}
+
+.colorElementSelected {
+  outline: 1px solid white;
+}
+
+.canvaWrapper {
+  display: flex;
+  gap: 10px;
+  @media (max-width: 1200px) {
+    margin: 30px auto;
+  }
+  @media (max-width: 600px) {
+    flex-direction: column;
+
+  }
+}
+
+.canva {
+  display:  inline-block;
+  width: 500px;
+  height: 500px;
+
+  @media (max-width: 600px) {
+    width: 300px;
+    height: 300px;
+    margin: auto;
+  }
+  background: white;
+  border-radius: 3px;
+
+}
+
+.canvaRow {
+  display: flex;
+}
+
+.canvaElement {
+  width: 5px;
+  height: 5px;
+  //outline: 1px solid red;
+  //margin-bottom: 1px;
+  //margin-left: 1px;
+  cursor: crosshair;
+  //&.selected {
+  //  background: red;
+  //}
+}
+
+.canvaElement {
+  width: 5px;
+  height: 5px;
+  @media (max-width: 600px) {
+    width: 3px;
+    height: 3px;
+  }
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 300px;
+  @media (max-width: 1200px) {
+    width: 100%;
+  }
+}
+.btnGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background: #5981EA;
+  color: #eeeeee;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover{
+    background: #4361af;
+  }
+  &:active{
+    background: #344c88;
+  }
+}
+.pixelUsed {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  text-align: center;
+  font-size: 80px;
+  line-height: 1;
+  @media (max-width: 1200px) {
+    margin: 40px auto;
+  }
+  span {
+    font-size: 17px;
+  }
+}
+
+
+.selectedToken {
+
+}
+.selectedTokenTitle {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.selectedTokenWrapper {
+  background: #323846;
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+
+  span {
+    flex: 1;
+    padding: 10px 15px;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+}
+.selectedTokenSelected {
+  background: #5981EA;
+}
+
+.historyLine {
+  padding: 0 calc((100vw - 1200px) / 2) 0 0 ;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  overflow: auto;
+}
+
+
+.historyStep {
+  margin: 50px 0px 50px 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 150px;
+  max-width: 150px;
+  min-height: 150px;
+  max-height: 150px;
+  background: #323846;
+  //border-radius: 50%;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: "";
+    position: absolute;
+    left: -100px;
+    width: 100px;
+    height: 1px;
+    background: #eeeeee;
+  }
+
+
+  div {
+    font-size: 20px;
+  }
+  span {font-size: 14px}
+}
+
+.historyStepSelected {
+  background: #5981EA;
+
+}
