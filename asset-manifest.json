@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/waves-mood-hostory/static/css/main.1e2a1d13.css",
+    "main.js": "/waves-mood-hostory/static/js/main.06783069.js",
+    "static/js/787.f510d75a.chunk.js": "/waves-mood-hostory/static/js/787.f510d75a.chunk.js",
+    "index.html": "/waves-mood-hostory/index.html",
+    "main.1e2a1d13.css.map": "/waves-mood-hostory/static/css/main.1e2a1d13.css.map",
+    "main.06783069.js.map": "/waves-mood-hostory/static/js/main.06783069.js.map",
+    "787.f510d75a.chunk.js.map": "/waves-mood-hostory/static/js/787.f510d75a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1e2a1d13.css",
+    "static/js/main.06783069.js"
+  ]
+}
