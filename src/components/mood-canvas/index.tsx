@@ -1,10 +1,9 @@
 import styles from "./style.module.scss"
 import React, {useEffect, useState} from "react";
-import useSWR from "swr";
 import {InvokeArgs, Signer} from "@waves/signer";
 import {ProviderKeeper} from "@waves/provider-keeper";
 import Moment from 'react-moment';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import {IBlockchainData, ILogData, IPixel} from "../../interface";
 
 export default function MoodCanvas({data}: {data: any}) {
@@ -50,10 +49,15 @@ export default function MoodCanvas({data}: {data: any}) {
     }
 
     const onClickSaveHandler = async () => {
+        let USDTWXG = "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ"
+        let USDCWXG = "6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ"
         const data: InvokeArgs = {
             dApp: "3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
             fee: 500000,
-            payment: [],
+            payment: [{
+                assetId: selectedToken === "USDT" ? USDTWXG : USDCWXG,
+                amount: 10000 * selectedPixelNew.length,
+            }],
             call: {
                 function: 'draw',
                 args: [
