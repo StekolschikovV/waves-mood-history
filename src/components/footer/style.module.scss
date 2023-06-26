@@ -31,6 +31,10 @@
   }
 }
 .right {
+  display: table-cell;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   @media (max-width: 900px) {
     span {
       display: none;

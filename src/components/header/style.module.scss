@@ -68,8 +68,9 @@
   transition: 0.3s;
   @media (max-width: 900px) {
     //display: none;
-    position: absolute;
-    top: -40px;
+    position: fixed;
+    //top: -40px;
+    top: 0px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -96,6 +97,8 @@
   cursor: pointer;
   height: 100%;
   display: none;
+  background: none;
+  border: 0;
   @media (max-width: 900px) {
     display: block;
   }

@@ -29,12 +29,14 @@ export default function Header() {
             <li className={styles.menuElement}><a href="#top-burners">Top burners</a></li>
             <li className={styles.menuElement}><a href="#FAQ">FAQ</a></li>
         </ul>
-        <div className={styles.menuMob} onClick={() => setIsMobOpen(true)}>
-            <svg  viewBox="0 0 100 80" width="30" height="20">
+        <button className={styles.menuMob} onClick={() => {
+            setIsMobOpen(true)
+        }}>
+            <svg  viewBox="0 0 100 80" width="30" height="20" >
                 <rect fill={"#eeeeee"} width="100" height="10" rx="8"></rect>
                 <rect fill={"#eeeeee"} y="25" width="100" height="10" rx="8"></rect>
                 <rect fill={"#eeeeee"} y="50" width="100" height="10" rx="8"></rect>
             </svg>
-        </div>
+        </button>
     </div>
 }

@@ -16,8 +16,14 @@
   align-self: center;
   font-size: 16px;
   width: 100%;
+
   @media (max-width: 900px) {
-    flex-direction: column;
+//display: block;
+    //width: 40%;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   span {
     display: flex;
