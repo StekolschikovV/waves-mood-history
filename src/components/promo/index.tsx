@@ -6,7 +6,7 @@ export default function Promo() {
 
         <div className={styles.round}
              style={{
-                 backgroundImage: `url("/promo3.gif")`
+                 backgroundImage: `url("promo3.gif")`
             }}
         ></div>
         <div className={styles.text}>
