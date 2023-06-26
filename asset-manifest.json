@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/waves-mood-hostory/static/css/main.cd9cd871.css",
-    "main.js": "/waves-mood-hostory/static/js/main.356b67b1.js",
+    "main.js": "/waves-mood-hostory/static/js/main.77882a77.js",
     "static/js/787.f510d75a.chunk.js": "/waves-mood-hostory/static/js/787.f510d75a.chunk.js",
     "index.html": "/waves-mood-hostory/index.html",
     "main.cd9cd871.css.map": "/waves-mood-hostory/static/css/main.cd9cd871.css.map",
-    "main.356b67b1.js.map": "/waves-mood-hostory/static/js/main.356b67b1.js.map",
+    "main.77882a77.js.map": "/waves-mood-hostory/static/js/main.77882a77.js.map",
     "787.f510d75a.chunk.js.map": "/waves-mood-hostory/static/js/787.f510d75a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cd9cd871.css",
-    "static/js/main.356b67b1.js"
+    "static/js/main.77882a77.js"
   ]
 }
