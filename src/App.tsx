@@ -27,7 +27,7 @@ function App() {
                 <meta property="description"
                       content="Immerse yourself in the captivating world of Waves Mood History. Collaborate in real-time, express your feelings through art, and witness the power of burning tokens as strokes on the canvas. Shape a unique history of emotions, where each stroke becomes a permanent mark on the blockchain. Join us and be part of a revolutionary artistic journey."/>
                 <meta property="og:image"
-                      content="https://raw.githubusercontent.com/StekolschikovV/waves-mood-hostory/main/public/og-image.png"
+                      content="https://raw.githubusercontent.com/StekolschikovV/waves-mood-hostory/main/public/og-image-2.png"
                       data-rh="true"/>
                 <title>Waves Mood History</title>
             </Helmet>
