@@ -1,0 +1,48 @@
+.container {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: hsl(220deg 33% 9%);
+  top: 0;
+  left: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.innerContainer {
+  width: 60px;
+  height: 60px;
+  background: #5981EA;
+  transform: rotate(45deg);
+
+  //transform: rotate(45deg);
+
+  //animation-duration: 3s;
+  //animation-name: square ;
+  animation: square 15s  cubic-bezier(1,1.1,1,40) infinite;
+
+}
+
+//transform: rotate(45deg);
+//45 90 135 180
+
+@keyframes square {
+  0% {
+    transform: rotate(45deg);
+
+  }
+
+
+  100% {
+
+    transform: rotate(999deg);
+  }
+
+}
+
+.isFadeOut {
+  opacity: 0;
+  transition: 0.5s;
+}

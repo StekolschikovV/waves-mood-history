@@ -10,11 +10,15 @@ import {Helmet} from "react-helmet";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import useSWR from "swr";
+import {Preloader} from "./components/preloader";
 
 const fetcher = (url: string) => fetch(url)
     .then((res) => res.json())
 
+let loadedCount = 0
 function App() {
+
+    const [isShowPreloader, setIsShowPreloader] = useState(true)
 
     const {data, error, isLoading, mutate} = useSWR(
         "https://nodes.wavesnodes.com/addresses/data/3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
@@ -22,8 +26,21 @@ function App() {
         {refreshInterval: 1000}
     );
 
+
+    const onLoadedHandler = () => {
+        loadedCount = loadedCount + 1
+
+        console.log("onLoadedHandler", loadedCount)
+
+        if (loadedCount > 1)
+        setTimeout(() => {
+            setIsShowPreloader(false)
+        }, 1500)
+    }
+
     return (
         <>
+            <Preloader isShow={isShowPreloader}/>
             <Helmet>
                 <meta property="og:title" content="Waves Mood History: Draw, Burn, and Shape History Together"
                       data-rh="true"/>
@@ -38,8 +55,8 @@ function App() {
                       data-rh="true"/>
                 <title>Waves Mood History</title>
             </Helmet>
-            <Header/>
-            <Promo/>
+            <Header onLoaded={onLoadedHandler}/>
+            <Promo onLoaded={onLoadedHandler}/>
             <MoodCanvas data={data}/>
             <TopBurners data={data}/>
             <FAQ/>

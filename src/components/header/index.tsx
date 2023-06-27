@@ -1,7 +1,7 @@
 import styles from "./style.module.scss"
 import {useEffect, useState} from "react";
 
-export default function Header() {
+export default function Header({onLoaded}: {onLoaded(): void}) {
 
     const [isMobOpen, setIsMobOpen] = useState(false)
 
@@ -21,7 +21,9 @@ export default function Header() {
             {/*    <div className={styles.logoSymbolH}>H</div>*/}
             {/*    <div className={styles.logoSymbolM}>M</div>*/}
             {/*</div>*/}
-            <img alt={"logo"} src={"logo.svg"}/>
+            <img alt={"logo"} src={"logo.svg"} onLoad={ e => {
+                onLoaded()
+            }}/>
             <div className={styles.logoText}>mood history</div>
         </div>
         <ul className={styles.menu} style={{right: !isMobOpen ? "-1000px" : "-10px"}}>
