@@ -1,9 +1,10 @@
-import styles from "./style.module.scss"
 import React, {useEffect, useState} from "react";
 import {InvokeArgs, Signer} from "@waves/signer";
 import {ProviderKeeper} from "@waves/provider-keeper";
 import Moment from 'react-moment';
 import {toast} from 'react-toastify';
+import html2canvas from "html2canvas";
+import styles from "./style.module.scss"
 import {IBlockchainData, ILogData, IPixel} from "../../interface";
 
 export default function MoodCanvas({data}: { data: any }) {
@@ -229,6 +230,34 @@ export default function MoodCanvas({data}: { data: any }) {
         setSelectedLog(id)
         setSelectedPixel(result)
     }
+    const saveAs = (blob: string, fileName: string) =>{
+        const elem: HTMLAnchorElement = window.document.createElement('a');
+        elem.href = blob
+        elem.download = fileName;
+        elem.style.cssText = 'display:none;';
+        (document.body || document.documentElement).appendChild(elem);
+        if (typeof elem.click === 'function') {
+            elem.click();
+        } else {
+            elem.target = '_blank';
+            elem.dispatchEvent(new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true
+            }));
+        }
+        URL.revokeObjectURL(elem.href);
+        elem.remove()
+    }
+    const takeScreenshotHandler = () => {
+        const canva = document.getElementById('canvaBlock')
+        if (canva) {
+            html2canvas(canva).then((canvas)=>{
+                let image = canvas.toDataURL('image/png', 1.0);
+                saveAs(image, 'Screenshot.png')
+            })
+        }
+    }
 
     return <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
         <div className={`container ${styles.moodCanvas}`}>
@@ -263,6 +292,7 @@ export default function MoodCanvas({data}: { data: any }) {
                         ></li>)}
                     </ul>
                     <div
+                        id={"canvaBlock"}
                         onMouseDown={() => setIsMouseDown(true)}
                         onMouseUp={() => setIsMouseDown(false)}
                         className={styles.canva}
@@ -315,11 +345,14 @@ export default function MoodCanvas({data}: { data: any }) {
                         <span>pixels used</span>
                     </div>
                     <div className={styles.btnGroup}>
-                        <button className={styles.btn}>Refresh</button>
                         <button className={styles.btn} onClick={() => onClickCanselHandler()}>Undo last</button>
+                        <button className={styles.btn} onClick={() =>{
+                            setSelectedPixelNew([])
+                        }}>Undo all</button>
                         <button disabled={selectedPixelNew.length === 0} className={styles.btn}
                                 onClick={() => onClickSaveHandler()}>Save and burn WXG
                         </button>
+                        <button className={styles.btn} onClick={e => takeScreenshotHandler()}>Take Screenshot</button>
                     </div>
                 </div>
             </div>
