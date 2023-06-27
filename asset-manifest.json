@@ -1,15 +1,33 @@
 {
   "files": {
-    "main.css": "/waves-mood-hostory/static/css/main.d389e887.css",
-    "main.js": "/waves-mood-hostory/static/js/main.4df29585.js",
+    "main.css": "/waves-mood-hostory/static/css/main.786a4dae.css",
+    "main.js": "/waves-mood-hostory/static/js/main.e84ca24c.js",
+    "static/css/358.4d3e0fd3.chunk.css": "/waves-mood-hostory/static/css/358.4d3e0fd3.chunk.css",
+    "static/js/358.26e11009.chunk.js": "/waves-mood-hostory/static/js/358.26e11009.chunk.js",
+    "static/css/608.456bb475.chunk.css": "/waves-mood-hostory/static/css/608.456bb475.chunk.css",
+    "static/js/608.cb6b0612.chunk.js": "/waves-mood-hostory/static/js/608.cb6b0612.chunk.js",
+    "static/css/472.cde3ccab.chunk.css": "/waves-mood-hostory/static/css/472.cde3ccab.chunk.css",
+    "static/js/472.2ad93992.chunk.js": "/waves-mood-hostory/static/js/472.2ad93992.chunk.js",
+    "static/css/381.8daede0a.chunk.css": "/waves-mood-hostory/static/css/381.8daede0a.chunk.css",
+    "static/js/381.71be6a11.chunk.js": "/waves-mood-hostory/static/js/381.71be6a11.chunk.js",
     "static/js/787.f510d75a.chunk.js": "/waves-mood-hostory/static/js/787.f510d75a.chunk.js",
+    "static/js/982.10cd670d.chunk.js": "/waves-mood-hostory/static/js/982.10cd670d.chunk.js",
     "index.html": "/waves-mood-hostory/index.html",
-    "main.d389e887.css.map": "/waves-mood-hostory/static/css/main.d389e887.css.map",
-    "main.4df29585.js.map": "/waves-mood-hostory/static/js/main.4df29585.js.map",
-    "787.f510d75a.chunk.js.map": "/waves-mood-hostory/static/js/787.f510d75a.chunk.js.map"
+    "main.786a4dae.css.map": "/waves-mood-hostory/static/css/main.786a4dae.css.map",
+    "main.e84ca24c.js.map": "/waves-mood-hostory/static/js/main.e84ca24c.js.map",
+    "358.4d3e0fd3.chunk.css.map": "/waves-mood-hostory/static/css/358.4d3e0fd3.chunk.css.map",
+    "358.26e11009.chunk.js.map": "/waves-mood-hostory/static/js/358.26e11009.chunk.js.map",
+    "608.456bb475.chunk.css.map": "/waves-mood-hostory/static/css/608.456bb475.chunk.css.map",
+    "608.cb6b0612.chunk.js.map": "/waves-mood-hostory/static/js/608.cb6b0612.chunk.js.map",
+    "472.cde3ccab.chunk.css.map": "/waves-mood-hostory/static/css/472.cde3ccab.chunk.css.map",
+    "472.2ad93992.chunk.js.map": "/waves-mood-hostory/static/js/472.2ad93992.chunk.js.map",
+    "381.8daede0a.chunk.css.map": "/waves-mood-hostory/static/css/381.8daede0a.chunk.css.map",
+    "381.71be6a11.chunk.js.map": "/waves-mood-hostory/static/js/381.71be6a11.chunk.js.map",
+    "787.f510d75a.chunk.js.map": "/waves-mood-hostory/static/js/787.f510d75a.chunk.js.map",
+    "982.10cd670d.chunk.js.map": "/waves-mood-hostory/static/js/982.10cd670d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d389e887.css",
-    "static/js/main.4df29585.js"
+    "static/css/main.786a4dae.css",
+    "static/js/main.e84ca24c.js"
   ]
 }
