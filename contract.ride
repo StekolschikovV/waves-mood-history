@@ -9,7 +9,7 @@ func mapStrToStr(accum: List[String], next: String) =  next :: accum
 func paintOver(accum: List[StringEntry], next: String) = {
     let array = next.split("-")
     # if(parseIntValue(array[1]) < 100 && parseIntValue(array[2]) < 100) then
-    if(containsElement(colorList,array[0]) && parseIntValue(array[1]) < 100  && parseIntValue(array[2]) < 100) then
+    if(containsElement(colorList, array[0]) && parseIntValue(array[1]) < 100  && parseIntValue(array[2]) < 100) then
         accum ++ [ StringEntry(array[1] + "-" + array[2], array[0]) ]
     else throw("Is't walid")
 }
@@ -41,40 +41,54 @@ func setUserPixelCount(address: String, pixelCount: Int) = {
 }
 
 func isPaymentOk(i: Invocation, sum: Int) = {
-let acceptableAssetId = base58'WAVES'
-let USDTWXG = base58'34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ'
-let USDCWXG = base58'6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ'
-let p = i.payments[0]
-match p.assetId {
-case assetId: ByteVector => (assetId == USDTWXG || assetId == USDCWXG) && p.amount >= sum
-case _ => false
+    let USDTWXG = base58'34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ'
+    let USDCWXG = base58'6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ'
+    let p = i.payments[0]
+    match p.assetId {
+        case assetId: ByteVector => (assetId == USDTWXG || assetId == USDCWXG) && p.amount >= sum
+        case _ => false
+    }
 }
+
+func getAssetId(i: Invocation) = {
+    let USDTWXG = base58'34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ'
+    let USDCWXG = base58'6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ'
+    let p = i.payments[0]
+    if(p.assetId == USDTWXG) then {
+        USDTWXG
+    } else {
+        USDCWXG
+    }
 }
 
 @Callable(i)
 func draw(pixels: List[String]) = {
 
-let address = toString(i.caller)
-let userPixelCount = getUserPixelCount(address) + size(pixels)
-let targetSum = size(pixels) * 10000
+    let address = toString(i.caller)
+    let userPixelCount = getUserPixelCount(address) + size(pixels)
+    let targetSum = 10000 * size(pixels)
+    # let assetId = i.payments[0].assetId
+    # let assetId = base58"p.assetId"
 
-if(isPaymentOk(i, targetSum)) then {
-let timestamp = match blockInfoByHeight(height) {
-case block:BlockInfo =>
-block.timestamp
-case _ => 0
-}
-let newLogID = getLogID() + 1
-FOLD<60>(pixels, [], paintOver)
-++ [
-StringEntry("log_" + toString(timestamp) + "_" + toString(newLogID), listIntCompressToString(pixels)),
-IntegerEntry("logID", newLogID),
-setUserPixelCount(address, userPixelCount)
-]
-} else {
-throw("Payment amount error!")
-}
+    if(isPaymentOk(i, targetSum)) then {
+        let timestamp = match blockInfoByHeight(height) {
+            case block: BlockInfo => block.timestamp
+            case _ => 0
+        }
 
+        let newLogID = getLogID() + 1
+
+        FOLD<60>(pixels, [], paintOver)
+        ++ [
+            StringEntry("log_" + toString(timestamp) + "_" + toString(newLogID), listIntCompressToString(pixels)),
+            IntegerEntry("logID", newLogID),
+            setUserPixelCount(address, userPixelCount),
+            # Burn(base58'34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ', targetSum)
+            Burn(getAssetId(i), targetSum)
+        ]
+    } else {
+        throw("Payment amount error!")
+    }
 }
 
 
