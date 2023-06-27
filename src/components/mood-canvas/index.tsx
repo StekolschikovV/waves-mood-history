@@ -163,43 +163,40 @@ export default function MoodCanvas({data}: { data: any }) {
     useEffect(() => {
         if (data) {
             let logData = data
-                .filter((e: IBlockchainData) => e.key.includes("log_"))
+                .filter((e: IBlockchainData) => e?.key?.includes("log_"))
                 .map((e: IBlockchainData) => {
-                    if (e.key.replaceAll('_', '').length > 0) {
-                        return {...e, key: `${e.key.split("_")[0]}_${e.key.split("_")[1]}`}
+                    if (e?.key?.replaceAll('_', '')?.length > 0) {
+                        return {...e, key: `${e?.key?.split("_")[0]}_${e?.key?.split("_")[1]}`}
                     } else {
                         return e
                     }
                 })
                 .reduce((acc: IBlockchainData[] = [], next: IBlockchainData,) => {
                     let ifExist = false
-                    // console.log("+++acc", acc, next)
-                    // if (acc.length === undefined) return [acc]
-                    if (acc.length === undefined) {
+                    if (acc?.length === undefined) {
                         return [acc, next]
                     }
-                    // console.log("+++acc", acc.length, next)
                     acc?.forEach(a => {
-                        if (a.key === next.key) {
+                        if (a?.key === next?.key) {
                             ifExist = true
                         }
                     })
                     if (!ifExist) {
                         return [...acc, next]
                     } else {
-                        return acc.map(e => {
-                            if (e.key !== next.key) {
+                        return acc?.map(e => {
+                            if (e?.key !== next?.key) {
                                 return e
                             } else {
-                                return {...e, value: e.value + "|" + next.value}
+                                return {...e, value: e?.value + "|" + next?.value}
                             }
                         })
                     }
                 })
             setSelectedPixel(decompressData(
                 data
-                    .filter((e: IBlockchainData) => e.key.includes("-"))
-                    .map((e: IBlockchainData) => `|${e.value}-${e.key}`).join(""))
+                    .filter((e: IBlockchainData) => e?.key?.includes("-"))
+                    .map((e: IBlockchainData) => `|${e?.value}-${e?.key}`)?.join(""))
             )
             setLog(logData)
             let element: any = document.querySelector(`.historyLine`)
@@ -219,9 +216,9 @@ export default function MoodCanvas({data}: { data: any }) {
         let result: IPixel[] = []
         log
             .map(e => {
-                return {...e, id: +e.key.split("_")[1]}
+                return {...e, id: +e?.key?.split("_")[1]}
             })
-            .filter(e => id !== "now" ? e.id <= id : true)
+            .filter(e => id !== "now" ? e?.id <= id : true)
             .sort((a: ILogData, b: ILogData) => a.id - b.id)
             .map(e => {
                 const stepData = decompressData(e.value) as unknown as IPixel
