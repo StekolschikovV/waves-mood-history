@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://StekolschikovV.github.com/waves-mood-hostory",
   "dependencies": {
+    "@sentry/react": "^7.56.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
