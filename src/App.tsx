@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './App.scss';
 import Header from "./components/header";
-import Footer from "./components/footer";
-import MoodCanvas from "./components/mood-canvas";
 import Promo from "./components/promo";
-import FAQ from "./components/FAQ";
-import TopBurners from "./components/top-burners";
 import {Helmet} from "react-helmet";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import useSWR from "swr";
 import {Preloader} from "./components/preloader";
+
+const MoodCanvasLazy = React.lazy(() => import("./components/mood-canvas"))
+const TopBurnersLazy = React.lazy(() => import("./components/top-burners"))
+const FAQLazy = React.lazy(() => import("./components/FAQ"))
+const FooterLazy = React.lazy(() => import("./components/footer"))
 
 const fetcher = (url: string) => fetch(url)
     .then((res) => res.json())
@@ -29,9 +30,6 @@ function App() {
 
     const onLoadedHandler = () => {
         loadedCount = loadedCount + 1
-
-        console.log("onLoadedHandler", loadedCount)
-
         if (loadedCount > 1)
         setTimeout(() => {
             setIsShowPreloader(false)
@@ -57,10 +55,10 @@ function App() {
             </Helmet>
             <Header onLoaded={onLoadedHandler}/>
             <Promo onLoaded={onLoadedHandler}/>
-            <MoodCanvas data={data}/>
-            <TopBurners data={data}/>
-            <FAQ/>
-            <Footer/>
+            <MoodCanvasLazy data={data}/>
+            <TopBurnersLazy data={data}/>
+            <FAQLazy/>
+            <FooterLazy/>
             <ToastContainer />
         </>
     )
