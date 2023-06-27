@@ -2,7 +2,7 @@
   "name": "waves-mood-hostory",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://StekolschikovV.github.com/waves-mood-hostory",
+  "homepage": "http://www.waves-mood-history.com",
   "dependencies": {
     "@sentry/react": "^7.56.0",
     "@testing-library/jest-dom": "^5.16.5",
