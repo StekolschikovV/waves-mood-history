@@ -1,46 +1,39 @@
-# Getting Started with Create React App
+# Waves Mood History
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## Available Scripts
+Waves Mood History is an interactive application for collaborative drawing and capturing mood history on the blockchain. Unleash your creativity, express emotions, and shape a vibrant tapestry of shared moods.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- Collaborative Drawing: Paint together with others, creating unique and colorful works of art.
+- Token Burning: Each stroke is accompanied by the burning of USDT-WXG or USDC-WXG tokens, creating a unique history on the blockchain.
+- Mood History: Every artwork is stored on the blockchain, capturing the emotional state and mood of each participant.
+- Interactivity: Answer questions, express emotions, and record them in the history, leaving a unique mark on the blockchain.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Requirements
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+To run the application, you will need:
 
-### `npm test`
+- WavesKeeper browser extension for interacting with the Waves blockchain.
+- Sufficient USDT-WXG or USDC-WXG tokens to participate in collaborative drawing and mood history creation.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation and Setup
 
-### `npm run build`
+1. Clone the repository to your device.
+2. Install and configure the WavesKeeper extension for your browser.
+3. Obtain USDT-WXG or USDC-WXG tokens in your wallet.
+4. Launch the application and connect to the Waves network using WavesKeeper.
+5. Start drawing, burn tokens, and create unique mood histories!
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Contribution and Development
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+If you are interested in contributing to the Waves Mood History project, we welcome your contributions! You can create pull requests and report issues in our GitHub repository.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## License
 
-### `npm run eject`
+Waves Mood History is released under the MIT License. See the [LICENSE](https://raw.githubusercontent.com/StekolschikovV/waves-mood-hostory/MIT-LICENSE.txt) file for details.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Contact Us
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+For any questions or inquiries, please contact us at [v.a.stekolschikov@gmail.com](mailto:v.a.stekolschikov@gmail.com).
