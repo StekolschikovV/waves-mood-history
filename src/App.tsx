@@ -3,10 +3,14 @@ import * as Sentry from "@sentry/react";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import useSWR from "swr";
+import ReactGA from 'react-ga';
 import './App.scss';
 import Header from "./components/header";
 import Promo from "./components/promo";
 import {Preloader} from "./components/preloader";
+
+const TRACKING_ID = "G-JNWMFZRRK5"; // OUR_TRACKING_ID
+ReactGA.initialize(TRACKING_ID);
 
 Sentry.init({
     dsn: "https://9cc1778cd77d43fbbc0d206de3230437@o4505432426479616.ingest.sentry.io/4505432432443392",
