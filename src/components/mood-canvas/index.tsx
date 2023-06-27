@@ -349,10 +349,10 @@ export default function MoodCanvas({data}: { data: any }) {
                         <button className={styles.btn} onClick={() =>{
                             setSelectedPixelNew([])
                         }}>Undo all</button>
+                        <button className={styles.btn} onClick={e => takeScreenshotHandler()}>Take Screenshot</button>
                         <button disabled={selectedPixelNew.length === 0} className={styles.btn}
                                 onClick={() => onClickSaveHandler()}>Save and burn WXG
                         </button>
-                        <button className={styles.btn} onClick={e => takeScreenshotHandler()}>Take Screenshot</button>
                     </div>
                 </div>
             </div>
