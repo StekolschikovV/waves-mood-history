@@ -9,7 +9,7 @@ interface IFAQ {
 export default function FAQ() {
 
     const [openedQuestion, setOpenedQuestion] = useState<null | number>(null)
-
+    
     const data: IFAQ[] = [
         {
             question: "How does the burning of USDT-WXG or USDC-WXG work in the app?",
@@ -52,11 +52,11 @@ export default function FAQ() {
     return <div className={`container`} id={"FAQ"}>
         <div className={"title"}>FAQ</div>
         <ul className={styles.list}>
-            {data.map( (e, i) => {
-                return  <li
+            {data.map((e, i) => {
+                return <li
                     key={e.answer + e.question}
                     className={`${styles.element} ${i === openedQuestion ? styles.opened : ""}`}
-                    onClick={ e => {
+                    onClick={e => {
                         setOpenedQuestion(i !== openedQuestion ? i : null)
                     }}>
                     <div className={`${styles.question} ${styles.question}`}>{e.question}</div>

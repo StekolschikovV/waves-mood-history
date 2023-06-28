@@ -227,7 +227,8 @@ export default function MoodCanvas({data}: { data: any }) {
         setSelectedLog(id)
         setSelectedPixel(result)
     }
-    const saveAs = (blob: string, fileName: string) =>{
+
+    const saveAs = (blob: string, fileName: string) => {
         const elem: HTMLAnchorElement = window.document.createElement('a');
         elem.href = blob
         elem.download = fileName;
@@ -249,13 +250,13 @@ export default function MoodCanvas({data}: { data: any }) {
     const takeScreenshotHandler = () => {
         const canva = document.getElementById('canvaBlock')
         if (canva) {
-            html2canvas(canva).then((canvas)=>{
+            html2canvas(canva).then((canvas) => {
                 let image = canvas.toDataURL('image/png', 1.0);
                 saveAs(image, 'Screenshot.png')
             })
         }
     }
-
+    
     return <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
         <div className={`container ${styles.moodCanvas}`}>
             <div className={"title"}>Mood canvas</div>
@@ -343,9 +344,10 @@ export default function MoodCanvas({data}: { data: any }) {
                     </div>
                     <div className={styles.btnGroup}>
                         <button className={styles.btn} onClick={() => onClickCanselHandler()}>Undo last</button>
-                        <button className={styles.btn} onClick={() =>{
+                        <button className={styles.btn} onClick={() => {
                             setSelectedPixelNew([])
-                        }}>Undo all</button>
+                        }}>Undo all
+                        </button>
                         <button className={styles.btn} onClick={e => takeScreenshotHandler()}>Take Screenshot</button>
                         <button disabled={selectedPixelNew.length === 0} className={styles.btn}
                                 onClick={() => onClickSaveHandler()}>Save and burn WXG

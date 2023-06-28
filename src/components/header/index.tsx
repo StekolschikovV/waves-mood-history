@@ -1,7 +1,7 @@
 import styles from "./style.module.scss"
 import {useEffect, useState} from "react";
 
-export default function Header({onLoaded}: {onLoaded(): void}) {
+export default function Header({onLoaded}: { onLoaded(): void }) {
 
     const [isMobOpen, setIsMobOpen] = useState(false)
 
@@ -17,13 +17,7 @@ export default function Header({onLoaded}: {onLoaded(): void}) {
 
     return <div className={`container ${styles.header}`}>
         <div className={styles.logoContainer}>
-            {/*<div className={styles.logo}>*/}
-            {/*    <div className={styles.logoSymbolH}>H</div>*/}
-            {/*    <div className={styles.logoSymbolM}>M</div>*/}
-            {/*</div>*/}
-            <img alt={"logo"} src={"logo.svg"} onLoad={ e => {
-                onLoaded()
-            }}/>
+            <img alt={"logo"} src={"logo.svg"} onLoad={e => onLoaded()}/>
             <div className={styles.logoText}>mood history</div>
         </div>
         <ul className={styles.menu} style={{right: !isMobOpen ? "-1000px" : "-10px"}}>
@@ -31,10 +25,8 @@ export default function Header({onLoaded}: {onLoaded(): void}) {
             <li className={styles.menuElement}><a href="#top-burners">Top burners</a></li>
             <li className={styles.menuElement}><a href="#FAQ">FAQ</a></li>
         </ul>
-        <button className={styles.menuMob} onClick={() => {
-            setIsMobOpen(true)
-        }}>
-            <svg  viewBox="0 0 100 80" width="30" height="20" >
+        <button className={styles.menuMob} onClick={() => setIsMobOpen(true)}>
+            <svg viewBox="0 0 100 80" width="30" height="20">
                 <rect fill={"#eeeeee"} width="100" height="10" rx="8"></rect>
                 <rect fill={"#eeeeee"} y="25" width="100" height="10" rx="8"></rect>
                 <rect fill={"#eeeeee"} y="50" width="100" height="10" rx="8"></rect>

@@ -3,14 +3,13 @@ import * as Sentry from "@sentry/react";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import useSWR from "swr";
-import ReactGA from 'react-ga';
 import './App.scss';
 import Header from "./components/header";
 import Promo from "./components/promo";
 import {Preloader} from "./components/preloader";
 
-const TRACKING_ID = "G-JNWMFZRRK5"; // OUR_TRACKING_ID
-ReactGA.initialize(TRACKING_ID);
+// const TRACKING_ID = "G-JNWMFZRRK5"; // OUR_TRACKING_ID
+// ReactGA.initialize(TRACKING_ID);
 
 Sentry.init({
     dsn: "https://9cc1778cd77d43fbbc0d206de3230437@o4505432426479616.ingest.sentry.io/4505432432443392",
@@ -28,7 +27,6 @@ Sentry.init({
     replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
 });
 
-
 const MoodCanvasLazy = React.lazy(() => import("./components/mood-canvas"))
 const TopBurnersLazy = React.lazy(() => import("./components/top-burners"))
 const FAQLazy = React.lazy(() => import("./components/FAQ"))
@@ -38,6 +36,7 @@ const fetcher = (url: string) => fetch(url)
     .then((res) => res.json())
 
 let loadedCount = 0
+
 function App() {
 
     const [isShowPreloader, setIsShowPreloader] = useState(true)
@@ -48,13 +47,12 @@ function App() {
         {refreshInterval: 1000}
     );
 
-
     const onLoadedHandler = () => {
         loadedCount = loadedCount + 1
         if (loadedCount > 1)
-        setTimeout(() => {
-            setIsShowPreloader(false)
-        }, 1500)
+            setTimeout(() => {
+                setIsShowPreloader(false)
+            }, 1500)
     }
 
     return (
@@ -66,7 +64,7 @@ function App() {
             <TopBurnersLazy data={data}/>
             <FAQLazy/>
             <FooterLazy/>
-            <ToastContainer />
+            <ToastContainer/>
         </>
     )
 }
