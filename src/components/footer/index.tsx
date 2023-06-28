@@ -8,7 +8,7 @@ export default function Footer() {
             <li><a href="https://new.wavesexplorer.com/addresses/3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE">Smart contract</a>
             </li>
             <li>
-                <a href="mailto:v.a.stekolschikov@gmail.com">
+                <a href="mailto:wavesmoodhistory@gmail.com">
                     <svg xmlns="http://www.w3.org/2000/svg" height="800px"
                          width="800px" version="1.1" id="_x32_" viewBox="0 0 512 512">
                         <g>

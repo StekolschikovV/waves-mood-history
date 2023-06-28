@@ -36,4 +36,4 @@ Waves Mood History is released under the MIT License. See the [LICENSE](https://
 
 ## Contact Us
 
-For any questions or inquiries, please contact us at [https://t.me/waves_mood_history](https://t.me/waves_mood_history).
+For any questions or inquiries, please contact us at [https://t.me/waves_mood_history](https://t.me/waves_mood_history) or [wavesmoodhistory@gmail.com](wavesmoodhistory@gmail.com).
