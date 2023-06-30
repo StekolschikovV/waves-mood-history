@@ -37,7 +37,7 @@ pull requests and report issues in our GitHub repository.
 ## License
 
 Waves Mood History is released under the MIT License. See
-the [LICENSE](https://raw.githubusercontent.com/StekolschikovV/waves-mood-history/main/MIT-LICENSE.txt file for details.
+the [LICENSE](https://raw.githubusercontent.com/StekolschikovV/waves-mood-history/main/MIT-LICENSE.txt) file for details.
 
 ## Contact Us
 
