@@ -31,6 +31,7 @@ const MoodCanvasLazy = React.lazy(() => import("./components/mood-canvas"))
 const TopBurnersLazy = React.lazy(() => import("./components/top-burners"))
 const FAQLazy = React.lazy(() => import("./components/FAQ"))
 const FooterLazy = React.lazy(() => import("./components/footer"))
+const SashaPanelLazy = React.lazy(() => import("./components/sasha-panel"))
 
 const fetcher = (url: string) => fetch(url)
     .then((res) => res.json())
@@ -63,6 +64,7 @@ function App() {
             <MoodCanvasLazy data={data}/>
             <TopBurnersLazy data={data}/>
             <FAQLazy/>
+            <SashaPanelLazy/>
             <FooterLazy/>
             <ToastContainer/>
         </>
