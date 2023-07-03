@@ -2,7 +2,7 @@ import styles from "./style.module.scss";
 import {useState} from "react";
 import Btn from "../../UI/btn";
 import {IBlockchainData} from "../../interface";
-import {MassTransferArgs, Signer} from "@waves/signer";
+import {InvokeArgs, MassTransferArgs, Signer} from "@waves/signer";
 import {ProviderKeeper} from "@waves/provider-keeper";
 import {toast} from "react-toastify";
 
@@ -113,10 +113,69 @@ export default function SashaPanel({data}: { data: any }) {
             })
     }
 
-    console.log("selectedWinners", selectedWinners)
-    console.log("getTopBurners()", getTopBurners())
+    const getClearBurnerList = () => {
+        return getTopBurners().map(e => `${e.key}_pixelCount`)
+    }
 
-    return <div className={"container"}>
+    const clearBurnerHandler = async () => {
+        const data: InvokeArgs = {
+            dApp: "3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
+            fee: 500000,
+            payment: [],
+            call: {
+                function: 'clearBurnerList',
+                args: [
+                    {
+                        type: "list",
+                        value: getClearBurnerList().map(e => {
+                            return {
+                                type: 'string',
+                                value: e
+                            }
+                        })
+                    }
+                ]
+            },
+        }
+        await signer
+            .invoke(data)
+            .broadcast()
+            .then(e => {
+                toast('Cleanup successful!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                })
+                setStep(1)
+                setSelectedWinners([])
+                setIsPaid(false)
+                setIsRewardSetForAll(false)
+                console.log(e)
+            })
+            .catch((e) => {
+                console.log("error", e)
+                toast(e?.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            })
+    }
+
+    console.log("selectedWinners", selectedWinners)
+    console.log("getClearBurnerList()", getClearBurnerList())
+
+    return <div className={"container"} id={"sasha-panel"}>
 
         <div className="title">Sasha panel</div>
 
@@ -142,7 +201,7 @@ export default function SashaPanel({data}: { data: any }) {
         <ul className={styles.body}>
             {step === 1 && <li className={styles.bodyElement}>
                 <div className={styles.bodyInfo}>Select burners who will be rewarded.</div>
-                <ul className={styles.bodyList}>
+                {getTopBurners().length > 0 && <ul className={styles.bodyList}>
                     {getTopBurners().map((e, i) =>
                         <li className={styles.bodyListElement} key={i}>
                             <div>
@@ -154,7 +213,8 @@ export default function SashaPanel({data}: { data: any }) {
                             <div>{0.01 * +e?.value} WGX</div>
                         </li>
                     )}
-                </ul>
+                </ul>}
+                {(!getTopBurners() || getTopBurners().length === 0) && <div>No new burners yet</div>}
                 <div className={styles.controls}>
                     <Btn title={"Next step"} onClick={() => setStep(2)} isDisabled={selectedWinners.length === 0}/>
                 </div>
@@ -183,7 +243,7 @@ export default function SashaPanel({data}: { data: any }) {
                     for the past week. This feature is only available to the administrator.
                 </div>
                 <div className={styles.controls}>
-                    <Btn title={"Clear burner list"} onClick={() => setStep(1)}/>
+                    <Btn title={"Clear burner list"} onClick={() => clearBurnerHandler()}/>
                 </div>
             </li>}
         </ul>

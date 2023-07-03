@@ -24,6 +24,7 @@ export default function Header({onLoaded}: { onLoaded(): void }) {
             <li className={styles.menuElement}><a href="#mood-canvas">Mood canvas</a></li>
             <li className={styles.menuElement}><a href="#top-burners">Top burners</a></li>
             <li className={styles.menuElement}><a href="#FAQ">FAQ</a></li>
+            <li className={styles.menuElement}><a href="#sasha-panel">Sasha panel</a></li>
         </ul>
         <button className={styles.menuMob} onClick={() => setIsMobOpen(true)}>
             <svg viewBox="0 0 100 80" width="30" height="20">
