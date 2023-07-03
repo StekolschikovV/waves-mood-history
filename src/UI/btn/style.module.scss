@@ -1,0 +1,27 @@
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background: #5981EA;
+  color: #eeeeee;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    background: #4361af;
+  }
+
+  &:active {
+    background: #344c88;
+  }
+
+  &:disabled {
+    background: #2e4377;
+    cursor: not-allowed;
+  }
+}
+
+.isW100 {
+  width: 100%;
+}

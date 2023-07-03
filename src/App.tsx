@@ -64,7 +64,7 @@ function App() {
             <MoodCanvasLazy data={data}/>
             <TopBurnersLazy data={data}/>
             <FAQLazy/>
-            <SashaPanelLazy/>
+            <SashaPanelLazy data={data}/>
             <FooterLazy/>
             <ToastContainer/>
         </>

@@ -37,7 +37,7 @@
   width: 80px;
   height: 80px;
   border: 1px solid #eeeeee;
-  cursor: pointer;
+  //cursor: pointer;
   border-radius: 50%;
   justify-content: center;
   display: flex;
@@ -55,16 +55,77 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  width: 100%;
 }
 
 .bodyElement {
+  width: 100%;
 }
 
 .bodyInfo {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 .controls {
-  text-align: right;
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  justify-content: right;
+}
+
+.bodyList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.bodyListElement {
+  display: flex;
+  justify-content: space-between;
+
+  div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.bodyListElementSelect {
+  width: 20px;
+  height: 20px;
+  //background: #eeeeee;
+  border: 1px solid #eeeeee;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.bodyListElementSelectSelected {
+  background: #5981EA;
+  border: 1px solid #5981EA;
+}
+
+.bodyListElementInput {
+
+  input {
+    background: none;
+    border: 0;
+    border-bottom: 1px solid #eeeeee;
+    outline: none;
+    color: #eeeeee;
+    text-align: center;
+    width: 60px;
+    font-size: 16px;
+    margin-right: 10px;
+    padding: 5px;
+
+    //+ ::placeholder {
+    //  color: red;
+    //}
+  }
 }
