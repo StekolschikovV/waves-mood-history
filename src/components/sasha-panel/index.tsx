@@ -114,6 +114,7 @@ export default function SashaPanel({data}: { data: any }) {
     }
 
     console.log("selectedWinners", selectedWinners)
+    console.log("getTopBurners()", getTopBurners())
 
     return <div className={"container"}>
 

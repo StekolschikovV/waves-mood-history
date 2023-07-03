@@ -13,10 +13,10 @@ export default function TopBurners({data}: { data: any }) {
             })
         else return []
     }
-    
+
     return <div className={"container"} id={"top-burners"}>
         <div className="title">Top burners</div>
-        <ul className={styles.list}>
+        {getTopBurners().length > 0 && <ul className={styles.list}>
             {getTopBurners().map((e, i) =>
                 <li className={styles.element} key={e.key}>
                     <span>
@@ -29,7 +29,8 @@ export default function TopBurners({data}: { data: any }) {
                     <span>{0.01 * +e?.value} WGX</span>
                 </li>
             )}
-        </ul>
+        </ul>}
+        {(!getTopBurners() || getTopBurners().length === 0) && <>No new burners yet</>}
     </div>
 
 }
