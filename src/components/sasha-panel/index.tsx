@@ -2,6 +2,9 @@ import styles from "./style.module.scss";
 import {useState} from "react";
 import Btn from "../../UI/btn";
 import {IBlockchainData} from "../../interface";
+import {MassTransferArgs, Signer} from "@waves/signer";
+import {ProviderKeeper} from "@waves/provider-keeper";
+import {toast} from "react-toastify";
 
 interface IWinner {
     address: string
@@ -15,6 +18,12 @@ export default function SashaPanel({data}: { data: any }) {
     const [selectedWinners, setSelectedWinners] = useState<IWinner[]>([])
     const [isPaid, setIsPaid] = useState(false)
     const [isRewardSetForAll, setIsRewardSetForAll] = useState<boolean>(false)
+
+    const signer = new Signer({
+        NODE_URL: 'https://nodes.wavesnodes.com',
+    });
+    const keeper = new ProviderKeeper();
+    signer.setProvider(keeper);
 
     const getTopBurners = (): IBlockchainData[] => {
         if (data) return data
@@ -56,6 +65,52 @@ export default function SashaPanel({data}: { data: any }) {
         })
         setIsRewardSetForAll(isRewardSetForAllLoc === null ? false : isRewardSetForAllLoc)
         setSelectedWinners(newData)
+    }
+
+    const payHandler = async () => {
+        //
+
+        const palymentsData: { amount: number, recipient: string }[] = selectedWinners.map(e => {
+            return {
+                recipient: e.address,
+                amount: e.reward * 100000000
+            }
+        })
+
+        const data: MassTransferArgs = {
+            attachment: "",
+            transfers: palymentsData
+        }
+        await signer
+            .massTransfer(data)
+            .broadcast()
+            .then(e => {
+                toast('Payments successful!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                setIsPaid(true)
+                console.log(e)
+            })
+            .catch((e) => {
+                console.log("error", e)
+                toast(e?.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            })
     }
 
     console.log("selectedWinners", selectedWinners)
@@ -118,7 +173,7 @@ export default function SashaPanel({data}: { data: any }) {
                 </ul>
                 <div className={styles.controls}>
                     <Btn isDisabled={isPaid || !isRewardSetForAll} title={"Pay rewards"}
-                         onClick={() => setIsPaid(true)}/>
+                         onClick={payHandler}/>
                     <Btn isDisabled={!isPaid} title={"Next step"} onClick={() => setStep(3)}/>
                 </div>
             </li>}
