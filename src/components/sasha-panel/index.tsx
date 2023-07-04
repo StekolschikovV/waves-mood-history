@@ -210,7 +210,7 @@ export default function SashaPanel({data}: { data: any }) {
                                     onClick={() => selectWinnerHandler(e)}></div>
                                 <div className={styles.bodyListElementText}>{e.key}</div>
                             </div>
-                            <div>{0.01 * +e?.value} WGX</div>
+                            <div>{(0.01 * +e?.value).toFixed(2)} WGX</div>
                         </li>
                     )}
                 </ul>}

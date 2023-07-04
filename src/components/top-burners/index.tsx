@@ -26,7 +26,7 @@ export default function TopBurners({data}: { data: any }) {
                         {i > 2 && <SVG name={"cup"} color={"#323846"} width={"25px"} height={"25px"}/>}
                         {e?.key}
                     </span>
-                    <span>{0.01 * +e?.value} WGX</span>
+                    <span>{(0.01 * +e?.value).toFixed(2)} WGX</span>
                 </li>
             )}
         </ul>}
