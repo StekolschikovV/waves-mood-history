@@ -1,11 +1,15 @@
 .header {
   list-style: none;
   padding: 0;
-  margin: 0;
+  //margin: 0;
   display: flex;
-  gap: 30px;
+  gap: 50px;
   justify-content: space-between;
-
+  width: calc(100% - 52px);
+  margin: auto;
+  @media (max-width: 900px) {
+    gap: 0;
+  }
 }
 
 .headerElement {
@@ -20,9 +24,13 @@
 .headerHr {
 
   height: 1px;
-  background: #323846;
-  margin-top: 40px;
+  //background: #323846;
+  background: #eeeeee;
+  margin-top: 75px;
   width: 100%;
+  @media (max-width: 900px) {
+    margin-top: 42px;
+  }
 }
 
 .headerElementSelected {
@@ -33,22 +41,32 @@
 }
 
 .headerElementNum {
-  font-size: 30px;
-  width: 80px;
-  height: 80px;
-  border: 1px solid #eeeeee;
+  font-size: 70px;
+  width: 150px;
+  height: 150px;
+  //border: 1px solid #eeeeee;
   //cursor: pointer;
   border-radius: 50%;
   justify-content: center;
   display: flex;
   align-items: center;
+  background: #323846;
+  @media (max-width: 900px) {
+    font-size: 30px;
+    width: 80px;
+    height: 80px;
+  }
 }
 
 .headerElementTitle {
   text-align: center;
-  font-size: 16px;
-  padding-top: 10px;
-  width: 70px;
+  font-size: 26px;
+  padding-top: 20px;
+  width: 120px;
+  line-height: 1;
+  @media (max-width: 900px) {
+    font-size: 20px;
+  }
 }
 
 .body {
