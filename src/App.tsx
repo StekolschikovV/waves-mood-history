@@ -3,10 +3,10 @@ import * as Sentry from "@sentry/react";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import useSWR from "swr";
-import './App.scss';
-import Header from "./components/header";
-import Promo from "./components/promo";
-import {Preloader} from "./components/preloader";
+import '@/App.scss';
+import Header from "@components/header";
+import Promo from "@components/promo";
+import {Preloader} from "@components/preloader";
 
 // const TRACKING_ID = "G-JNWMFZRRK5"; // OUR_TRACKING_ID
 // ReactGA.initialize(TRACKING_ID);

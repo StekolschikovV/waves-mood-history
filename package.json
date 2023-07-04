@@ -14,6 +14,7 @@
     "@types/react-dom": "^18.2.6",
     "@waves/provider-keeper": "^2.0.5",
     "@waves/signer": "^1.1.0",
+    "craco": "^0.0.3",
     "html2canvas": "^1.4.1",
     "moment": "^2.29.4",
     "react": "^18.2.0",
@@ -30,9 +31,9 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
+    "start": "craco start",
     "serv": "export PUBLIC_URL=http://localhost:3000/ && react-scripts start",
-    "build": "react-scripts build",
+    "build": "craco build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

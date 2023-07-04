@@ -1,6 +1,6 @@
 import styles from "./style.module.scss"
-import SVG from "../SVG";
-import {IBlockchainData} from "../../interface";
+import SVG from "@UI/SVG";
+import {IBlockchainData} from "@/interface";
 
 export default function TopBurners({data}: { data: any }) {
 
