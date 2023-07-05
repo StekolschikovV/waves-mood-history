@@ -21,6 +21,8 @@ export default function MoodCanvas({data}: { data: any }) {
     const [isMouseDown, setIsMouseDown] = useState(false)
     const [log, setLog] = useState<IBlockchainData[]>([])
     const [selectedLog, setSelectedLog] = useState<string | number>("now")
+    const [recordCount, setRecordCount] = useState<number>(0)
+    const [isWithUpdate, setIsWithUpdate] = useState<boolean>(false)
 
     const signer = new Signer({
         NODE_URL: 'https://nodes.wavesnodes.com',
@@ -76,6 +78,7 @@ export default function MoodCanvas({data}: { data: any }) {
                 ]
             },
         }
+        setIsWithUpdate(true)
         await signer
             .invoke(data)
             .broadcast()
@@ -134,12 +137,15 @@ export default function MoodCanvas({data}: { data: any }) {
             })
         setTimeout(() => {
             setSelectedPixelNew([])
+            scrollRight()
+            setIsWithUpdate(false)
         }, 7000)
     }
 
     const onClickCanselHandler = () => {
         setSelectedPixelNew(selectedPixelNew.filter((_, i, a) => i !== (a.length - 1)))
     }
+
     const addNewPixelHandler = (pixel: IPixel) => {
         if (selectedPixelNew.length < 60) {
             let oldPixels = selectedPixelNew.filter(p => !(p.height === pixel.height && p.width === pixel.width))
@@ -159,6 +165,13 @@ export default function MoodCanvas({data}: { data: any }) {
     }
 
     const [isInit, setInit] = useState(false)
+
+    const scrollRight = () => {
+        let element: any = document.querySelector(`.historyLine`)
+        if (element) {
+            element.scrollLeft = element?.scrollWidth
+        }
+    }
 
     useEffect(() => {
         if (data) {
@@ -199,12 +212,13 @@ export default function MoodCanvas({data}: { data: any }) {
                     .map((e: IBlockchainData) => `|${e?.value}-${e?.key}`)?.join(""))
             )
             setLog(logData)
-            let element: any = document.querySelector(`.historyLine`)
-
-            if (!isInit && element) {
+            if (!isInit) {
                 setInit(true)
                 setTimeout(() => {
-                    element.scrollLeft = element?.scrollWidth
+                    scrollRight()
+                }, 1000)
+                setTimeout(() => {
+                    scrollRight()
                 }, 3000)
             }
         }
@@ -255,6 +269,16 @@ export default function MoodCanvas({data}: { data: any }) {
                 saveAs(image, 'Screenshot.png')
             })
         }
+    }
+
+    const recordCountTemp = JSON.stringify(data)?.length || 0
+    if (recordCount !== recordCountTemp) {
+        if (isWithUpdate && recordCountTemp > recordCount) {
+            setSelectedPixelNew([])
+            scrollRight()
+            setIsWithUpdate(false)
+        }
+        setRecordCount(recordCountTemp)
     }
     
     return <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
