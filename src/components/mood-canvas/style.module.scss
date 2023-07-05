@@ -3,13 +3,13 @@
   margin: auto;
   flex-direction: column;
 }
+
 .moodCanvas {
   display: flex;
   flex-direction: column;
   gap: 0px;
   margin: auto;
 }
-
 
 
 .innerContainer {
@@ -27,8 +27,10 @@
     width: 100%;
   }
   font-size: 16px;
+
   ul {
     padding: 0 0 0 20px;
+
     li {
 
     }
@@ -46,6 +48,7 @@
     flex-wrap: wrap;
   }
 }
+
 .colorElement {
   padding: 0;
   margin-bottom: 5.57px;
@@ -77,7 +80,7 @@
 }
 
 .canva {
-  display:  inline-block;
+  display: inline-block;
   width: 500px;
   height: 500px;
 
@@ -125,11 +128,13 @@
     width: 100%;
   }
 }
+
 .btnGroup {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
+
 .btn {
   width: 100%;
   padding: 10px;
@@ -140,17 +145,21 @@
   border-radius: 3px;
   cursor: pointer;
   transition: 0.3s;
-  &:hover{
+
+  &:hover {
     background: #4361af;
   }
-  &:active{
+
+  &:active {
     background: #344c88;
   }
+
   &:disabled {
     background: #2e4377;
     cursor: not-allowed;
   }
 }
+
 .pixelUsed {
   display: flex;
   flex-direction: column;
@@ -161,6 +170,7 @@
   @media (max-width: 1200px) {
     margin: 40px auto;
   }
+
   span {
     font-size: 17px;
   }
@@ -170,10 +180,12 @@
 .selectedToken {
 
 }
+
 .selectedTokenTitle {
   font-size: 14px;
   margin-bottom: 5px;
 }
+
 .selectedTokenWrapper {
   background: #323846;
   border-radius: 3px;
@@ -189,16 +201,21 @@
     transition: 0.3s;
   }
 }
+
 .selectedTokenSelected {
   background: #5981EA;
 }
 
 .historyLine {
-  padding: 0 calc((100vw - 1200px) / 2) 0 0 ;
+  padding: 0 calc((100vw - 1200px) / 2) 0 0;
   margin: 0;
   list-style: none;
   display: flex;
   overflow: auto;
+  @media (max-width: 600px) {
+    padding-right: 30px;
+
+  }
 }
 
 
@@ -217,6 +234,7 @@
   border-radius: 3px;
   position: relative;
   cursor: pointer;
+
   &::after {
     content: "";
     position: absolute;
@@ -230,7 +248,23 @@
   div {
     font-size: 20px;
   }
-  span {font-size: 14px}
+
+  span {
+    font-size: 14px
+  }
+
+  @media (max-width: 600px) {
+    min-width: 90px;
+    max-width: 90px;
+    min-height: 90px;
+    max-height: 90px;
+    div {
+      font-size: 14px;
+    }
+    span {
+      font-size: 12px
+    }
+  }
 }
 
 .historyStepSelected {

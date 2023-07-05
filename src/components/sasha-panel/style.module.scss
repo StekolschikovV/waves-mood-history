@@ -10,6 +10,11 @@
   @media (max-width: 900px) {
     gap: 0;
   }
+  @media (max-width: 600px) {
+    padding: 0;
+    margin: 0;
+
+  }
 }
 
 .headerElement {
@@ -19,6 +24,7 @@
   align-items: center;
   width: 100px;
   position: relative;
+
 }
 
 .headerHr {
@@ -31,6 +37,9 @@
   @media (max-width: 900px) {
     margin-top: 42px;
   }
+  @media (max-width: 600px) {
+    display: none;
+  }
 }
 
 .headerElementSelected {
@@ -38,6 +47,8 @@
     background: #5981EA;
     border: 1px solid #5981EA;
   }
+
+
 }
 
 .headerElementNum {
@@ -56,6 +67,12 @@
     width: 80px;
     height: 80px;
   }
+  @media (max-width: 600px) {
+    padding: 0;
+    margin: 0;
+    width: 60px;
+    height: 60px;
+  }
 }
 
 .headerElementTitle {
@@ -66,6 +83,11 @@
   line-height: 1;
   @media (max-width: 900px) {
     font-size: 20px;
+    width: 100px;
+  }
+  @media (max-width: 600px) {
+    font-size: 18px;
+    width: 70px;
   }
 }
 
@@ -75,6 +97,7 @@
   margin: 0;
   display: flex;
   width: 100%;
+
 }
 
 .bodyElement {
@@ -107,10 +130,17 @@
   display: flex;
   justify-content: space-between;
 
+
   div {
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+
+  @media (max-width: 600px) {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
 
