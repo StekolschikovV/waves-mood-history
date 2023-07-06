@@ -4,7 +4,6 @@ import {useEffect, useState} from "react";
 export default function Header({onLoaded}: { onLoaded(): void }) {
 
     const [isMobOpen, setIsMobOpen] = useState(false)
-    const [isBlock, setIsBlock] = useState(false)
 
     useEffect(() => {
         const onClick = (e: any) => {
