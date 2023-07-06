@@ -280,7 +280,7 @@ export default function MoodCanvas({data}: { data: any }) {
         }
         setRecordCount(recordCountTemp)
     }
-    
+
     return <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
         <div className={`container ${styles.moodCanvas}`}>
             <div className={"title"}>Mood canvas</div>

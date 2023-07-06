@@ -9,6 +9,7 @@
   display: flex;
   gap: 30px;
 }
+
 .logo {
   margin-top: 10px;
   margin-left: 10px;
@@ -23,6 +24,7 @@
   align-self: center;
   position: relative;
 }
+
 .logoSymbolH {
   width: 100%;
   text-align: center;
@@ -32,11 +34,10 @@
   font-family: ui-monospace;
   position: absolute;
   left: 10px;
-
-  left: 10px;
   bottom: 14px;
   top: 15px;
 }
+
 .logoSymbolM {
   width: 100%;
   text-align: center;
@@ -49,6 +50,7 @@
   //background: red;
 
 }
+
 .logoText {
   font-size: 30px;
   width: 140px;
@@ -78,22 +80,27 @@
     padding: 30px;
     background: black;
   }
+  z-index: 99999;
+
 }
+
 .menuElement {
   font-size: 18px;
   border-bottom: 1px solid rgba(238, 238, 238, 0);
   cursor: pointer;
   transition: 0.3s;
+
   &:hover {
     border-bottom: 1px solid #eeeeee;
   }
+
   a {
     color: #eeeeee;
     text-decoration: none;
   }
 }
 
-.menuMob{
+.menuMob {
   cursor: pointer;
   height: 100%;
   display: none;

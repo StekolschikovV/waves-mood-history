@@ -172,8 +172,6 @@ export default function SashaPanel({data}: { data: any }) {
             })
     }
 
-    console.log("selectedWinners", selectedWinners)
-    console.log("getClearBurnerList()", getClearBurnerList())
 
     return <div className={"container"} id={"sasha-panel"}>
 
