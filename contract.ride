@@ -61,14 +61,16 @@ USDCWXG
 }
 }
 
+func recordsForDeletionMap(accum: List[StringEntry], next: String) = {
+accum ++ [ DeleteEntry(next) ]
+}
+
 @Callable(i)
 func draw(pixels: List[String]) = {
 
 let address = toString(i.caller)
 let userPixelCount = getUserPixelCount(address) + size(pixels)
 let targetSum = 10000 * size(pixels)
-# let assetId = i.payments[0].assetId
-# let assetId = base58"p.assetId"
 
 if(isPaymentOk(i, targetSum)) then {
 let timestamp = match blockInfoByHeight(height) {
@@ -82,7 +84,6 @@ FOLD<60>(pixels, [], paintOver)
 StringEntry("log_" + toString(timestamp) + "_" + toString(newLogID), listIntCompressToString(pixels)),
 IntegerEntry("logID", newLogID),
 setUserPixelCount(address, userPixelCount),
-# Burn(base58'34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ', targetSum)
 Burn(getAssetId(i), targetSum)
 ]
 } else {
@@ -90,4 +91,41 @@ throw("Payment amount error!")
 }
 }
 
+
+
+
+# @Callable(i)
+# func testWriteString(key: String, value: String) = {
+
+#   ([
+#     StringEntry(key, value)
+#   ])
+
+# }
+
+
+# @Callable(i)
+# func testWriteInteger(key: String, value: Int) = {
+
+#   ([
+#     IntegerEntry(key, value)
+#   ])
+
+# }
+
+
+@Callable(i)
+func clearBurnerList(recordsForDeletion: List[String]) = {
+
+let caller = toString(i.caller)
+
+if (caller == "3PNWjCoZuFyKDz5tvb2YcU5LtcDyyUAxaSh") then {
+FOLD<60>(recordsForDeletion, [], recordsForDeletionMap)
+} else {
+throw("You are not an admin!")
+}
+
+
+
+}
 
