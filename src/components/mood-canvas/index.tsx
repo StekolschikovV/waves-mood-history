@@ -7,6 +7,19 @@ import html2canvas from "html2canvas";
 import styles from "./style.module.scss"
 import {IBlockchainData, ILogData, IPixel} from "../../interface";
 
+const toastWrapper = (text: string) => {
+    toast(text, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+}
+
 export default function MoodCanvas({data}: { data: any }) {
 
 
@@ -84,54 +97,18 @@ export default function MoodCanvas({data}: { data: any }) {
             .broadcast()
             .then(e => {
                 if (e && e[0]?.type === 16) {
-                    toast('Request sent successfully!', {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
+                    toastWrapper('Request sent successfully!')
                 } else {
-                    toast('An error occurred, please check your wallet!', {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
+                    toastWrapper('An error occurred, please check your wallet!')
                 }
                 console.log(e)
             })
             .catch((e) => {
                 console.log("error", e)
                 if (e?.message?.includes("WavesKeeper is not installed.. This is not error of signer")) {
-                    toast("WavesKeeper not found! You need to install a WavesKeeper to use the app!", {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
+                    toastWrapper("WavesKeeper not found! You need to install a WavesKeeper to use the app!")
                 } else {
-                    toast(e?.message, {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
+                    toastWrapper(e?.message)
                 }
                 setSelectedPixelNew([])
             })
@@ -151,16 +128,7 @@ export default function MoodCanvas({data}: { data: any }) {
             let oldPixels = selectedPixelNew.filter(p => !(p.height === pixel.height && p.width === pixel.width))
             setSelectedPixelNew([...oldPixels, pixel])
         } else {
-            toast('60 pixels max per transaction!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            toastWrapper('60 pixels max per transaction!')
         }
     }
 
