@@ -2,10 +2,10 @@ import styles from "./style.module.scss"
 import {useState} from "react";
 
 export default function Promo({onLoaded}: { onLoaded(): void }) {
-    
+
     const [isGifLoaded, setIsGifLoaded] = useState(false)
 
-    return <div className={`container ${styles.promo}`}>
+    return <div className={`container ${styles.promo}`} id={"promo"}>
 
         <div className={styles.round}>
             <img src={"promo3.gif"}

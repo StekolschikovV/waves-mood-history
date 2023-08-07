@@ -22,7 +22,7 @@ export default function Header({onLoaded}: { onLoaded(): void }) {
         }, 300)
     }
 
-    return <div className={`container ${styles.header}`}>
+    return <div className={`container ${styles.header}`} id={"header"}>
         <div className={styles.logoContainer}>
             <img alt={"logo"} src={"logo.svg"} onLoad={e => onLoaded()}/>
             <div className={styles.logoText}>mood history</div>
