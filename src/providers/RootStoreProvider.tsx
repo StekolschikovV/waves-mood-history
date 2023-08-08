@@ -16,11 +16,6 @@ export function useRootStore() {
     return context;
 }
 
-// export function useAccountStore() {
-//     const {accountStore} = useRootStore();
-//     return accountStore;
-// }
-
 export function RootStoreProvider({children, hydrationData,}: {
     children: ReactNode;
     hydrationData?: RootStoreHydration;

@@ -3,6 +3,7 @@ import React, {forwardRef, useEffect, useRef, useState} from "react";
 import {BoxGeometry, Mesh, MeshStandardMaterial} from "three";
 import gsap from "gsap";
 import {useRootStore} from "@/providers/RootStoreProvider";
+import {observer} from "mobx-react-lite";
 
 interface IProps {
     name: string
@@ -12,7 +13,7 @@ interface IProps {
     isDrawMode: boolean
 }
 
-const Pixel = forwardRef((
+const Pixel = observer(forwardRef((
     {
         isDrawMode,
         name,
@@ -37,7 +38,7 @@ const Pixel = forwardRef((
 
     useEffect(() => {
         innerRef.current.material.color.set(store.pixelStore.state.get(name) || "white")
-    }, [store.pixelStore.state])
+    }, [store.pixelStore.state, store.pixelStore.needUpdatePixel])
 
     // useEffect(() => {
     //     innerRef.current.material.color.set(canvasHelper.getMyColor(name))
@@ -56,9 +57,9 @@ const Pixel = forwardRef((
 
     const hoverAction = (isClick = false) => {
         if (isDrawMode || isClick) {
-            gsap.to(innerRef.current.position, {z: 3, duration: 3});
+            gsap.to(innerRef.current.position, {z: 5, duration: 1});
             innerRef?.current?.material?.color.set(store.pixelStore.color)
-            gsap.to(innerRef.current.position, {z: 0, duration: 1, delay: 2});
+            gsap.to(innerRef.current.position, {z: 0, duration: 0.5, delay: 1});
             playPixelSound(getPixelVolume(innerRef.current.name))
             store.pixelStore.addNewPixel(name, store.pixelStore.color)
         }
@@ -72,6 +73,6 @@ const Pixel = forwardRef((
         <boxGeometry args={[1, 1, 1]}/>
         <meshStandardMaterial opacity={0} transparent={true}/>
     </mesh>
-})
+}))
 
 export default Pixel
