@@ -5,6 +5,7 @@ import {useRootStore} from "@/providers/RootStoreProvider";
 import {observer} from "mobx-react-lite";
 import Timestamp from "@components/mood-canvas2/timestamp";
 import styles from "@components/mood-canvas/style.module.scss";
+import Moment from "react-moment";
 
 const MemoizedTimestamp = memo((props, context) => {
     return <Timestamp name={""} x={0} y={100} z={5}/>
@@ -169,33 +170,36 @@ export default observer(function MoodCanvas2() {
                 </div>
             </div>
 
-            {/*<div className="container-full">*/}
-            {/*    <ul className={`historyLine ${styles.historyLine}`}>*/}
-            {/*        {logPoints.map((id, i) =>*/}
-            {/*            <li key={`${id}-${i}`}*/}
-            {/*                className={`${styles.historyStep} ${id === selectedLog && styles.historyStepSelected}`}*/}
-            {/*                onClick={() => onClickLogHandler(id)}>*/}
-            {/*                <div>*/}
-            {/*                    <Moment format="YYYY/MM/DD">*/}
-            {/*                        {id}*/}
-            {/*                    </Moment>*/}
-            {/*                </div>*/}
-            {/*                <span>*/}
-            {/*         <Moment format="HH:mm">*/}
-            {/*             {id}*/}
-            {/*         </Moment>*/}
-            {/*     </span>*/}
-            {/*            </li>)}*/}
-            {/*        <li*/}
-            {/*            onClick={() => onClickLogHandler("now")}*/}
-            {/*            key={`now`}*/}
-            {/*            className={`historyStepNow ${styles.historyStep} ${selectedLog === "now" && styles.historyStepSelected}`}>*/}
-            {/*            <div>*/}
-            {/*                NOW*/}
-            {/*            </div>*/}
-            {/*        </li>*/}
-            {/*    </ul>*/}
-            {/*</div>*/}
+            <div className="container-full">
+                <ul className={`historyLine ${styles.historyLine}`}>
+                    {store.pixelStore.data.map((p, i) =>
+                        <li key={`${p.time}-${i}`}
+                            className={`${styles.historyStep}`}
+                            // className={`${styles.historyStep} ${p === selectedLog && styles.historyStepSelected}`}
+                            // onClick={() => onClickLogHandler(p)}
+                        >
+                            <div>
+                                <Moment format="YYYY/MM/DD">
+                                    {p.time}
+                                </Moment>
+                            </div>
+                            <span>
+                     <Moment format="HH:mm">
+                         {p.time}
+                     </Moment>
+                 </span>
+                        </li>)}
+                    <li
+                        onClick={() => store.pixelStore.travelToTime(store.pixelStore.lastDataTime)}
+                        key={`now`}
+                        // className={`historyStepNow ${styles.historyStep} ${selectedLog === "now" && styles.historyStepSelected}`}>
+                        className={`historyStepNow `}>
+                        <div>
+                            NOW
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         {/*<div>*/}
