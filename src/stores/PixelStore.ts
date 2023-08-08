@@ -4,6 +4,7 @@ import axios from "axios";
 import {IBlockchainData, IPixelState} from "@/interface";
 import {InvokeArgs, Signer} from "@waves/signer";
 import {ProviderKeeper} from "@waves/provider-keeper";
+import _ from 'lodash';
 
 export class PixelStore {
 
@@ -13,34 +14,47 @@ export class PixelStore {
 
     state: Map<string, string> = new Map()
     stateNew: Map<string, string> = new Map()
+    stateNewTemp: Map<string, string> = new Map()
 
     color = "red"
 
-    needUpdatePixel = 0
+    signer: Signer
+
+    // needUpdatePixel = 0
+    debouncedAddNewPixel = _.debounce(() => {
+        this.stateNewTemp.forEach((value, key, map) => {
+            this.stateNew.set(key, value)
+        })
+        this.stateNewTemp = new Map()
+    }, 1000);
 
     constructor(root: RootStore) {
         this.root = root;
         makeAutoObservable(this)
+
         this.load()
 
+        this.signer = new Signer({NODE_URL: 'https://nodes.wavesnodes.com'})
+        this.signer.setProvider(new ProviderKeeper());
+
+        // TODO: remove
         // @ts-ignore
         window.xxx = this
     }
 
     public addNewPixel = (name: string, color: string) => {
-        this.stateNew.set(name, color)
+        this.stateNewTemp.set(name, color)
+        this.debouncedAddNewPixel();
     }
 
     public travelToTime = (time: number): void => {
         this.state = this.getSliceFromTime(time)
-        this.needUpdatePixel = this.needUpdatePixel + 1
     }
 
     public saveNewToBlockchain = async (selectedToken: "USDT" | "USDC") => {
         let newData: any[] = []
         const stateNewClone = this.stateNew
         this.stateNew.forEach((value, key, map) => {
-            // console.log(`m[${key}] = ${value}`);
             const arr = key.split("-")
             const y = Math.abs(+arr[1] - 99)
             const x = Math.abs(+arr[0])
@@ -70,39 +84,11 @@ export class PixelStore {
             },
         }
 
-        const signer = new Signer({
-            NODE_URL: 'https://nodes.wavesnodes.com',
-        });
-        const keeper = new ProviderKeeper();
-        signer.setProvider(keeper);
-
-        // setIsWithUpdate(true)
-        await signer
+        await this.signer
             .invoke(data)
             .broadcast()
-            .then(e => {
-                // if (e && e[0]?.type === 16) {
-                //     toastWrapper('Request sent successfully!')
-                // } else {
-                //     toastWrapper('An error occurred, please check your wallet!')
-                // }
-                this.waitNewPixels(stateNewClone)
-            })
-            .catch((e) => {
-                console.log(e)
-                // console.log("error", e)
-                // if (e?.message?.includes("WavesKeeper is not installed.. This is not error of signer")) {
-                //     toastWrapper("WavesKeeper not found! You need to install a WavesKeeper to use the app!")
-                // } else {
-                //     toastWrapper(e?.message)
-                // }
-                // setSelectedPixelNew([])
-            })
-        // setTimeout(() => {
-        //     setSelectedPixelNew([])
-        //     scrollRight()
-        //     setIsWithUpdate(false)
-        // }, 7000)
+            .then((_) => this.waitNewPixels(stateNewClone))
+            .catch((e) => console.log(e))
     }
 
     private waitNewPixels = (stateNewClone: Map<string, string>) => {
@@ -120,7 +106,6 @@ export class PixelStore {
             }
         }, 3000)
     }
-
 
     private load = async () => {
         this.data = await axios
@@ -147,8 +132,6 @@ export class PixelStore {
             })
         this.lastDataTime = this.data[this.data.length - 1].time
         this.state = this.getSliceFromTime(this.lastDataTime)
-
-        this.needUpdatePixel += 1
     }
 
     private getSliceFromTime = (time: number): Map<string, string> => {

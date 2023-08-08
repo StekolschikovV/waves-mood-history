@@ -24,7 +24,6 @@ const Pixel = observer(forwardRef((
 
     const store = useRootStore();
 
-
     const innerRef = useRef<Mesh<BoxGeometry, MeshStandardMaterial>>(null!);
     const [position, setPosition] =
         useState({x, y, z})
@@ -38,11 +37,7 @@ const Pixel = observer(forwardRef((
 
     useEffect(() => {
         innerRef.current.material.color.set(store.pixelStore.state.get(name) || "white")
-    }, [store.pixelStore.state, store.pixelStore.needUpdatePixel])
-
-    // useEffect(() => {
-    //     innerRef.current.material.color.set(canvasHelper.getMyColor(name))
-    // }, [needUpdatePixels])
+    }, [store.pixelStore.state])
 
     const playPixelSound = (volume: number) => {
         const pixelSound = new Audio('./sound/ui-click.mp3')
@@ -57,9 +52,9 @@ const Pixel = observer(forwardRef((
 
     const hoverAction = (isClick = false) => {
         if (isDrawMode || isClick) {
-            gsap.to(innerRef.current.position, {z: 5, duration: 1});
+            gsap.to(innerRef.current.position, {z: 3, duration: 0.5});
             innerRef?.current?.material?.color.set(store.pixelStore.color)
-            gsap.to(innerRef.current.position, {z: 0, duration: 0.5, delay: 1});
+            gsap.to(innerRef.current.position, {z: 0, duration: 0.2, delay: 1});
             playPixelSound(getPixelVolume(innerRef.current.name))
             store.pixelStore.addNewPixel(name, store.pixelStore.color)
         }
