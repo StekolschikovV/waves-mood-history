@@ -14,11 +14,18 @@ export class PixelStore {
     lastDataTime = 0
 
     state: Map<string, string> = new Map()
+    stateNew: Map<string, string> = new Map()
+
+    color = "red"
 
     constructor(root: RootStore) {
         this.root = root;
         makeAutoObservable(this)
         this.load()
+    }
+
+    public addNewPixel = (name: string, color: string) => {
+        this.stateNew.set(name, color)
     }
 
     private load = async () => {

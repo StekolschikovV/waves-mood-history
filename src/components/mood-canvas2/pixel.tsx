@@ -54,26 +54,20 @@ const Pixel = forwardRef((
         return volume / 1000
     }
 
-    const hoverAction = () => {
-        // const currentColor = innerRef.current.material.color
-        // const newColor = new Color(color)
-        // if (isDrawMode && !newColor.equals(currentColor)) {
-        //     innerRef.current.material.color.set(color)
-        //     playPixelSound(getPixelVolume(innerRef.current.name))
-        //     gsap.to(innerRef.current.position, {z: 15, duration: 3});
-        //     gsap.to(innerRef.current.position, {z: 0, duration: 3, data: 3});
-        //     addNewPixelHandler({
-        //         width: y,
-        //         height: x,
-        //         color: color
-        //     })
-        // }
+    const hoverAction = (isClick = false) => {
+        if (isDrawMode || isClick) {
+            gsap.to(innerRef.current.position, {z: 3, duration: 3});
+            innerRef?.current?.material?.color.set(store.pixelStore.color)
+            gsap.to(innerRef.current.position, {z: 0, duration: 1, delay: 2});
+            playPixelSound(getPixelVolume(innerRef.current.name))
+            store.pixelStore.addNewPixel(name, store.pixelStore.color)
+        }
     }
 
     return <mesh
-        onClick={hoverAction}
+        onClick={() => hoverAction(true)}
         name={name} ref={innerRef}
-        onPointerOver={hoverAction}
+        onPointerOver={() => hoverAction(false)}
         position={[position.y, position.x, position.z]}>
         <boxGeometry args={[1, 1, 1]}/>
         <meshStandardMaterial opacity={0} transparent={true}/>
