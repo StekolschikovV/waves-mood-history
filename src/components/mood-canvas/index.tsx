@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {InvokeArgs, Signer} from "@waves/signer";
 import {ProviderKeeper} from "@waves/provider-keeper";
 import Moment from 'react-moment';
@@ -22,7 +22,6 @@ const toastWrapper = (text: string) => {
 }
 
 export default function MoodCanvas({data}: { data: any }) {
-
 
     const width = 100
     const height = 100
@@ -249,11 +248,15 @@ export default function MoodCanvas({data}: { data: any }) {
         }
         setRecordCount(recordCountTemp)
     }
+    const canvasRef = useRef<{ test: () => void }>(null)
+
+    // console.log("selectedPixel", selectedPixel)
+    // console.log("log", log)
 
     return <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
         <div className={`container ${styles.moodCanvas}`}>
-            <Canvas/>
-
+            <button onClick={() => canvasRef?.current?.test()}>test</button>
+            <Canvas pixels={selectedPixel} ref={canvasRef} color={selectedColor}/>
         </div>
         <div className={`container ${styles.moodCanvas}`}>
             <div className={"title"}>Mood canvas</div>

@@ -1,8 +1,8 @@
-import React, {useEffect, useRef, useState} from "react";
-import {useFrame} from "@react-three/fiber";
+import React, {forwardRef, useEffect, useRef, useState} from "react";
 
 import {BoxGeometry, Color, Mesh, MeshStandardMaterial} from "three";
 import gsap from "gsap";
+import CanvasHelper from "@components/canvas/canvasHelper";
 
 interface IProps {
     name: string
@@ -11,27 +11,29 @@ interface IProps {
     z: number
     isDrawMode: boolean
     color: string
+    needUpdatePixels: number
+    canvasHelper: CanvasHelper
 }
 
-export default function Pixel({isDrawMode, name, color, y, x, z = 0}: IProps) {
+const Pixel = forwardRef(({isDrawMode, needUpdatePixels, canvasHelper, name, color, y, x, z = 0}: IProps, ref) => {
 
-    const ref = useRef<Mesh<BoxGeometry, MeshStandardMaterial>>(null!);
+    const innerRef = useRef<Mesh<BoxGeometry, MeshStandardMaterial>>(null!);
     const [position, setPosition] = useState({
         x: ((Math.random() - 0.5) * 2) * 100,
         y: ((Math.random() - 0.5) * 2) * 100,
         z: ((Math.random() - 0.5) * 2) * 100
     })
 
-    useFrame(() => {
-        // ref.current.rotation.y += 0.01
-    });
+    useEffect(() => {
+        if (innerRef?.current) {
+            gsap.to(innerRef.current.position, {x, y, z, duration: 0});
+            gsap.to(innerRef.current.material, {opacity: 1, duration: 10});
+        }
+    }, [innerRef?.current])
 
     useEffect(() => {
-        if (ref?.current) {
-            gsap.to(ref.current.position, {x, y, z, duration: 0});
-            gsap.to(ref.current.material, {opacity: 1, duration: 10});
-        }
-    }, [ref?.current])
+        innerRef.current.material.color.set(canvasHelper.getMyColor(name))
+    }, [needUpdatePixels])
 
     const playPixelSound = (volume: number) => {
         const pixelSound = new Audio('./sound/ui-click.mp3')
@@ -45,25 +47,23 @@ export default function Pixel({isDrawMode, name, color, y, x, z = 0}: IProps) {
     }
 
     const hoverAction = () => {
-        const currentColor = ref.current.material.color
+        const currentColor = innerRef.current.material.color
         const newColor = new Color(color)
         if (isDrawMode && !newColor.equals(currentColor)) {
-            ref.current.material.color.set(color)
-            playPixelSound(getPixelVolume(ref.current.name))
-            gsap.to(ref.current.position, {z: 15, duration: 3});
-            gsap.to(ref.current.position, {z: 0, duration: 3, data: 3});
+            innerRef.current.material.color.set(color)
+            playPixelSound(getPixelVolume(innerRef.current.name))
+            gsap.to(innerRef.current.position, {z: 15, duration: 3});
+            gsap.to(innerRef.current.position, {z: 0, duration: 3, data: 3});
         }
-    }
-    const hoverOutAction = () => {
-        // gsap.to(ref.current.position, {z: 0, duration: 3, data: 3});
     }
 
     return <mesh
-        name={name} ref={ref}
+        name={name} ref={innerRef}
         onPointerOver={hoverAction}
-        onPointerOut={hoverOutAction}
         position={[position.y, position.x, position.z]}>
         <boxGeometry args={[1, 1, 1]}/>
         <meshStandardMaterial opacity={0} transparent={true}/>
     </mesh>
-}
+})
+
+export default Pixel

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import * as Sentry from "@sentry/react";
 import 'react-toastify/dist/ReactToastify.css';
 import '@/App.scss';
-import Canvas from "@components/canvas";
+import useSWR from "swr";
 
 // const TRACKING_ID = "G-JNWMFZRRK5"; // OUR_TRACKING_ID
 // ReactGA.initialize(TRACKING_ID);
@@ -38,11 +38,11 @@ function App() {
 
     const [isShowPreloader, setIsShowPreloader] = useState(true)
 
-    // const {data, error, isLoading, mutate} = useSWR(
-    //     "https://nodes.wavesnodes.com/addresses/data/3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
-    //     fetcher,
-    //     {refreshInterval: 1000}
-    // );
+    const {data, error, isLoading, mutate} = useSWR(
+        "https://nodes.wavesnodes.com/addresses/data/3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
+        fetcher,
+        {refreshInterval: 1000}
+    );
 
     const onLoadedHandler = () => {
         loadedCount = loadedCount + 1
@@ -57,8 +57,7 @@ function App() {
             {/*<Preloader isShow={isShowPreloader}/>*/}
             {/*<Header onLoaded={onLoadedHandler}/>*/}
             {/*<Promo onLoaded={onLoadedHandler}/>*/}
-            {/*<MoodCanvasLazy data={data}/>*/}
-            <Canvas/>
+            <MoodCanvasLazy data={data}/>
             {/*<TopBurnersLazy data={data}/>*/}
             {/*<FAQLazy/>*/}
             {/*<SashaPanelLazy data={data}/>*/}
