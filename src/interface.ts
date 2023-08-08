@@ -10,6 +10,17 @@ export interface IBlockchainData {
     value: string
 }
 
-export interface ILogData extends IBlockchainData{
+export interface IPixelState {
+    pixels: {
+        color: string
+        y: number
+        x: number
+    }[],
+    time: number
+}
+
+
+export interface ILogData extends IBlockchainData {
     id: number
 }
+

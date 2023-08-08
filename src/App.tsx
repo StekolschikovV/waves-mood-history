@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import * as Sentry from "@sentry/react";
 import 'react-toastify/dist/ReactToastify.css';
 import '@/App.scss';
+import MoodCanvas2 from "@components/mood-canvas2";
 import useSWR from "swr";
 
 // const TRACKING_ID = "G-JNWMFZRRK5"; // OUR_TRACKING_ID
@@ -57,7 +58,8 @@ function App() {
             {/*<Preloader isShow={isShowPreloader}/>*/}
             {/*<Header onLoaded={onLoadedHandler}/>*/}
             {/*<Promo onLoaded={onLoadedHandler}/>*/}
-            <MoodCanvasLazy data={data}/>
+            {/*<MoodCanvasLazy data={data}/>*/}
+            <MoodCanvas2/>
             {/*<TopBurnersLazy data={data}/>*/}
             {/*<FAQLazy/>*/}
             {/*<SashaPanelLazy data={data}/>*/}

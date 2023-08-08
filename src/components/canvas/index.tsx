@@ -4,7 +4,6 @@ import Pixel from "@components/canvas/pixel";
 import {IPixel} from "@/interface";
 import CanvasHelper from "@components/canvas/canvasHelper";
 
-
 interface IProps {
     color: string
     pixels: IPixel[]
