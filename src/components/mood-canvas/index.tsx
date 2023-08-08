@@ -6,6 +6,7 @@ import {toast} from 'react-toastify';
 import html2canvas from "html2canvas";
 import styles from "./style.module.scss"
 import {IBlockchainData, ILogData, IPixel} from "../../interface";
+import Canvas from "@components/canvas";
 
 const toastWrapper = (text: string) => {
     toast(text, {
@@ -251,6 +252,10 @@ export default function MoodCanvas({data}: { data: any }) {
 
     return <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
         <div className={`container ${styles.moodCanvas}`}>
+            <Canvas/>
+
+        </div>
+        <div className={`container ${styles.moodCanvas}`}>
             <div className={"title"}>Mood canvas</div>
             <div className={styles.innerContainer}>
                 <div className={styles.text}>
@@ -272,7 +277,6 @@ export default function MoodCanvas({data}: { data: any }) {
                     </ul>
                 </div>
                 <div className={styles.canvaWrapper}>
-
                     <ul className={styles.colorList}>
                         {colors.map(color => <li
                             key={color}
