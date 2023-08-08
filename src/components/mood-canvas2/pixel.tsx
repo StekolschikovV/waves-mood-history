@@ -59,7 +59,7 @@ const Pixel = observer(forwardRef((
             store.pixelStore.addNewPixel(name, store.pixelStore.color)
         }
     }
-
+    // console.log(isDrawMode)
     return <mesh
         onClick={() => hoverAction(true)}
         name={name} ref={innerRef}

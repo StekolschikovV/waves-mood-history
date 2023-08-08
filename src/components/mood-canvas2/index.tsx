@@ -1,8 +1,32 @@
-import React, {useEffect, useState} from 'react'
+import React, {memo, useEffect, useState} from 'react'
 import {Canvas as CANVAS} from '@react-three/fiber'
 import Pixel from "@components/mood-canvas2/pixel";
 import {useRootStore} from "@/providers/RootStoreProvider";
 import {observer} from "mobx-react-lite";
+import Timestamp from "@components/mood-canvas2/timestamp";
+
+const MemoizedTimestamp = memo((props, context) => {
+    return <Timestamp name={""} x={0} y={100} z={5}/>
+})
+
+const MemoizedPixels = memo((props: {
+    pixels: { name: string, y: number, x: number }[]
+    isDrawMode: boolean
+}, context) => {
+    return <>
+        {props.pixels.map(c => {
+                return <Pixel
+                    key={c.name}
+                    name={c.name}
+                    isDrawMode={props.isDrawMode}
+                    x={c.x}
+                    y={c.y}
+                    z={0}
+                />
+            }
+        )}
+    </>
+});
 
 export default observer(function MoodCanvas2() {
 
@@ -16,7 +40,7 @@ export default observer(function MoodCanvas2() {
         let result: { name: string, y: number, x: number }[] = []
         Array.from({length: 100}).forEach((_, xI) => {
             Array.from({length: 100}).forEach((_, yI) => {
-                const currentSize = (0.4 + 1)
+                const currentSize = (0.1 + 1.5)
                 const y = (yI * currentSize) - (100 / 2 * currentSize) + (currentSize / 2)
                 const x = (xI * currentSize) - (100 / 2 * currentSize) + (currentSize / 2)
                 result.push({name: `${yI}-${xI}`, y, x})
@@ -43,19 +67,10 @@ export default observer(function MoodCanvas2() {
             onMouseDown={() => setIsDrawMode(true)}
             onMouseUp={() => setIsDrawMode(false)}
         >
-            <CANVAS camera={{fov: 75, position: [0, 0, 95]}}>
-                <ambientLight/>
-                {pixels.map(c => {
-                        return <Pixel
-                            key={c.name}
-                            name={c.name}
-                            isDrawMode={isDrawMode}
-                            x={c.x}
-                            y={c.y}
-                            z={0}
-                        />
-                    }
-                )}
+            {/*<CANVAS camera={{fov: 75, position: [0, 0, 95]}}>*/}
+            <CANVAS camera={{fov: 75, position: [0, 0, 105]}}>
+                <ambientLight intensity={1.5}/>
+                <MemoizedPixels pixels={pixels} isDrawMode={isDrawMode}/>
             </CANVAS>
         </div>
         <ul>
