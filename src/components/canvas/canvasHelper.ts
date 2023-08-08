@@ -11,7 +11,6 @@ export default class CanvasHelper {
     }
 
     public upload = (pixels: IPixel[]) => {
-        console.log("upload", pixels)
         if (this.pixels.length !== pixels.length) {
             this.pixels = pixels
             this.lastSate = this.getLastSate()

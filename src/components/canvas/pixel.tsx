@@ -3,6 +3,7 @@ import React, {forwardRef, useEffect, useRef, useState} from "react";
 import {BoxGeometry, Color, Mesh, MeshStandardMaterial} from "three";
 import gsap from "gsap";
 import CanvasHelper from "@components/canvas/canvasHelper";
+import {IPixel} from "@/interface";
 
 interface IProps {
     name: string
@@ -13,9 +14,20 @@ interface IProps {
     color: string
     needUpdatePixels: number
     canvasHelper: CanvasHelper
+    addNewPixelHandler: (pixel: IPixel) => void
 }
 
-const Pixel = forwardRef(({isDrawMode, needUpdatePixels, canvasHelper, name, color, y, x, z = 0}: IProps, ref) => {
+const Pixel = forwardRef(({
+                              isDrawMode,
+                              needUpdatePixels,
+                              addNewPixelHandler,
+                              canvasHelper,
+                              name,
+                              color,
+                              y,
+                              x,
+                              z = 0
+                          }: IProps, ref) => {
 
     const innerRef = useRef<Mesh<BoxGeometry, MeshStandardMaterial>>(null!);
     const [position, setPosition] = useState({
@@ -54,10 +66,16 @@ const Pixel = forwardRef(({isDrawMode, needUpdatePixels, canvasHelper, name, col
             playPixelSound(getPixelVolume(innerRef.current.name))
             gsap.to(innerRef.current.position, {z: 15, duration: 3});
             gsap.to(innerRef.current.position, {z: 0, duration: 3, data: 3});
+            addNewPixelHandler({
+                width: y,
+                height: x,
+                color: color
+            })
         }
     }
 
     return <mesh
+        onClick={hoverAction}
         name={name} ref={innerRef}
         onPointerOver={hoverAction}
         position={[position.y, position.x, position.z]}>

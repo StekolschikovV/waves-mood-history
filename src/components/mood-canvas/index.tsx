@@ -256,7 +256,8 @@ export default function MoodCanvas({data}: { data: any }) {
     return <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
         <div className={`container ${styles.moodCanvas}`}>
             <button onClick={() => canvasRef?.current?.test()}>test</button>
-            <Canvas pixels={selectedPixel} ref={canvasRef} color={selectedColor}/>
+            <Canvas pixels={selectedPixel} ref={canvasRef} color={selectedColor}
+                    addNewPixelHandler={addNewPixelHandler}/>
         </div>
         <div className={`container ${styles.moodCanvas}`}>
             <div className={"title"}>Mood canvas</div>

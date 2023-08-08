@@ -9,11 +9,12 @@ interface IProps {
     color: string
     pixels: IPixel[]
     size?: number
+    addNewPixelHandler: (pixel: IPixel) => void
 }
 
 let canvasHelper: CanvasHelper
 
-const Canvas = forwardRef(({color, pixels, size = 100}: IProps, ref) => {
+const Canvas = forwardRef(({color, pixels, addNewPixelHandler, size = 100}: IProps, ref) => {
 
     useImperativeHandle(ref, () => ({
         test() {
@@ -65,6 +66,7 @@ const Canvas = forwardRef(({color, pixels, size = 100}: IProps, ref) => {
                 <ambientLight/>
                 {cubes.map(c => {
                         return <Pixel
+                            addNewPixelHandler={addNewPixelHandler}
                             needUpdatePixels={needUpdatePixels}
                             key={c.name}
                             name={c.name}
