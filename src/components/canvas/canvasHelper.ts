@@ -34,14 +34,13 @@ export default class CanvasHelper {
         Array.from({length: this.size}).forEach((_, yI) => {
             let line: IPixel[] = []
             Array.from({length: this.size}).forEach((_, xI) => {
-                let p: IPixel = {color: "white", width: yI, height: xI}
+                let p: IPixel = {color: "white", width: xI, height: yI}
                 this.pixels.forEach(e => {
-                    if (e.height === yI && e.width === xI) p = e
+                    if (e.height === xI && e.width === yI) p = e
                 })
                 line.push(p)
-
             })
-            result.push(line)
+            result.push(line.reverse())
         })
         return result
     }

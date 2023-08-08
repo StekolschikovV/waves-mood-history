@@ -36,7 +36,7 @@ const Canvas = forwardRef(({color, pixels, size = 100}: IProps, ref) => {
                 const currentSize = (0.4 + 1)
                 const y = (yI * currentSize) - (size / 2 * currentSize) + (currentSize / 2)
                 const x = (xI * currentSize) - (size / 2 * currentSize) + (currentSize / 2)
-                result.push({name: `${yI}-${xI}`, y, x})
+                result.push({name: `${99 - yI}-${99 - xI}`, y, x})
             })
         })
         setCubes(result)
@@ -53,7 +53,11 @@ const Canvas = forwardRef(({color, pixels, size = 100}: IProps, ref) => {
     return <>
         {/*<button onChange={}> hide</button>*/}
         <div
-            className={"canvas"} style={{height: "600px", border: "1px solid black", width: "600px"}}
+            className={"canvas"} style={{
+            height: "600px",
+            border: "1px solid black",
+            width: "600px",
+        }}
             onMouseDown={() => setIsDrawMode(true)}
             onMouseUp={() => setIsDrawMode(false)}
         >
