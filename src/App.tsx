@@ -4,6 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import '@/App.scss';
 import MoodCanvas2 from "@components/mood-canvas2";
 import useSWR from "swr";
+import Promo from "@components/promo";
+import Header from "@components/header";
+import {Preloader} from "@components/preloader";
 
 // const TRACKING_ID = "G-JNWMFZRRK5"; // OUR_TRACKING_ID
 // ReactGA.initialize(TRACKING_ID);
@@ -55,15 +58,15 @@ function App() {
 
     return (
         <>
-            {/*<Preloader isShow={isShowPreloader}/>*/}
-            {/*<Header onLoaded={onLoadedHandler}/>*/}
-            {/*<Promo onLoaded={onLoadedHandler}/>*/}
+            <Preloader isShow={isShowPreloader}/>
+            <Header onLoaded={onLoadedHandler}/>
+            <Promo onLoaded={onLoadedHandler}/>
             {/*<MoodCanvasLazy data={data}/>*/}
             <MoodCanvas2/>
-            {/*<TopBurnersLazy data={data}/>*/}
-            {/*<FAQLazy/>*/}
-            {/*<SashaPanelLazy data={data}/>*/}
-            {/*<FooterLazy/>*/}
+            <TopBurnersLazy data={data}/>
+            <FAQLazy/>
+            <SashaPanelLazy data={data}/>
+            <FooterLazy/>
             {/*<ToastContainer/>*/}
         </>
     )

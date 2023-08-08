@@ -19,6 +19,7 @@ export class PixelStore {
     color = "red"
 
     signer: Signer
+    selectedToken: "USDT" | "USDC" = "USDT"
 
     // needUpdatePixel = 0
     debouncedAddNewPixel = _.debounce(() => {
@@ -51,7 +52,7 @@ export class PixelStore {
         this.state = this.getSliceFromTime(time)
     }
 
-    public saveNewToBlockchain = async (selectedToken: "USDT" | "USDC") => {
+    public saveNewToBlockchain = async () => {
         let newData: any[] = []
         const stateNewClone = this.stateNew
         this.stateNew.forEach((value, key, map) => {
@@ -70,7 +71,7 @@ export class PixelStore {
             dApp: "3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
             fee: 500000,
             payment: [{
-                assetId: selectedToken === "USDT" ? USDTWXG : USDCWXG,
+                assetId: this.selectedToken === "USDT" ? USDTWXG : USDCWXG,
                 amount: 10000 * this.stateNew.size,
             }],
             call: {
