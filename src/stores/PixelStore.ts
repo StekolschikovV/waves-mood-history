@@ -11,6 +11,7 @@ export class PixelStore {
     root: RootStore;
     data: IPixelState[] = []
     lastDataTime = 0
+    selectedDataTime = 0
 
     state: Map<string, string> = new Map()
     stateNew: Map<string, string> = new Map()
@@ -50,6 +51,7 @@ export class PixelStore {
 
     public travelToTime = (time: number): void => {
         this.state = this.getSliceFromTime(time)
+        this.selectedDataTime = time
     }
 
     public saveNewToBlockchain = async () => {
@@ -64,7 +66,6 @@ export class PixelStore {
                 value: `${value}-${y}-${x}`
             })
         })
-        console.log(newData)
         let USDTWXG = "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ"
         let USDCWXG = "6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ"
         const data: InvokeArgs = {

@@ -174,9 +174,9 @@ export default observer(function MoodCanvas2() {
                 <ul className={`historyLine ${styles.historyLine}`}>
                     {store.pixelStore.data.map((p, i) =>
                         <li key={`${p.time}-${i}`}
-                            className={`${styles.historyStep}`}
-                            // className={`${styles.historyStep} ${p === selectedLog && styles.historyStepSelected}`}
-                            // onClick={() => onClickLogHandler(p)}
+                            // className={`${styles.historyStep}`}
+                            className={`${styles.historyStep} ${p.time === store.pixelStore.selectedDataTime && styles.historyStepSelected}`}
+                            onClick={() => store.pixelStore.travelToTime(p.time)}
                         >
                             <div>
                                 <Moment format="YYYY/MM/DD">
