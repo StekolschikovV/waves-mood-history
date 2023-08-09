@@ -10,6 +10,12 @@ export default observer(function Color({color, i}: { color: string, i: number })
     const [lastSelectedColor, setLastSelectedColor] = useState<string | null>(null)
     const [z, setZ] = useState<number>(0)
 
+    const playPixelSound = () => {
+        const pixelSound = new Audio('./sound/clickselect.mp3')
+        pixelSound.volume = 0.8
+        pixelSound.play()
+    }
+
     const innerRef = useRef<Mesh<BoxGeometry, MeshStandardMaterial>>(null!);
 
     useEffect(() => {
@@ -28,7 +34,10 @@ export default observer(function Color({color, i}: { color: string, i: number })
     return <>
         <mesh
             ref={innerRef}
-            onPointerDown={(e) => store.pixelStore.color = color}
+            onPointerDown={(e) => {
+                store.pixelStore.color = color
+                playPixelSound()
+            }}
             position={[-80, ((8 * i) - 60), -2.5]}>
             <boxGeometry args={[5, 5, 5]}/>
             <meshStandardMaterial opacity={1} color={color} transparent={true}/>

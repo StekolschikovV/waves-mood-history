@@ -1,5 +1,6 @@
 import React, {memo, useEffect, useState} from 'react'
 import {Canvas as CANVAS} from '@react-three/fiber'
+
 import Pixel from "@components/mood-canvas2/pixel";
 import {useRootStore} from "@/providers/RootStoreProvider";
 import {observer} from "mobx-react-lite";
@@ -58,8 +59,8 @@ export default observer(function MoodCanvas2() {
         scrollRight()
 
     }, [store.pixelStore.data])
-
-
+    const width = window.innerWidth > 700 ? "550px" : "90vw"
+    const height = window.innerWidth > 700 ? "500px" : "80vw"
     return <>
         <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
             <div className={`container ${styles.moodCanvas}`}>
@@ -67,8 +68,7 @@ export default observer(function MoodCanvas2() {
                 <div className={styles.innerContainer}>
                     <div className={styles.text}>
                         This drawing will be permanently stored in the blockchain on behalf of your account. Try to
-                        express
-                        your emotions by answering the following questions:
+                        express your emotions by answering the following questions:
                         <ul>
                             <li>
                                 What is your waves mood today?
@@ -89,10 +89,11 @@ export default observer(function MoodCanvas2() {
                             id={"canvaBlock"}
                             className={styles.canva}
                             style={{
-                                height: "500px",
-                                // border: "1px solid black",
-                                width: "550px",
+                                width: width,
+                                height: height,
                                 cursor: "crosshair"
+                                // border: "1px solid black",
+
                             }}
                             onMouseDown={() => setIsDrawMode(true)}
                             onMouseUp={() => setIsDrawMode(false)}
@@ -112,41 +113,6 @@ export default observer(function MoodCanvas2() {
                                 <Colors/>
                             </CANVAS>
                         </div>
-                        {/*<div*/}
-                        {/*    id={"canvaBlock"}*/}
-                        {/*    onMouseDown={() => setIsMouseDown(true)}*/}
-                        {/*    onMouseUp={() => setIsMouseDown(false)}*/}
-                        {/*    className={styles.canva}*/}
-                        {/*>*/}
-                        {/*    {Array.from({length: height}).map((row, rowI) => {*/}
-                        {/*        return <div key={`${rowI}`} className={styles.canvaRow}>*/}
-                        {/*            {Array.from({length: width}).map((pixel, pixelI) => {*/}
-                        {/*                let isPixelSelectedLoc = isPixelSelected(rowI, pixelI, false)*/}
-                        {/*                let isPixelSelectedLocNew = selectedLog === "now" ? isPixelSelected(rowI, pixelI, true) : []*/}
-                        {/*                let bg = "none"*/}
-                        {/*                if (typeof isPixelSelectedLocNew === "string") bg = isPixelSelectedLocNew*/}
-                        {/*                else if (typeof isPixelSelectedLoc === "string") bg = isPixelSelectedLoc*/}
-                        {/*                return <div*/}
-                        {/*                    key={`${rowI}${pixelI}`}*/}
-                        {/*                    className={`${styles.canvaElement}`}*/}
-                        {/*                    style={{background: bg}}*/}
-                        {/*                    onClick={() => addNewPixelHandler({*/}
-                        {/*                        width: rowI,*/}
-                        {/*                        height: pixelI,*/}
-                        {/*                        color: selectedColor*/}
-                        {/*                    })}*/}
-                        {/*                    onMouseEnter={() => {*/}
-                        {/*                        if (isMouseDown) addNewPixelHandler({*/}
-                        {/*                            width: rowI,*/}
-                        {/*                            height: pixelI,*/}
-                        {/*                            color: selectedColor*/}
-                        {/*                        })*/}
-                        {/*                    }}*/}
-                        {/*                ></div>*/}
-                        {/*            })}*/}
-                        {/*        </div>*/}
-                        {/*    })}*/}
-                        {/*</div>*/}
                     </div>
 
                     <div className={styles.controls}>
@@ -161,6 +127,21 @@ export default observer(function MoodCanvas2() {
                                     className={store.pixelStore.selectedToken === "USDC" ? styles.selectedTokenSelected : ""}>USDC-WXG</span>
                             </div>
                         </div>
+                        <div className={styles.selectedToken}>
+                            <div className={styles.selectedTokenTitle}>Mode:</div>
+                            <div className={styles.selectedTokenWrapper}>
+                                    <span
+                                        onClick={e => store.pixelStore.mode = "draw"}
+                                        className={store.pixelStore.mode === "draw" ? styles.selectedTokenSelected : ""}>
+                                        Draw
+                                    </span>
+                                <span
+                                    onClick={e => store.pixelStore.mode = "clean"}
+                                    className={store.pixelStore.mode === "clean" ? styles.selectedTokenSelected : ""}>
+                                        clean
+                                    </span>
+                            </div>
+                        </div>
                         <div className={styles.pixelUsed}>
                             {store.pixelStore.stateNew.size}
                             <span>pixels used</span>
@@ -168,26 +149,13 @@ export default observer(function MoodCanvas2() {
                                 className={styles.pixelCalc}>{store.pixelStore.stateNew.size} pixel / {store.pixelStore.blockchainDataLimit} max = {Math.ceil((store.pixelStore.stateNew.size || 0) / (store.pixelStore.blockchainDataLimit || 1))} transactions</span>
                         </div>
                         <div className={styles.btnGroup}>
-                            {/*<button className={styles.btn} onClick={() => onClickCanselHandler()}>Undo last</button>*/}
-                            {/*<button className={styles.btn} onClick={() => {*/}
-                            {/*    setSelectedPixelNew([])*/}
-                            {/*}}>Undo all*/}
-                            {/*</button>*/}
-                            {/*<button className={styles.btn} onClick={e => takeScreenshotHandler()}>Take Screenshot</button>*/}
                             <button disabled={store.pixelStore.stateNew.size === 0} className={styles.btn}
                                     onClick={() => store.pixelStore.saveNewToBlockchain()}>Save and burn WXG
                             </button>
-                            <div className={styles.selectedToken}>
-                                <div className={styles.selectedTokenTitle}>Mode:</div>
-                                <div className={styles.selectedTokenWrapper}>
-                            <span
-                                onClick={e => store.pixelStore.mode = "draw"}
-                                className={store.pixelStore.mode === "draw" ? styles.selectedTokenSelected : ""}>Draw</span>
-                                    <span
-                                        onClick={e => store.pixelStore.mode = "clean"}
-                                        className={store.pixelStore.mode === "clean" ? styles.selectedTokenSelected : ""}>clean</span>
-                                </div>
-                            </div>
+                            <button disabled={store.pixelStore.stateNew.size === 0} className={styles.btn}
+                                    onClick={() => store.pixelStore.clean()}>Clean
+                            </button>
+
                         </div>
                     </div>
                 </div>

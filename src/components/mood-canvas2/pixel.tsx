@@ -59,12 +59,7 @@ const Pixel = observer(forwardRef((
             store.pixelStore.addNewPixel(name, store.pixelStore.color)
         } else if (store.pixelStore.mode === "clean") {
             store.pixelStore.cleanPixel(name)
-            // const arr = name.split("-")
-            // const y = Math.abs(+arr[1] + 99)
-            // const x = Math.abs(+arr[0])
             innerRef?.current?.material?.color.set(store.pixelStore.state.get(name) || "white")
-            // console.log(store.pixelStore.state.get(name))
-
         }
     }
     // console.log(isDrawMode)

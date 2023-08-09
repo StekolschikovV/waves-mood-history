@@ -62,6 +62,11 @@ export class PixelStore {
         this.selectedDataTime = time
     }
 
+    public clean() {
+        this.stateNew.clear()
+        this.implementNewData(this.data)
+    }
+
     public saveNewToBlockchain = async () => {
         let newData: any[] = []
         this.stateNew.forEach((value, key, map) => {
