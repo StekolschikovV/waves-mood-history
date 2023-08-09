@@ -24,6 +24,7 @@ const MemoizedPixels = memo((props: {
                 />
             }
         )}
+
     </>
 });
 
@@ -85,10 +86,15 @@ export default observer(function MoodCanvas2() {
                             onMouseDown={() => setIsDrawMode(true)}
                             onMouseUp={() => setIsDrawMode(false)}
                         >
-                            <CANVAS camera={{fov: 75, position: [0, 0, 105]}}>
-                                <ambientLight intensity={4}/>
+                            <CANVAS camera={{fov: 75, position: [0, 0, 107]}}>
+                                <ambientLight intensity={2.7}/>
                                 <pointLight intensity={10000} position={[-120, 0, 0]}/>
                                 <MemoizedPixels pixels={pixels} isDrawMode={isDrawMode}/>
+                                <mesh scale={[((0.1 + 1.5) * 102), ((0.1 + 1.5) * 102), 1]} position={[8, 0, -1]}>
+                                    <planeGeometry/>
+                                    <meshStandardMaterial color={"#ababab"}/>
+
+                                </mesh>
                                 <Colors/>
                             </CANVAS>
                         </div>

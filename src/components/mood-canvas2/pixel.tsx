@@ -1,6 +1,6 @@
 import React, {forwardRef, useEffect, useRef, useState} from "react";
 
-import {BoxGeometry, Mesh, MeshStandardMaterial} from "three";
+import {BoxGeometry, Color, Mesh, MeshStandardMaterial} from "three";
 import gsap from "gsap";
 import {useRootStore} from "@/providers/RootStoreProvider";
 import {observer} from "mobx-react-lite";
@@ -51,7 +51,7 @@ const Pixel = observer(forwardRef((
     }
 
     const hoverAction = (isClick = false) => {
-        if (isDrawMode || isClick) {
+        if ((isDrawMode || isClick) && !innerRef?.current?.material?.color.equals(new Color(store.pixelStore.color))) {
             gsap.to(innerRef.current.position, {z: 3, duration: 0.5});
             innerRef?.current?.material?.color.set(store.pixelStore.color)
             gsap.to(innerRef.current.position, {z: 0, duration: 0.2, delay: 1});
