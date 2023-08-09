@@ -78,24 +78,16 @@ export default observer(function MoodCanvas2() {
                             className={styles.canva}
                             style={{
                                 height: "500px",
-                                border: "1px solid black",
-                                width: "600px",
+                                // border: "1px solid black",
+                                width: "550px",
                                 cursor: "crosshair"
                             }}
                             onMouseDown={() => setIsDrawMode(true)}
                             onMouseUp={() => setIsDrawMode(false)}
                         >
-                            {/*<CANVAS camera={{fov: 75, position: [0, 0, 95]}}>*/}
                             <CANVAS camera={{fov: 75, position: [0, 0, 105]}}>
-                                {/*<CANVAS camera={{fov: 75, position: [0, 0, 2]}}>*/}
-                                <ambientLight intensity={1.8}/>
-                                {/*<ambientLight/>*/}
+                                <ambientLight intensity={4}/>
                                 <pointLight intensity={10000} position={[-120, 0, 0]}/>
-                                {/*<mesh rotation={[0, 10, 0]}>*/}
-                                {/*    <boxGeometry attach="geometry" args={[1, 1, 1]}/>*/}
-                                {/*    <meshStandardMaterial attach="material" color={"#6be092"}/>*/}
-                                {/*</mesh>*/}
-
                                 <MemoizedPixels pixels={pixels} isDrawMode={isDrawMode}/>
                                 <Colors/>
                             </CANVAS>

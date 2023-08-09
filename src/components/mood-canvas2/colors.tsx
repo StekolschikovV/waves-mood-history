@@ -1,6 +1,7 @@
 import {observer} from "mobx-react-lite";
 import {useRootStore} from "@/providers/RootStoreProvider";
 import React from "react";
+import Color from "@components/mood-canvas2/color";
 
 export default observer(function Colors() {
 
@@ -10,14 +11,7 @@ export default observer(function Colors() {
 
     return <>
         {colors.map((c, i) => {
-            return <mesh
-                key={i}
-                onClick={() => store.pixelStore.color = c}
-
-                position={[-80, ((8 * i) - 80), -2.5]}>
-                <boxGeometry args={[5, 5, 5]}/>
-                <meshStandardMaterial opacity={1} color={c} transparent={true}/>
-            </mesh>
+            return <Color key={i} color={c} i={i}/>
         })}
     </>
 })
