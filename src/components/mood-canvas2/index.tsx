@@ -34,6 +34,13 @@ export default observer(function MoodCanvas2() {
     const [pixels, setPixels] = useState<{ name: string, y: number, x: number }[]>([])
     const store = useRootStore();
 
+    const scrollRight = () => {
+        let element: any = document.querySelector(`.historyLine`)
+        if (element) {
+            element.scrollLeft = element?.scrollWidth
+        }
+    }
+
     useEffect(() => {
         let result: { name: string, y: number, x: number }[] = []
         Array.from({length: 100}).forEach((_, xI) => {
@@ -46,6 +53,12 @@ export default observer(function MoodCanvas2() {
         })
         setPixels(result)
     }, [])
+
+    useEffect(() => {
+        scrollRight()
+
+    }, [store.pixelStore.data])
+
 
     return <>
         <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
@@ -86,14 +99,17 @@ export default observer(function MoodCanvas2() {
                             onMouseDown={() => setIsDrawMode(true)}
                             onMouseUp={() => setIsDrawMode(false)}
                         >
-                            <CANVAS camera={{fov: 75, position: [0, 0, 107]}}>
+                            <CANVAS
+                                camera={{
+                                    fov: 75,
+                                    position: [0, 0, 107],
+                                }}>
                                 <ambientLight intensity={2.7}/>
                                 <pointLight intensity={10000} position={[-120, 0, 0]}/>
                                 <MemoizedPixels pixels={pixels} isDrawMode={isDrawMode}/>
                                 <mesh scale={[((0.1 + 1.5) * 102), ((0.1 + 1.5) * 102), 1]} position={[8, 0, -1]}>
                                     <planeGeometry/>
                                     <meshStandardMaterial color={"#ababab"}/>
-
                                 </mesh>
                                 <Colors/>
                             </CANVAS>
