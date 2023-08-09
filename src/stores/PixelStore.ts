@@ -56,7 +56,6 @@ export class PixelStore {
 
     public saveNewToBlockchain = async () => {
         let newData: any[] = []
-        const stateNewClone = this.stateNew
         this.stateNew.forEach((value, key, map) => {
             const arr = key.split("-")
             const y = Math.abs(+arr[1] - 99)
@@ -68,47 +67,49 @@ export class PixelStore {
         })
         let USDTWXG = "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ"
         let USDCWXG = "6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ"
-        const data: InvokeArgs = {
-            dApp: "3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
-            fee: 500000,
-            payment: [{
-                assetId: this.selectedToken === "USDT" ? USDTWXG : USDCWXG,
-                amount: 10000 * this.stateNew.size,
-            }],
-            call: {
-                function: 'draw',
-                args: [
-                    {
-                        type: "list",
-                        value: newData
-                    }
-                ]
-            },
-        }
+        _.chunk(newData, 3).forEach(e => {
+            const data: InvokeArgs = {
+                dApp: "3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
+                fee: 500000,
+                payment: [{
+                    assetId: this.selectedToken === "USDT" ? USDTWXG : USDCWXG,
+                    amount: 10000 * this.stateNew.size,
+                }],
+                call: {
+                    function: 'draw',
+                    args: [
+                        {
+                            type: "list",
+                            value: newData
+                        }
+                    ]
+                }
+            }
+            this.signer
+                .invoke(data)
+                .broadcast()
+                .then((_) => {
+                    this.updateLoop()
+                })
+                .catch((e) => {
+                    this.updateLoop()
+                    console.log(e)
+                })
+        })
 
-        await this.signer
-            .invoke(data)
-            .broadcast()
-            .then((_) => this.waitNewPixels(stateNewClone))
-            .catch((e) => console.log(e))
     }
 
-    private waitNewPixels = (stateNewClone: Map<string, string>) => {
-        this.load()
+    updateLoop = () => {
         setTimeout(() => {
-            let updateCount = 0
-            stateNewClone.forEach((value, key, map) => {
-                if (this.stateNew.get(key) === value) {
-                    updateCount = updateCount + 1
-                }
-            })
-            if (stateNewClone.size !== updateCount) {
-                this.waitNewPixels(stateNewClone)
-            } else {
-                this.stateNew = new Map()
-            }
             this.load()
-        }, 3000)
+        }, 500)
+        setTimeout(() => {
+            this.load()
+        }, 1000)
+        setTimeout(() => {
+            this.stateNew = new Map()
+            this.load()
+        }, 1500)
     }
 
     private load = async () => {

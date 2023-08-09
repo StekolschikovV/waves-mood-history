@@ -10,6 +10,11 @@ export interface IBlockchainData {
     value: string
 }
 
+export interface IBlockchainDataArg {
+    type: string
+    value: string
+}
+
 export interface IPixelState {
     pixels: {
         color: string

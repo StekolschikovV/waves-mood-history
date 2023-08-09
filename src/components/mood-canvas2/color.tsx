@@ -13,7 +13,6 @@ export default observer(function Color({color, i}: { color: string, i: number })
     const innerRef = useRef<Mesh<BoxGeometry, MeshStandardMaterial>>(null!);
 
     useEffect(() => {
-        console.log(store.pixelStore.color, color === store.pixelStore.color, z, z === -2.5)
         if (lastSelectedColor !== store.pixelStore.color) {
             if (color === store.pixelStore.color && (z === -2.5 || lastSelectedColor === null)) {
                 gsap.to(innerRef.current.position, {z: 4, duration: 0.25});
