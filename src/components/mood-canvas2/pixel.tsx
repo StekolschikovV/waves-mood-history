@@ -63,9 +63,16 @@ const Pixel = observer(forwardRef((
     return <mesh
         onClick={() => hoverAction(true)}
         name={name} ref={innerRef}
-        onPointerOver={() => hoverAction(false)}
+        onPointerOver={() => {
+            // document.body.style.cursor = "crosshair";
+            hoverAction(false)
+        }}
+        onPointerOut={() => {
+            // document.body.style.cursor = "default";
+            hoverAction(false)
+        }}
         position={[position.y, position.x, position.z]}>
-        <boxGeometry args={[1, 1, 1]}/>
+        <boxGeometry args={[1, 1, 2]}/>
         <meshStandardMaterial opacity={0} transparent={true}/>
     </mesh>
 }))

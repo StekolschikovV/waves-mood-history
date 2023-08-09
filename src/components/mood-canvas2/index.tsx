@@ -3,13 +3,10 @@ import {Canvas as CANVAS} from '@react-three/fiber'
 import Pixel from "@components/mood-canvas2/pixel";
 import {useRootStore} from "@/providers/RootStoreProvider";
 import {observer} from "mobx-react-lite";
-import Timestamp from "@components/mood-canvas2/timestamp";
 import styles from "@components/mood-canvas/style.module.scss";
 import Moment from "react-moment";
+import Colors from "@components/mood-canvas2/colors";
 
-const MemoizedTimestamp = memo((props, context) => {
-    return <Timestamp name={""} x={0} y={100} z={5}/>
-})
 
 const MemoizedPixels = memo((props: {
     pixels: { name: string, y: number, x: number }[]
@@ -35,14 +32,13 @@ export default observer(function MoodCanvas2() {
     const [isDrawMode, setIsDrawMode] = useState(false)
     const [pixels, setPixels] = useState<{ name: string, y: number, x: number }[]>([])
     const store = useRootStore();
-    const colors = ['aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow']
 
     useEffect(() => {
         let result: { name: string, y: number, x: number }[] = []
         Array.from({length: 100}).forEach((_, xI) => {
             Array.from({length: 100}).forEach((_, yI) => {
                 const currentSize = (0.1 + 1.5)
-                const y = (yI * currentSize) - (100 / 2 * currentSize) + (currentSize / 2)
+                const y = (yI * currentSize) - (100 / 2 * currentSize) + (currentSize / 2) + 8
                 const x = (xI * currentSize) - (100 / 2 * currentSize) + (currentSize / 2)
                 result.push({name: `${yI}-${xI}`, y, x})
             })
@@ -75,20 +71,13 @@ export default observer(function MoodCanvas2() {
                         </ul>
                     </div>
                     <div className={styles.canvaWrapper}>
-                        <ul className={styles.colorList}>
-                            {colors.map(color => <li
-                                key={color}
-                                className={`${styles.colorElement} ${store.pixelStore.color === color && styles.colorElementSelected}`}
-                                style={{background: color}}
-                                onClick={e => store.pixelStore.color = color}
-                            ></li>)}
-                        </ul>
+
 
                         <div
                             id={"canvaBlock"}
                             className={styles.canva}
                             style={{
-                                height: "600px",
+                                height: "500px",
                                 border: "1px solid black",
                                 width: "600px",
                                 cursor: "crosshair"
@@ -98,8 +87,17 @@ export default observer(function MoodCanvas2() {
                         >
                             {/*<CANVAS camera={{fov: 75, position: [0, 0, 95]}}>*/}
                             <CANVAS camera={{fov: 75, position: [0, 0, 105]}}>
-                                <ambientLight intensity={1.5}/>
+                                {/*<CANVAS camera={{fov: 75, position: [0, 0, 2]}}>*/}
+                                <ambientLight intensity={1.8}/>
+                                {/*<ambientLight/>*/}
+                                <pointLight intensity={10000} position={[-120, 0, 0]}/>
+                                {/*<mesh rotation={[0, 10, 0]}>*/}
+                                {/*    <boxGeometry attach="geometry" args={[1, 1, 1]}/>*/}
+                                {/*    <meshStandardMaterial attach="material" color={"#6be092"}/>*/}
+                                {/*</mesh>*/}
+
                                 <MemoizedPixels pixels={pixels} isDrawMode={isDrawMode}/>
+                                <Colors/>
                             </CANVAS>
                         </div>
                         {/*<div*/}
