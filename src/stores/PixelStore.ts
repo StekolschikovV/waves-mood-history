@@ -22,6 +22,10 @@ export class PixelStore {
     signer: Signer
     selectedToken: "USDT" | "USDC" = "USDT"
 
+    mode: "draw" | "clean" = "draw"
+
+    blockchainDataLimit = 60
+
     // needUpdatePixel = 0
     debouncedAddNewPixel = _.debounce(() => {
         this.stateNewTemp.forEach((value, key, map) => {
@@ -49,6 +53,10 @@ export class PixelStore {
         this.debouncedAddNewPixel();
     }
 
+    public cleanPixel = (name: string) => {
+        this.stateNew.delete(name)
+    }
+
     public travelToTime = (time: number): void => {
         this.state = this.getSliceFromTime(time)
         this.selectedDataTime = time
@@ -62,25 +70,27 @@ export class PixelStore {
             const x = Math.abs(+arr[0])
             newData.push({
                 type: 'string',
-                value: `${value}-${y}-${x}`
+                value: `${value}-${y}-${x}`,
+                keyForDel: key,
+                valueForDel: value,
             })
         })
         let USDTWXG = "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ"
         let USDCWXG = "6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ"
-        _.chunk(newData, 3).forEach(e => {
+        _.chunk(newData, this.blockchainDataLimit).forEach(e => {
             const data: InvokeArgs = {
                 dApp: "3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
                 fee: 500000,
                 payment: [{
                     assetId: this.selectedToken === "USDT" ? USDTWXG : USDCWXG,
-                    amount: 10000 * this.stateNew.size,
+                    amount: 10000 * e.length,
                 }],
                 call: {
                     function: 'draw',
                     args: [
                         {
                             type: "list",
-                            value: newData
+                            value: e
                         }
                     ]
                 }
@@ -89,27 +99,25 @@ export class PixelStore {
                 .invoke(data)
                 .broadcast()
                 .then((_) => {
-                    this.updateLoop()
+                    e.forEach(ee => {
+                        this.stateNew.delete(ee.keyForDel)
+                    })
                 })
-                .catch((e) => {
-                    this.updateLoop()
+                .catch((_) => {
+                    e.forEach((ee: any) => {
+                        this.stateNew.delete(ee.keyForDel)
+                    })
+                    this.implementNewData(this.data)
                     console.log(e)
                 })
         })
 
-    }
-
-    updateLoop = () => {
         setTimeout(() => {
             this.load()
-        }, 500)
+        }, 6000)
         setTimeout(() => {
             this.load()
-        }, 1000)
-        setTimeout(() => {
-            this.stateNew = new Map()
-            this.load()
-        }, 1500)
+        }, 20000)
     }
 
     private load = async () => {
@@ -151,6 +159,10 @@ export class PixelStore {
                 console.log(e)
                 return []
             })
+        this.implementNewData(date)
+    }
+
+    private implementNewData = (date: IPixelState[]) => {
         const lastDateSize = this.data.length
         this.data = date
         this.lastDataTime = this.data[this.data.length - 1].time

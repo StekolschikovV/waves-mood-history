@@ -51,18 +51,27 @@ const Pixel = observer(forwardRef((
     }
 
     const hoverAction = (isClick = false) => {
-        if ((isDrawMode || isClick) && !innerRef?.current?.material?.color.equals(new Color(store.pixelStore.color))) {
+        if (store.pixelStore.mode === "draw" && (isDrawMode || isClick) && !innerRef?.current?.material?.color.equals(new Color(store.pixelStore.color))) {
             gsap.to(innerRef.current.position, {z: 3, duration: 0.5});
             innerRef?.current?.material?.color.set(store.pixelStore.color)
             gsap.to(innerRef.current.position, {z: 0, duration: 0.2, delay: 1});
             playPixelSound(getPixelVolume(innerRef.current.name))
             store.pixelStore.addNewPixel(name, store.pixelStore.color)
+        } else if (store.pixelStore.mode === "clean") {
+            store.pixelStore.cleanPixel(name)
+            // const arr = name.split("-")
+            // const y = Math.abs(+arr[1] + 99)
+            // const x = Math.abs(+arr[0])
+            innerRef?.current?.material?.color.set(store.pixelStore.state.get(name) || "white")
+            // console.log(store.pixelStore.state.get(name))
+
         }
     }
     // console.log(isDrawMode)
     return <mesh
         onClick={() => hoverAction(true)}
-        name={name} ref={innerRef}
+        name={name}
+        ref={innerRef}
         onPointerOver={() => {
             // document.body.style.cursor = "crosshair";
             hoverAction(false)

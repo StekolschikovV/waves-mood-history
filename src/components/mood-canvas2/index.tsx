@@ -85,8 +85,6 @@ export default observer(function MoodCanvas2() {
                         </ul>
                     </div>
                     <div className={styles.canvaWrapper}>
-
-
                         <div
                             id={"canvaBlock"}
                             className={styles.canva}
@@ -166,6 +164,8 @@ export default observer(function MoodCanvas2() {
                         <div className={styles.pixelUsed}>
                             {store.pixelStore.stateNew.size}
                             <span>pixels used</span>
+                            <span
+                                className={styles.pixelCalc}>{store.pixelStore.stateNew.size} pixel / {store.pixelStore.blockchainDataLimit} max = {Math.ceil((store.pixelStore.stateNew.size || 0) / (store.pixelStore.blockchainDataLimit || 1))} transactions</span>
                         </div>
                         <div className={styles.btnGroup}>
                             {/*<button className={styles.btn} onClick={() => onClickCanselHandler()}>Undo last</button>*/}
@@ -177,6 +177,17 @@ export default observer(function MoodCanvas2() {
                             <button disabled={store.pixelStore.stateNew.size === 0} className={styles.btn}
                                     onClick={() => store.pixelStore.saveNewToBlockchain()}>Save and burn WXG
                             </button>
+                            <div className={styles.selectedToken}>
+                                <div className={styles.selectedTokenTitle}>Mode:</div>
+                                <div className={styles.selectedTokenWrapper}>
+                            <span
+                                onClick={e => store.pixelStore.mode = "draw"}
+                                className={store.pixelStore.mode === "draw" ? styles.selectedTokenSelected : ""}>Draw</span>
+                                    <span
+                                        onClick={e => store.pixelStore.mode = "clean"}
+                                        className={store.pixelStore.mode === "clean" ? styles.selectedTokenSelected : ""}>clean</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
