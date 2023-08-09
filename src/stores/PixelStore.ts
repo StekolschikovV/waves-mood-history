@@ -94,6 +94,7 @@ export class PixelStore {
     }
 
     private waitNewPixels = (stateNewClone: Map<string, string>) => {
+        this.load()
         setTimeout(() => {
             let updateCount = 0
             stateNewClone.forEach((value, key, map) => {
@@ -106,11 +107,12 @@ export class PixelStore {
             } else {
                 this.stateNew = new Map()
             }
+            this.load()
         }, 3000)
     }
 
     private load = async () => {
-        this.data = await axios
+        const date = await axios
             .get("https://nodes.wavesnodes.com/addresses/data/3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE")
             .then(e => e.data as IBlockchainData[])
             .then(e => e.filter(e => e.key.includes("log_")))
@@ -128,12 +130,33 @@ export class PixelStore {
                     }
                 })
             })
+            .then((e: IPixelState[]) => {
+                let clearArray: IPixelState[] = []
+                e.map(ee => {
+                    let isExist = false
+                    clearArray.forEach((eee, i) => {
+                        if (eee.time === ee.time) {
+                            clearArray[i].pixels.concat(ee.pixels)
+                            isExist = true
+                        }
+                    })
+                    if (!isExist) {
+                        clearArray.push(ee)
+                    }
+                })
+                return clearArray
+            })
             .catch(e => {
                 console.log(e)
                 return []
             })
+        const lastDateSize = this.data.length
+        this.data = date
         this.lastDataTime = this.data[this.data.length - 1].time
         this.state = this.getSliceFromTime(this.lastDataTime)
+        if (lastDateSize > 0) {
+            this.selectedDataTime = this.lastDataTime
+        }
     }
 
     private getSliceFromTime = (time: number): Map<string, string> => {

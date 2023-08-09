@@ -50,6 +50,11 @@ export default observer(function MoodCanvas2() {
         setPixels(result)
     }, [])
 
+    const isSameTime = (time: number, time2: number): boolean => {
+        console.log("+", time, time2, time === time2)
+        return time === time2
+    }
+
     return <>
         <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
             <div className={`container ${styles.moodCanvas}`}>
@@ -162,23 +167,29 @@ export default observer(function MoodCanvas2() {
                             {/*}}>Undo all*/}
                             {/*</button>*/}
                             {/*<button className={styles.btn} onClick={e => takeScreenshotHandler()}>Take Screenshot</button>*/}
-                            {/*<button disabled={selectedPixelNew.length === 0} className={styles.btn}*/}
-                            {/*        onClick={() => onClickSaveHandler()}>Save and burn WXG*/}
-                            {/*</button>*/}
+                            <button disabled={store.pixelStore.stateNew.size === 0} className={styles.btn}
+                                    onClick={() => store.pixelStore.saveNewToBlockchain()}>Save and burn WXG
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div className="container-full">
+                ++{store.pixelStore.lastDataTime} <br/>
+                ++{store.pixelStore.selectedDataTime}
+            </div>
+            <div className="container-full">
                 <ul className={`historyLine ${styles.historyLine}`}>
                     {store.pixelStore.data.map((p, i) =>
                         <li key={`${p.time}-${i}`}
                             // className={`${styles.historyStep}`}
-                            className={`${styles.historyStep} ${p.time === store.pixelStore.selectedDataTime && styles.historyStepSelected}`}
+                            className={`${styles.historyStep} ${p.time == (store.pixelStore.selectedDataTime || store.pixelStore.lastDataTime) && styles.historyStepSelected}`}
                             onClick={() => store.pixelStore.travelToTime(p.time)}
                         >
                             <div>
+                                {JSON.stringify(isSameTime(p.time, store.pixelStore.selectedDataTime))} <br/>
+                                {p.time} <br/>
                                 <Moment format="YYYY/MM/DD">
                                     {p.time}
                                 </Moment>
@@ -191,9 +202,10 @@ export default observer(function MoodCanvas2() {
                         </li>)}
                     <li
                         onClick={() => store.pixelStore.travelToTime(store.pixelStore.lastDataTime)}
-                        key={`now`}
-                        // className={`historyStepNow ${styles.historyStep} ${selectedLog === "now" && styles.historyStepSelected}`}>
-                        className={`historyStepNow `}>
+                        key={`now`}>
+                        {/*className={`historyStepNow ${styles.historyStep} ${selectedLog === "now" && styles.historyStepSelected}`}>*/}
+                        {/*className={`historyStepNow `}*/}
+
                         <div>
                             NOW
                         </div>
@@ -201,37 +213,6 @@ export default observer(function MoodCanvas2() {
                 </ul>
             </div>
         </div>
-
-        {/*<div>*/}
-        {/*    <h1>{store.pixelStore.stateNew.size}</h1>*/}
-        {/*    <button onClick={e => store.pixelStore.color = "red"}>red</button>*/}
-        {/*    <button onClick={e => store.pixelStore.color = "blue"}>blue</button>*/}
-        {/*    <button onClick={e => store.pixelStore.color = "green"}>green</button>*/}
-        {/*    <button onClick={e => store.pixelStore.saveNewToBlockchain("USDT")}>save</button>*/}
-        {/*</div>*/}
-        {/*<div*/}
-        {/*    className={"canvas"} style={{*/}
-        {/*    height: "600px",*/}
-        {/*    border: "1px solid black",*/}
-        {/*    width: "600px",*/}
-        {/*    cursor: "crosshair"*/}
-        {/*}}*/}
-        {/*    onMouseDown={() => setIsDrawMode(true)}*/}
-        {/*    onMouseUp={() => setIsDrawMode(false)}*/}
-        {/*>*/}
-        {/*    /!*<CANVAS camera={{fov: 75, position: [0, 0, 95]}}>*!/*/}
-        {/*    <CANVAS camera={{fov: 75, position: [0, 0, 105]}}>*/}
-        {/*        <ambientLight intensity={1.5}/>*/}
-        {/*        <MemoizedPixels pixels={pixels} isDrawMode={isDrawMode}/>*/}
-        {/*    </CANVAS>*/}
-        {/*</div>*/}
-        {/*<ul>*/}
-        {/*    {store.pixelStore.data.map((ts, i) => {*/}
-        {/*        return <li key={i} onClick={(_) => {*/}
-        {/*            store.pixelStore.travelToTime(ts.time)*/}
-        {/*        }}>{ts.time}</li>*/}
-        {/*    })}*/}
-        {/*</ul>*/}
     </>
 
 })
