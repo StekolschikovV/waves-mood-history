@@ -50,11 +50,6 @@ export default observer(function MoodCanvas2() {
         setPixels(result)
     }, [])
 
-    const isSameTime = (time: number, time2: number): boolean => {
-        console.log("+", time, time2, time === time2)
-        return time === time2
-    }
-
     return <>
         <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
             <div className={`container ${styles.moodCanvas}`}>
@@ -176,20 +171,13 @@ export default observer(function MoodCanvas2() {
             </div>
 
             <div className="container-full">
-                ++{store.pixelStore.lastDataTime} <br/>
-                ++{store.pixelStore.selectedDataTime}
-            </div>
-            <div className="container-full">
                 <ul className={`historyLine ${styles.historyLine}`}>
                     {store.pixelStore.data.map((p, i) =>
                         <li key={`${p.time}-${i}`}
-                            // className={`${styles.historyStep}`}
                             className={`${styles.historyStep} ${p.time == (store.pixelStore.selectedDataTime || store.pixelStore.lastDataTime) && styles.historyStepSelected}`}
                             onClick={() => store.pixelStore.travelToTime(p.time)}
                         >
                             <div>
-                                {JSON.stringify(isSameTime(p.time, store.pixelStore.selectedDataTime))} <br/>
-                                {p.time} <br/>
                                 <Moment format="YYYY/MM/DD">
                                     {p.time}
                                 </Moment>
@@ -200,16 +188,6 @@ export default observer(function MoodCanvas2() {
                      </Moment>
                  </span>
                         </li>)}
-                    <li
-                        onClick={() => store.pixelStore.travelToTime(store.pixelStore.lastDataTime)}
-                        key={`now`}>
-                        {/*className={`historyStepNow ${styles.historyStep} ${selectedLog === "now" && styles.historyStepSelected}`}>*/}
-                        {/*className={`historyStepNow `}*/}
-
-                        <div>
-                            NOW
-                        </div>
-                    </li>
                 </ul>
             </div>
         </div>
