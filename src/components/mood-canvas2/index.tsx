@@ -5,8 +5,8 @@ import {observer} from "mobx-react-lite";
 import styles from "@components/mood-canvas2/style.module.scss";
 import Moment from "react-moment";
 import Colors from "@components/mood-canvas2/colors";
-import MemoizedPixels from "@components/mood-canvas2/MemoizedPixels";
-import Screenshot from "@components/mood-canvas2/Screenshot";
+import MemoizedPixels from "@components/mood-canvas2/memoized-pixels";
+import Screenshot from "@components/mood-canvas2/screenshot";
 
 
 export default observer(function MoodCanvas2() {
@@ -123,13 +123,13 @@ export default observer(function MoodCanvas2() {
                                 <span
                                     onClick={e => store.pixelStore.mode = "clean"}
                                     className={store.pixelStore.mode === "clean" ? styles.selectedTokenSelected : ""}>
-                                        clean
+                                        Clean
                                     </span>
                             </div>
                         </div>
                         <div className={styles.pixelUsed}>
                             {store.pixelStore.stateNew.size}
-                            {/*<span>pixels used({store.pixelStore.blockchainDataLimit} max)</span>*/}
+                            <span>pixels used</span>
                             <span
                                 className={styles.pixelCalc}>{store.pixelStore.stateNew.size} pixel / {store.pixelStore.blockchainDataLimit} max = {Math.ceil((store.pixelStore.stateNew.size || 0) / (store.pixelStore.blockchainDataLimit || 1))} transactions</span>
                         </div>
@@ -140,11 +140,7 @@ export default observer(function MoodCanvas2() {
                             <button disabled={store.pixelStore.stateNew.size === 0} className={styles.btn}
                                     onClick={() => store.pixelStore.clean()}>Clean
                             </button>
-                            <button className={styles.btn}
-                                    onClick={() => store.pixelStore.load()}>Load
-                            </button>
                             <button className={styles.btn} onClick={e => {
-                                // TODO: !!
                                 setIsNeedScreen(isNeedScreen + 1)
                             }}>Take Screenshot
                             </button>

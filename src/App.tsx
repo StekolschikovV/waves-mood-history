@@ -41,8 +41,11 @@ let loadedCount = 0
 
 function App() {
 
+    const hash = window.location.hash.replace("#", "")
+    const hashNum = hash.length > 0 ? +hash : null
+
     const [isShowPreloader, setIsShowPreloader] = useState(true)
-    const [version, setVersion] = useState<1 | 2>(2)
+    const [version, setVersion] = useState<number>(hashNum || 2)
 
     const {data, error, isLoading, mutate} = useSWR(
         "https://nodes.wavesnodes.com/addresses/data/3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
