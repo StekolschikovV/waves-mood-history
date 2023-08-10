@@ -1,4 +1,4 @@
-import {makeAutoObservable, toJS} from "mobx";
+import {makeAutoObservable} from "mobx";
 import {RootStore} from "@/stores/RootStore";
 import axios from "axios";
 import {IBlockchainData, IPixelState} from "@/interface";
@@ -230,13 +230,32 @@ export class PixelStore {
                     }
                 })
             })
+            // .then((e: IPixelState[]) => {
+            //     let clearArray: IPixelState[] = []
+            //     e.map(ee => {
+            //         let isExist = false
+            //         clearArray.forEach((eee, i) => {
+            //             if (eee.time === ee.time) {
+            //                 clearArray[i].pixels.concat(ee.pixels)
+            //                 isExist = true
+            //             }
+            //         })
+            //         if (!isExist) {
+            //             clearArray.push(ee)
+            //         }
+            //     })
+            //     console.log(clearArray[clearArray.length - 1])
+            //
+            //     return clearArray
+            // })
+
             .then((e: IPixelState[]) => {
                 let clearArray: IPixelState[] = []
-                e.map(ee => {
+                e.map((ee, i) => {
                     let isExist = false
                     clearArray.forEach((eee, i) => {
                         if (eee.time === ee.time) {
-                            clearArray[i].pixels.concat(ee.pixels)
+                            clearArray[i].pixels = clearArray[i].pixels.concat(ee.pixels)
                             isExist = true
                         }
                     })
@@ -318,7 +337,7 @@ export class PixelStore {
     }
 
     private getSliceFromTime = (time: number): Map<string, string> => {
-        const validData = this.data.filter(p => p.time <= time).map(e => toJS(e)).reverse()
+        const validData = this.data.filter(p => p.time <= time).map(e => e).reverse()
         const map: Map<string, string> = new Map();
         validData.forEach(e => {
             e.pixels.forEach(p => {
