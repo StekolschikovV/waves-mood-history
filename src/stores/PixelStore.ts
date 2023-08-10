@@ -5,7 +5,6 @@ import {IBlockchainData, IPixelState} from "@/interface";
 import {InvokeArgs, Signer} from "@waves/signer";
 import {ProviderKeeper} from "@waves/provider-keeper";
 import _ from 'lodash';
-import {toast} from "react-toastify";
 
 export class PixelStore {
 
@@ -25,7 +24,8 @@ export class PixelStore {
 
     mode: "draw" | "clean" = "draw"
 
-    blockchainDataLimit = 60
+    // blockchainDataLimit = 60
+    blockchainDataLimit = 2
 
     debouncedAddNewPixel = _.debounce(() => {
         // console.log("+++his.stateNewTemp", this.stateNewTemp.size)
@@ -82,8 +82,9 @@ export class PixelStore {
                 valueForDel: value,
             })
         })
-        // let targetIF
-        _.chunk(newData, this.blockchainDataLimit).forEach(e => {
+        const chunks = _.chunk(newData, this.blockchainDataLimit)
+        let targetIForUpdate = chunks.length
+        chunks.forEach(e => {
             let USDTWXG = "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ"
             let USDCWXG = "6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ"
             const data: InvokeArgs = {
@@ -108,10 +109,16 @@ export class PixelStore {
                 .broadcast()
                 .then((response) => {
                     console.log(response)
+                    targetIForUpdate = targetIForUpdate - 1
                     e.forEach(ee => {
                         this.state.set(ee.keyForDel, ee.valueForDel)
                         this.stateNew.delete(ee.keyForDel)
                     })
+                    if (targetIForUpdate === 0) {
+                        setTimeout(() => {
+                            this.load()
+                        }, 5000)
+                    }
                 })
                 .catch((error) => {
                     console.log(error)
