@@ -25,7 +25,7 @@ export class PixelStore {
     mode: "draw" | "clean" = "draw"
 
     // blockchainDataLimit = 60
-    blockchainDataLimit = 2
+    blockchainDataLimit = 60
 
     debouncedAddNewPixel = _.debounce(() => {
         // console.log("+++his.stateNewTemp", this.stateNewTemp.size)
