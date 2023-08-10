@@ -25,14 +25,12 @@ export class PixelStore {
 
     mode: "draw" | "clean" = "draw"
 
-    blockchainDataLimit = 10
+    blockchainDataLimit = 60
 
-    debouncedAddNewPixelCounter = 0
     debouncedAddNewPixel = _.debounce(() => {
+        // console.log("+++his.stateNewTemp", this.stateNewTemp.size)
         this.stateNewTemp.forEach((value, key, map) => {
-            if (this.stateNew.size <= this.blockchainDataLimit - 1) {
-                this.stateNew.set(key, value)
-            }
+            this.stateNew.set(key, value)
         })
         this.stateNewTemp = new Map()
     }, 500);
@@ -52,11 +50,8 @@ export class PixelStore {
     }
 
     public addNewPixel = (name: string, color: string) => {
-        this.debouncedAddNewPixelCounter = this.debouncedAddNewPixelCounter + 1
-        if (this.debouncedAddNewPixelCounter <= this.blockchainDataLimit) {
-            this.stateNewTemp.set(name, color)
-            this.debouncedAddNewPixel();
-        }
+        this.stateNewTemp.set(name, color)
+        this.debouncedAddNewPixel();
     }
 
     public cleanPixel = (name: string) => {
@@ -73,13 +68,9 @@ export class PixelStore {
         // this.implementNewData(this.data)
         this.load()
         this.stateNew.clear()
-        this.debouncedAddNewPixelCounter = 0
-
     }
 
     public saveNewToBlockchain = async () => {
-        this.debouncedAddNewPixelCounter = 0
-
         let newData: any[] = []
         let newDataClear: any[] = []
         this.stateNew.forEach((value, key, map) => {
@@ -132,86 +123,87 @@ export class PixelStore {
                 ]
             }
         }
-        this.signer
-            .invoke(data)
-            .broadcast()
-            .then((response) => {
-                // console.log(response)
-                // newData.forEach(ee => {
-                //     // this.state.set(ee.keyForDel, ee.valueForDel)
-                //     this.stateNew.delete(ee.keyForDel)
-                // })
-                setTimeout(() => {
-                    this.load()
-
-                }, 3000)
-                // this.invoke(newData)
-            })
-            .catch((error) => {
-                // console.log(error.message)
-                toast(error.message, {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
-                // newData.forEach((ee: any) => {
-                //     this.stateNew.delete(ee.keyForDel)
-                // })
-                this.load()
-            })
-        // console.log(newData, _.chunk(newData, this.blockchainDataLimit))
-        // this.invoke(newData)
-        // _.chunk(newData, this.blockchainDataLimit).forEach(e => {
-        // resArr.forEach(e => {
-        //     let USDTWXG = "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ"
-        //     let USDCWXG = "6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ"
-        //     const data: InvokeArgs = {
-        //         dApp: "3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
-        //         fee: 500000,
-        //         payment: [{
-        //             assetId: this.selectedToken === "USDT" ? USDTWXG : USDCWXG,
-        //             amount: 10000 * e.length,
-        //         }],
-        //         call: {
-        //             function: 'draw',
-        //             args: [
-        //                 {
-        //                     type: "list",
-        //                     value: e
-        //                 }
-        //             ]
-        //         }
-        //     }
-        //     this.signer
-        //         .invoke(data)
-        //         .broadcast()
-        //         .then((response) => {
-        //             console.log(response)
-        //             e.forEach(ee => {
-        //                 this.state.set(ee.keyForDel, ee.valueForDel)
-        //                 this.stateNew.delete(ee.keyForDel)
-        //             })
-        //         })
-        //         .catch((error) => {
-        //             console.log(error)
-        //
-        //             e.forEach((ee: any) => {
-        //                 this.stateNew.delete(ee.keyForDel)
-        //             })
-        //             // this.implementNewData(this.data)
+        // this.signer
+        //     .invoke(data)
+        //     .broadcast()
+        //     .then((response) => {
+        //         // console.log(response)
+        //         // newData.forEach(ee => {
+        //         //     // this.state.set(ee.keyForDel, ee.valueForDel)
+        //         //     this.stateNew.delete(ee.keyForDel)
+        //         // })
+        //         setTimeout(() => {
         //             this.load()
-        //             console.log(e)
-        //         })
-        // })
+        //
+        //         }, 3000)
+        //         // this.invoke(newData)
+        //     })
+        //     .catch((error) => {
+        //         // console.log(error.message)
+        //         toast(error.message, {
+        //             position: "top-right",
+        //             autoClose: 5000,
+        //             hideProgressBar: false,
+        //             closeOnClick: true,
+        //             pauseOnHover: true,
+        //             draggable: true,
+        //             progress: undefined,
+        //             theme: "light",
+        //         });
+        //         // newData.forEach((ee: any) => {
+        //         //     this.stateNew.delete(ee.keyForDel)
+        //         // })
+        //         this.load()
+        //     })
+
+
+        console.log(newData, _.chunk(newData, this.blockchainDataLimit))
+        // this.invoke(newData)
+        _.chunk(newData, this.blockchainDataLimit).forEach(e => {
+            // resArr.forEach(e => {
+            let USDTWXG = "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ"
+            let USDCWXG = "6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ"
+            const data: InvokeArgs = {
+                dApp: "3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
+                fee: 500000,
+                payment: [{
+                    assetId: this.selectedToken === "USDT" ? USDTWXG : USDCWXG,
+                    amount: 10000 * e.length,
+                }],
+                call: {
+                    function: 'draw',
+                    args: [
+                        {
+                            type: "list",
+                            value: e
+                        }
+                    ]
+                }
+            }
+            this.signer
+                .invoke(data)
+                .broadcast()
+                .then((response) => {
+                    console.log(response)
+                    e.forEach(ee => {
+                        this.state.set(ee.keyForDel, ee.valueForDel)
+                        this.stateNew.delete(ee.keyForDel)
+                    })
+                })
+                .catch((error) => {
+                    console.log(error)
+
+                    e.forEach((ee: any) => {
+                        this.stateNew.delete(ee.keyForDel)
+                    })
+                    // this.implementNewData(this.data)
+                    this.load()
+                    console.log(e)
+                })
+        })
     }
 
     public load = async () => {
-        this.debouncedAddNewPixelCounter = 0
         const date = await axios
             .get("https://nodes.wavesnodes.com/addresses/data/3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE")
             .then(e => e.data as IBlockchainData[])

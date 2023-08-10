@@ -52,13 +52,11 @@ const Pixel = observer(forwardRef((
 
     const hoverAction = (isClick = false) => {
         if (store.pixelStore.mode === "draw" && (isDrawMode || isClick) && !innerRef?.current?.material?.color.equals(new Color(store.pixelStore.color))) {
-            if (store.pixelStore.debouncedAddNewPixelCounter < store.pixelStore.blockchainDataLimit) {
-                gsap.to(innerRef.current.position, {z: 3, duration: 0.5});
-                innerRef?.current?.material?.color.set(store.pixelStore.color)
-                gsap.to(innerRef.current.position, {z: 0, duration: 0.2, delay: 1});
-                playPixelSound(getPixelVolume(innerRef.current.name))
-                store.pixelStore.addNewPixel(name, store.pixelStore.color)
-            }
+            gsap.to(innerRef.current.position, {z: 3, duration: 0.5});
+            innerRef?.current?.material?.color.set(store.pixelStore.color)
+            gsap.to(innerRef.current.position, {z: 0, duration: 0.2, delay: 1});
+            playPixelSound(getPixelVolume(innerRef.current.name))
+            store.pixelStore.addNewPixel(name, store.pixelStore.color)
         } else if (store.pixelStore.mode === "clean") {
             store.pixelStore.cleanPixel(name)
             innerRef?.current?.material?.color.set(store.pixelStore.state.get(name) || "white")

@@ -147,8 +147,9 @@ export default observer(function MoodCanvas2() {
                         </div>
                         <div className={styles.pixelUsed}>
                             {store.pixelStore.stateNew.size}
-                            <span>pixels used({store.pixelStore.blockchainDataLimit} max)</span>
-                            {/*<span className={styles.pixelCalc}>{store.pixelStore.stateNew.size} pixel / {store.pixelStore.blockchainDataLimit} max = {Math.ceil((store.pixelStore.stateNew.size || 0) / (store.pixelStore.blockchainDataLimit || 1))} transactions</span>*/}
+                            {/*<span>pixels used({store.pixelStore.blockchainDataLimit} max)</span>*/}
+                            <span
+                                className={styles.pixelCalc}>{store.pixelStore.stateNew.size} pixel / {store.pixelStore.blockchainDataLimit} max = {Math.ceil((store.pixelStore.stateNew.size || 0) / (store.pixelStore.blockchainDataLimit || 1))} transactions</span>
                         </div>
                         <div className={styles.btnGroup}>
                             <button disabled={store.pixelStore.stateNew.size === 0} className={styles.btn}
