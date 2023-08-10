@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useState} from 'react'
-import {Canvas as CANVAS} from '@react-three/fiber'
+import {Canvas as CANVAS, useThree} from '@react-three/fiber'
 
 import Pixel from "@components/mood-canvas2/pixel";
 import {useRootStore} from "@/providers/RootStoreProvider";
@@ -7,12 +7,48 @@ import {observer} from "mobx-react-lite";
 import styles from "@components/mood-canvas2/style.module.scss";
 import Moment from "react-moment";
 import Colors from "@components/mood-canvas2/colors";
+import html2canvas from "html2canvas";
 
 
 const MemoizedPixels = memo((props: {
     pixels: { name: string, y: number, x: number }[]
     isDrawMode: boolean
 }, context) => {
+    // const {gl,} = useThree();
+    const {
+        gl,                           // WebGL renderer
+        scene,                        // Default scene
+        camera,                       // Default camera
+    } = useThree();
+
+    function renderToJPG() {
+        gl.domElement.getContext('webgl', {preserveDrawingBuffer: true});
+        gl.render(scene, camera);
+
+
+        gl.domElement.toBlob(
+            function (blob) {
+                var a = document.createElement('a');
+                // @ts-ignore
+                var url = URL.createObjectURL(blob);
+                a.href = url;
+                a.download = 'canvas.jpg';
+                a.click();
+                console.log('function is actually being used');
+            },
+            'image/jpg',
+            1.0
+        )
+
+        gl.domElement.getContext('webgl', {preserveDrawingBuffer: false});
+    }
+
+    useEffect(() => {
+        setTimeout(() => {
+            console.log("!")
+            renderToJPG()
+        }, 5000)
+    }, [])
     return <>
         {props.pixels.map(c => {
                 return <Pixel
@@ -42,6 +78,70 @@ export default observer(function MoodCanvas2() {
         }
     }
 
+
+    // const takeScreenshotHandler = () => {
+    //     const canva = document.getElementById('canvaBlock')
+    //     if (canva) {
+    //         html2canvas(canva).then((canvas) => {
+    //             let image = canvas.toDataURL('image/png', 1.0);
+    //             saveAs(image, 'Screenshot.png')
+    //         })
+    //     }
+    // }
+
+    function takeScreenshotHandler() {
+        const canvasElement = document.querySelector('.xxx') as HTMLElement; // Замените '.canvas' на селектор вашего Canvas
+        console.log("++canvasElement", canvasElement)
+        if (!canvasElement) {
+            console.error("Canvas element not found");
+            return;
+        }
+
+        html2canvas(canvasElement, {
+            useCORS: true, // Может потребоваться для избежания ошибок CORS при загрузке текстур и моделей
+        }).then((canvas) => {
+            // Создание ссылки на скриншот
+            const screenshotLink = document.createElement('a');
+            screenshotLink.href = canvas.toDataURL('image/png');
+            screenshotLink.download = 'screenshot.png';
+            screenshotLink.click();
+        });
+
+        html2canvas(canvasElement, {
+            useCORS: true,
+        }).then((canvas) => {
+            // Создание ссылки на скриншот
+            canvas.toBlob((blob) => {
+                const screenshotLink = document.createElement('a');
+                // @ts-ignore
+                screenshotLink.href = URL.createObjectURL(blob);
+                screenshotLink.download = 'screenshot.png';
+                screenshotLink.click();
+            }, 'image/png');
+        });
+    }
+
+    const saveAs = (blob: string, fileName: string) => {
+        const elem: HTMLAnchorElement = window.document.createElement('a');
+        elem.href = blob
+        elem.download = fileName;
+        elem.style.cssText = 'display:none;';
+        (document.body || document.documentElement).appendChild(elem);
+        if (typeof elem.click === 'function') {
+            elem.click();
+        } else {
+            elem.target = '_blank';
+            elem.dispatchEvent(new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true
+            }));
+        }
+        URL.revokeObjectURL(elem.href);
+        elem.remove()
+    }
+
+
     useEffect(() => {
         let result: { name: string, y: number, x: number }[] = []
         Array.from({length: 100}).forEach((_, xI) => {
@@ -57,10 +157,12 @@ export default observer(function MoodCanvas2() {
 
     useEffect(() => {
         scrollRight()
-
     }, [store.pixelStore.data])
+
     const width = window.innerWidth > 700 ? "550px" : "90vw"
     const height = window.innerWidth > 700 ? "500px" : "80vw"
+
+
     return <>
         <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
             <div className={`container ${styles.moodCanvas}`}>
@@ -160,6 +262,8 @@ export default observer(function MoodCanvas2() {
                             </button>
                             <button className={styles.btn}
                                     onClick={() => store.pixelStore.load()}>Load
+                            </button>
+                            <button className={styles.btn} onClick={e => takeScreenshotHandler()}>Take Screenshot
                             </button>
 
                         </div>
