@@ -4,7 +4,7 @@ import {Canvas as CANVAS} from '@react-three/fiber'
 import Pixel from "@components/mood-canvas2/pixel";
 import {useRootStore} from "@/providers/RootStoreProvider";
 import {observer} from "mobx-react-lite";
-import styles from "@components/mood-canvas/style.module.scss";
+import styles from "@components/mood-canvas2/style.module.scss";
 import Moment from "react-moment";
 import Colors from "@components/mood-canvas2/colors";
 
@@ -64,7 +64,10 @@ export default observer(function MoodCanvas2() {
     return <>
         <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
             <div className={`container ${styles.moodCanvas}`}>
-                <div className={"title"}>Mood canvas</div>
+                <div className={"title"}>
+                    Mood canvas
+                    {/*<div className={"subtitle"}>v2 - Kleon style | v2 - Old style </div>*/}
+                </div>
                 <div className={styles.innerContainer}>
                     <div className={styles.text}>
                         This drawing will be permanently stored in the blockchain on behalf of your account. Try to
@@ -87,7 +90,7 @@ export default observer(function MoodCanvas2() {
                     <div className={styles.canvaWrapper}>
                         <div
                             id={"canvaBlock"}
-                            className={styles.canva}
+                            className={styles.canva2}
                             style={{
                                 width: width,
                                 height: height,
@@ -144,9 +147,8 @@ export default observer(function MoodCanvas2() {
                         </div>
                         <div className={styles.pixelUsed}>
                             {store.pixelStore.stateNew.size}
-                            <span>pixels used</span>
-                            <span
-                                className={styles.pixelCalc}>{store.pixelStore.stateNew.size} pixel / {store.pixelStore.blockchainDataLimit} max = {Math.ceil((store.pixelStore.stateNew.size || 0) / (store.pixelStore.blockchainDataLimit || 1))} transactions</span>
+                            <span>pixels used({store.pixelStore.blockchainDataLimit} max)</span>
+                            {/*<span className={styles.pixelCalc}>{store.pixelStore.stateNew.size} pixel / {store.pixelStore.blockchainDataLimit} max = {Math.ceil((store.pixelStore.stateNew.size || 0) / (store.pixelStore.blockchainDataLimit || 1))} transactions</span>*/}
                         </div>
                         <div className={styles.btnGroup}>
                             <button disabled={store.pixelStore.stateNew.size === 0} className={styles.btn}
@@ -154,6 +156,9 @@ export default observer(function MoodCanvas2() {
                             </button>
                             <button disabled={store.pixelStore.stateNew.size === 0} className={styles.btn}
                                     onClick={() => store.pixelStore.clean()}>Clean
+                            </button>
+                            <button className={styles.btn}
+                                    onClick={() => store.pixelStore.load()}>Load
                             </button>
 
                         </div>

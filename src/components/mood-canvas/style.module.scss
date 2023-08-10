@@ -89,7 +89,21 @@
     height: 300px;
     margin: auto;
   }
-  //background: #ababab;
+  background: #ffffff;
+  border-radius: 3px;
+
+}
+
+.canva2 {
+  display: inline-block;
+  width: 500px;
+  height: 500px;
+
+  @media (max-width: 600px) {
+    width: 300px;
+    height: 300px;
+    margin: auto;
+  }
   border-radius: 3px;
 
 }
