@@ -230,25 +230,6 @@ export class PixelStore {
                     }
                 })
             })
-            // .then((e: IPixelState[]) => {
-            //     let clearArray: IPixelState[] = []
-            //     e.map(ee => {
-            //         let isExist = false
-            //         clearArray.forEach((eee, i) => {
-            //             if (eee.time === ee.time) {
-            //                 clearArray[i].pixels.concat(ee.pixels)
-            //                 isExist = true
-            //             }
-            //         })
-            //         if (!isExist) {
-            //             clearArray.push(ee)
-            //         }
-            //     })
-            //     console.log(clearArray[clearArray.length - 1])
-            //
-            //     return clearArray
-            // })
-
             .then((e: IPixelState[]) => {
                 let clearArray: IPixelState[] = []
                 e.map((ee, i) => {
