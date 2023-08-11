@@ -27,9 +27,10 @@ export class PixelStore {
     mode: "draw" | "clean" = "draw"
 
     blockchainDataLimit = 60
+    pixelCount = 100
     colors = ['aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow']
     materials: Map<string, MeshBasicMaterial> = new Map()
-    geometry = new THREE.BoxGeometry(1, 1, 2)
+    geometry = new THREE.BoxGeometry(1, 1, 1)
     geometryBig = new THREE.BoxGeometry(5, 5, 5)
 
     debouncedAddNewPixel = _.debounce(() => {
