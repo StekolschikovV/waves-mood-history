@@ -6,8 +6,8 @@ import useSWR from "swr";
 import Promo from "@components/promo";
 import Header from "@components/header";
 import {Preloader} from "@components/preloader";
-import MoodCanvas2 from "@components/mood-canvas2";
 import {ToastContainer} from "react-toastify";
+import MoodCanvas3 from "@components/mood-canvas3";
 
 // const TRACKING_ID = "G-JNWMFZRRK5"; // OUR_TRACKING_ID
 // ReactGA.initialize(TRACKING_ID);
@@ -66,8 +66,9 @@ function App() {
             <Preloader isShow={isShowPreloader}/>
             <Header onLoaded={onLoadedHandler}/>
             <Promo onLoaded={onLoadedHandler}/>
-            {version === 1 && <MoodCanvasLazy data={data}/>}
-            {version === 2 && <MoodCanvas2/>}
+            {/*{version === 1 && <MoodCanvasLazy data={data}/>}*/}
+            {/*{version === 2 && <MoodCanvas2/>}*/}
+            <MoodCanvas3/>
             <TopBurnersLazy data={data}/>
             <FAQLazy/>
             <SashaPanelLazy data={data}/>
