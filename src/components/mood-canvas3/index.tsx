@@ -5,12 +5,15 @@ import styles from "@components/mood-canvas2/style.module.scss";
 import gsap from "gsap";
 import {Color} from "three";
 import {useRootStore} from "@/providers/RootStoreProvider";
+import Moment from "react-moment";
+import Colors from "@components/mood-canvas2/colors";
+import Screenshot from "@components/mood-canvas2/screenshot";
 
 
 const selected: Map<number, string> = new Map()
 
 
-const Points = ({isSelectMode, color}: { isSelectMode: boolean, color: string }) => {
+const Points = observer(({isSelectMode, color}: { isSelectMode: boolean, color: string }) => {
 
     const pointsRef = useRef<any>();
     const store = useRootStore();
@@ -19,7 +22,7 @@ const Points = ({isSelectMode, color}: { isSelectMode: boolean, color: string })
         const positions: number[] = [];
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
-                positions.push(((x - (height / 2)) * step) + step / 2, ((y - (width / 2)) * step) + step / 2, 0);
+                positions.push(((x - (height / 2)) * step) + 7.8, ((y - (width / 2)) * step) + step / 2, 0);
             }
         }
         return positions;
@@ -69,43 +72,16 @@ const Points = ({isSelectMode, color}: { isSelectMode: boolean, color: string })
     }
 
     useEffect(() => {
-        setTimeout(() => {
-            console.log(store.pixelStore3.state.size)
-            store.pixelStore3.state.forEach((value, key) => {
-                // console.log(key)
-                //     const obj = key.split("-")
-                //     console.log(obj[0], obj[1], +obj[0] * +obj[1])
-            })
-
-            let i = 0
-            for (let y = 0; y < 100; y++) {
-                for (let x = 0; x < 100; x++) {
-                    const color = store.pixelStore3.state.get(`${y}-${x}`) || "white"
-                    // console.log((y + x) * 3, color)
-                    setColor(i, color)
-                    i++
-                }
+        let i = 0
+        for (let y = 0; y < 100; y++) {
+            for (let x = 0; x < 100; x++) {
+                const color = store.pixelStore3.state.get(`${y}-${x}`) || "white"
+                // console.log((y + x) * 3, color)
+                setColor(i, color)
+                i++
             }
-            setColor((0), "red")
-            setColor((99), "red")
-            setColor((100), "red")
-
-            console.log(store.pixelStore3.state.get(`${99}-${0}`))
-        }, 2000)
-
-        // if (store.pixelStore3.state) {
-        //     for (let y = 0; y < 100; y++) {
-        //         for (let x = 0; x < 100; x++) {
-        //             const color = store.pixelStore3.state.get(`${y}-${x}`) || "white"
-        //             console.log((y + x) * 3, color)
-        //             setColor((y + x) * 3, color)
-        //         }
-        //     }
-        // }
-        // console.log('+++store.pixelStore3.state', store.pixelStore3.state)
-        // console.log(store.pixelStore3.state.get("100-100"))
-        // console.log(store.pixelStore3.state.get("99-99"))
-    }, [])
+        }
+    }, [store.pixelStore3.state])
 
     const convertFromCoordinateToPosition = () => {
         let result = 0
@@ -131,135 +107,139 @@ const Points = ({isSelectMode, color}: { isSelectMode: boolean, color: string })
                     itemSize={3}/>
 
             </bufferGeometry>
-            <pointsMaterial size={1} color={""} vertexColors={true}/>
+            <pointsMaterial size={1.5} color={""} vertexColors={true}/>
         </points>
     );
-}
+})
 
 
 export default observer(function MoodCanvas3() {
 
+    const store = useRootStore();
 
     const [isSelectMode, setIsSelectMode] = useState(false)
+    const [isNeedScreen, setIsNeedScreen] = useState(0)
 
-    const width = window.innerWidth > 700 ? "600px" : "90vw"
+    const width = window.innerWidth > 700 ? "660px" : "90vw"
     const height = window.innerWidth > 700 ? "600px" : "80vw"
-
 
     return <>
         <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
             <div className={`container ${styles.moodCanvas}`}>
-                {/*<div className={"title"}>*/}
-                {/*    Mood canvas*/}
-                {/*    /!*<div className={"subtitle"}>v2 - Kleon style | v2 - Old style </div>*!/*/}
-                {/*</div>*/}
-                {/*<div className={styles.innerContainer}>*/}
-                {/*    <div className={styles.text}>*/}
-                {/*        This drawing will be permanently stored in the blockchain on behalf of your account. Try to*/}
-                {/*        express your emotions by answering the following questions:*/}
-                {/*        <ul>*/}
-                {/*            <li>*/}
-                {/*                What is your waves mood today?*/}
-                {/*            </li>*/}
-                {/*            <li>*/}
-                {/*                What would you like to be recorded in history today?*/}
-                {/*            </li>*/}
-                {/*            <li>*/}
-                {/*                How would you describe your current state of mind?*/}
-                {/*            </li>*/}
-                {/*            <li>*/}
-                {/*                What thoughts or memories are evoking strong emotions within you right now?*/}
-                {/*            </li>*/}
-                {/*        </ul>*/}
-                {/*    </div>*/}
-                {/*    <div className={styles.canvaWrapper}>*/}
-                <div
-                    id={"canvaBlock"}
-                    className={styles.canva2}
-                    style={{
-                        width: width,
-                        height: height,
-                        cursor: "crosshair",
-                        border: "1px solid black"
-                    }}
-                    onMouseDown={() => setIsSelectMode(true)}
-                    onMouseUp={() => setIsSelectMode(false)}
-                >
-                    <CANVAS camera={{fov: 75, position: [0, 0, 100]}}>
-                        <Points isSelectMode={isSelectMode} color={"red"}/>
-                    </CANVAS>
+                <div className={"title"}>
+                    Mood canvas
+                    {/*<div className={"subtitle"}>v2 - Kleon style | v2 - Old style </div>*/}
                 </div>
-                {/*            </div>*/}
+                <div className={styles.innerContainer}>
+                    <div className={styles.text}>
+                        This drawing will be permanently stored in the blockchain on behalf of your account. Try to
+                        express your emotions by answering the following questions:
+                        <ul>
+                            <li>
+                                What is your waves mood today?
+                            </li>
+                            <li>
+                                What would you like to be recorded in history today?
+                            </li>
+                            <li>
+                                How would you describe your current state of mind?
+                            </li>
+                            <li>
+                                What thoughts or memories are evoking strong emotions within you right now?
+                            </li>
+                        </ul>
+                    </div>
+                    <div className={styles.canvaWrapper}>
+                        <div
+                            id={"canvaBlock"}
+                            className={styles.canva2}
+                            style={{
+                                width: width,
+                                height: height,
+                                cursor: "crosshair",
+                                border: "1px solid black"
+                            }}
+                            onMouseDown={() => setIsSelectMode(true)}
+                            onMouseUp={() => setIsSelectMode(false)}
+                        >
+                            <CANVAS camera={{fov: 75, position: [0, 0, 100]}}>
+                                <Points isSelectMode={isSelectMode} color={"red"}/>
+                                <Colors/>
+                                <Screenshot isNeedScreen={isNeedScreen}/>
+                            </CANVAS>
+                        </div>
+                    </div>
 
-                {/*            <div className={styles.controls}>*/}
-                {/*                <div className={styles.selectedToken}>*/}
-                {/*                    <div className={styles.selectedTokenTitle}>Payment in token:</div>*/}
-                {/*                    <div className={styles.selectedTokenWrapper}>*/}
-                {/*                    <span*/}
-                {/*                        onClick={e => store.pixelStore.selectedToken = "USDT"}*/}
-                {/*                        className={store.pixelStore.selectedToken === "USDT" ? styles.selectedTokenSelected : ""}>USDT-WXG</span>*/}
-                {/*                        <span*/}
-                {/*                            onClick={e => store.pixelStore.selectedToken = "USDC"}*/}
-                {/*                            className={store.pixelStore.selectedToken === "USDC" ? styles.selectedTokenSelected : ""}>USDC-WXG</span>*/}
-                {/*                    </div>*/}
-                {/*                </div>*/}
-                {/*                <div className={styles.selectedToken}>*/}
-                {/*                    <div className={styles.selectedTokenTitle}>Mode:</div>*/}
-                {/*                    <div className={styles.selectedTokenWrapper}>*/}
-                {/*                            <span*/}
-                {/*                                onClick={e => store.pixelStore.mode = "draw"}*/}
-                {/*                                className={store.pixelStore.mode === "draw" ? styles.selectedTokenSelected : ""}>*/}
-                {/*                                Draw*/}
-                {/*                            </span>*/}
-                {/*                        <span*/}
-                {/*                            onClick={e => store.pixelStore.mode = "clean"}*/}
-                {/*                            className={store.pixelStore.mode === "clean" ? styles.selectedTokenSelected : ""}>*/}
-                {/*                                Clean*/}
-                {/*                            </span>*/}
-                {/*                    </div>*/}
-                {/*                </div>*/}
-                {/*                <div className={styles.pixelUsed}>*/}
-                {/*                    {store.pixelStore.stateNew.size}*/}
-                {/*                    <span>pixels used</span>*/}
-                {/*                    <span*/}
-                {/*                        className={styles.pixelCalc}>{store.pixelStore.stateNew.size} pixel / {store.pixelStore.blockchainDataLimit} max = {Math.ceil((store.pixelStore.stateNew.size || 0) / (store.pixelStore.blockchainDataLimit || 1))} transactions</span>*/}
-                {/*                </div>*/}
-                {/*                <div className={styles.btnGroup}>*/}
-                {/*                    <button disabled={store.pixelStore.stateNew.size === 0} className={styles.btn}*/}
-                {/*                            onClick={() => store.pixelStore.saveNewToBlockchain()}>Save and burn WXG*/}
-                {/*                    </button>*/}
-                {/*                    <button disabled={store.pixelStore.stateNew.size === 0} className={styles.btn}*/}
-                {/*                            onClick={() => store.pixelStore.clean()}>Clean*/}
-                {/*                    </button>*/}
-                {/*                    <button className={styles.btn} onClick={e => {*/}
-                {/*                        setIsNeedScreen(isNeedScreen + 1)*/}
-                {/*                    }}>Take Screenshot*/}
-                {/*                    </button>*/}
+                    <div className={styles.controls}>
+                        <div className={styles.selectedToken}>
+                            <div className={styles.selectedTokenTitle}>Payment in token:</div>
+                            <div className={styles.selectedTokenWrapper}>
+                                    <span
+                                        onClick={e => store.pixelStore3.selectedToken = "USDT"}
+                                        className={store.pixelStore3.selectedToken === "USDT" ? styles.selectedTokenSelected : ""}>USDT-WXG</span>
+                                <span
+                                    onClick={e => store.pixelStore3.selectedToken = "USDC"}
+                                    className={store.pixelStore3.selectedToken === "USDC" ? styles.selectedTokenSelected : ""}>USDC-WXG</span>
+                            </div>
+                        </div>
+                        <div className={styles.selectedToken}>
+                            <div className={styles.selectedTokenTitle}>Mode:</div>
+                            <div className={styles.selectedTokenWrapper}>
+                                            <span
+                                                onClick={e => store.pixelStore3.mode = "draw"}
+                                                className={store.pixelStore3.mode === "draw" ? styles.selectedTokenSelected : ""}>
+                                                Draw
+                                            </span>
+                                <span
+                                    onClick={e => store.pixelStore3.mode = "clean"}
+                                    className={store.pixelStore3.mode === "clean" ? styles.selectedTokenSelected : ""}>
+                                                Clean
+                                            </span>
+                            </div>
+                        </div>
+                        <div className={styles.pixelUsed}>
+                            {store.pixelStore3.stateNew.size}
+                            <span>pixels used</span>
+                            <span
+                                className={styles.pixelCalc}>{store.pixelStore3.stateNew.size} pixel / {store.pixelStore3.blockchainDataLimit} max = {Math.ceil((store.pixelStore3.stateNew.size || 0) / (store.pixelStore3.blockchainDataLimit || 1))} transactions</span>
+                        </div>
+                        <div className={styles.btnGroup}>
+                            <button disabled={store.pixelStore3.stateNew.size === 0} className={styles.btn}
+                                    onClick={() => store.pixelStore3.saveNewToBlockchain()}>Save and burn WXG
+                            </button>
+                            <button disabled={store.pixelStore3.stateNew.size === 0} className={styles.btn}
+                                    onClick={() => store.pixelStore3.clean()}>Clean
+                            </button>
+                            <button className={styles.btn} onClick={e => {
+                                // TODO: !!!!
+                                // setIsNeedScreen(isNeedScreen + 1)
+                            }}>Take Screenshot
+                            </button>
 
-                {/*                </div>*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                {/*    <div className="container-full">*/}
-                {/*        <ul className={`historyLine ${styles.historyLine}`}>*/}
-                {/*            {store.pixelStore.data.map((p, i) =>*/}
-                {/*                <li key={`${p.time}-${i}`}*/}
-                {/*                    className={`${styles.historyStep} ${p.time == (store.pixelStore.selectedDataTime || store.pixelStore.lastDataTime) && styles.historyStepSelected}`}*/}
-                {/*                    onClick={() => store.pixelStore.travelToTime(p.time)}*/}
-                {/*                >*/}
-                {/*                    <div>*/}
-                {/*                        <Moment format="YYYY/MM/DD">*/}
-                {/*                            {p.time}*/}
-                {/*                        </Moment>*/}
-                {/*                    </div>*/}
-                {/*                    <span>*/}
-                {/*             <Moment format="HH:mm">*/}
-                {/*                 {p.time}*/}
-                {/*             </Moment>*/}
-                {/*         </span>*/}
-                {/*                </li>)}*/}
-                {/*        </ul>*/}
+            <div className="container-full">
+                <ul className={`historyLine ${styles.historyLine}`}>
+                    {store.pixelStore3.data.map((p, i) =>
+                        <li key={`${p.time}-${i}`}
+                            className={`${styles.historyStep} ${p.time == (store.pixelStore3.selectedDataTime || store.pixelStore3.lastDataTime) && styles.historyStepSelected}`}
+                            onClick={() => store.pixelStore3.travelToTime(p.time)}
+                        >
+                            <div>
+                                <Moment format="YYYY/MM/DD">
+                                    {p.time}
+                                </Moment>
+                            </div>
+                            <span>
+                             <Moment format="HH:mm">
+                                 {p.time}
+                             </Moment>
+                         </span>
+                        </li>)}
+                </ul>
             </div>
         </div>
     </>
