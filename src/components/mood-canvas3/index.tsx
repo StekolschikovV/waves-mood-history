@@ -2,6 +2,8 @@ import React, {useMemo, useRef, useState} from 'react'
 import {Canvas as CANVAS, useFrame} from '@react-three/fiber'
 import {observer} from "mobx-react-lite";
 import styles from "@components/mood-canvas2/style.module.scss";
+import gsap from "gsap";
+import {Color} from "three";
 
 
 function Points() {
@@ -21,7 +23,7 @@ function Points() {
     };
 
     const positions = useMemo(() => {
-        return new Float32Array(createPositionsArray(100, 100, 2));
+        return new Float32Array(createPositionsArray(100, 100, 1));
     }, []);
 
 
@@ -33,31 +35,63 @@ function Points() {
         if (pointsRef.current) {
             const positionAttribute = pointsRef.current.geometry.getAttribute('position');
             const colorAttribute = pointsRef.current.geometry.getAttribute('color');
+            const p = hovered
+            // if (p) {
+            for (let i = 0; i < positionAttribute.count; i++) {
+
+                if (positionAttribute.array[i * 3 + 2] === 10) {
+                    gsap.to([positionAttribute.array], {
+                        duration: 2,
+                        [i * 3 + 2]: 0, // Опустить частицу
+                    });
+                }
+                // console.log(positionAttribute.array[i * 3 + 2])
+                if (hovered === i) {
+                    if (positionAttribute.array[i * 3 + 2] === 0) {
+                        gsap.to([positionAttribute.array], {
+                            duration: 1,
+                            [i * 3 + 2]: 10, // Поднять частицу
+                        });
+                    }
+                }
+            }
             // for (let i = 0; i < positionAttribute.count; i++) {
-            //     const x = positionAttribute.getX(i);
-            //     const y = positionAttribute.getY(i);
-            //     positionAttribute.setXYZ(i, x, y, Math.sin(clock.elapsedTime + x * 0.1 + y * 0.1));
+            //     //     const x = positionAttribute.getX(i);
+            //     //     const y = positionAttribute.getY(i);
+            //     //     positionAttribute.setXYZ(i, x, y, Math.sin(clock.elapsedTime + x * 0.1 + y * 0.1));
+            //     //
+            //     //     const t = (Math.sin(timeRef.current + x * 0.1 + y * 0.1) + 1) / 2; // Нормализуем от -1 до 1 к 0 до 1
+            //     //     const colorValue = (1 - t) * 0xff + t * 0x00; // Линейная интерполяция между красным и синим
+            //     //     colorAttribute.setXYZ(i, colorValue / 255, 0, (255 - colorValue) / 255); // Преобразуем 0-255 в 0-1
             //
-            //     const t = (Math.sin(timeRef.current + x * 0.1 + y * 0.1) + 1) / 2; // Нормализуем от -1 до 1 к 0 до 1
-            //     const colorValue = (1 - t) * 0xff + t * 0x00; // Линейная интерполяция между красным и синим
-            //     colorAttribute.setXYZ(i, colorValue / 255, 0, (255 - colorValue) / 255); // Преобразуем 0-255 в 0-1
+            //
             // }
-            // const colorAttribute = pointsRef.current.material.getAttribute('color');
+            // // const colorAttribute = pointsRef.current.material.getAttribute('color');
             // for (let i = 0; i < positionAttribute.count; i++) {
             //     const x = positionAttribute.getX(i);
             //     const y = positionAttribute.getY(i);
             //     positionAttribute.setXYZ(i, x, y, 0);
             // }
-            // positionAttribute[hovered || 0].setXYZ(10, 10, 10)
-            // const x = positionAttribute.getX(hovered || 0);
-            // const y = positionAttribute.getY(hovered || 0);
-            // positionAttribute.setXYZ(hovered || 0, x, y, 10)
-            // colorAttribute.set("red")
-            colorAttribute.setXYZ(hovered || 0, 255, 255, 255); // Преобразуем 0-255 в 0-1
+            // // positionAttribute[hovered || 0].setXYZ(10, 10, 10)
+            // const x = positionAttribute.getX(p);
+            // const y = positionAttribute.getY(p);
+            // positionAttribute.setXYZ(p, x, y, 2)
+            // // colorAttribute.set("red")
+            // // colorAttribute.setXYZ(hovered || 0, new Color("red")); // Преобразуем 0-255 в 0-1
+            //
+            if (p) {
+                const color = new Color("red");
+                colors[p * 3] = color.r;
+                colors[p * 3 + 1] = color.g;
+                colors[p * 3 + 2] = color.b;
+            }
+
 
             colorAttribute.needsUpdate = true;
             positionAttribute.needsUpdate = true;
             // timeRef.current += clock.getDelta();
+            // }
+
         }
     });
 
@@ -138,7 +172,7 @@ export default observer(function MoodCanvas3() {
                     // onMouseDown={() => window.app.onMouseDown = true}
                     // onMouseUp={() => window.app.onMouseDown = false}
                 >
-                    <CANVAS camera={{fov: 75, position: [0, 0, 107],}}>
+                    <CANVAS camera={{fov: 75, position: [0, 0, 70],}}>
                         <Points/>
                     </CANVAS>
                 </div>
