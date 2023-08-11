@@ -31,6 +31,32 @@ function Points() {
         return new Float32Array(positions.length);
     }, []);
 
+    const setColor = (position: number, color: string) => {
+        const colorObj = new Color(color);
+        if (colors[position * 3] !== colorObj.r)
+            colors[position * 3] = colorObj.r;
+        if (colors[position * 3 + 1] !== colorObj.g)
+            colors[position * 3 + 1] = colorObj.g;
+        if (colors[position * 3 + 2] !== colorObj.b)
+            colors[position * 3 + 2] = colorObj.b;
+    }
+
+    const setAnimation = (position: number) => {
+        const positionAttribute = pointsRef.current.geometry.getAttribute('position');
+        if (positionAttribute.array[position * 3 + 2] === 0) {
+            const tl = gsap.timeline()
+            tl
+                .to([positionAttribute.array], {
+                    duration: 2,
+                    [position * 3 + 2]: 10,
+                })
+                .to([positionAttribute.array], {
+                    duration: 2,
+                    [position * 3 + 2]: 0,
+                })
+        }
+    }
+
     useFrame(({mouse, clock}) => {
         if (pointsRef.current) {
             const positionAttribute = pointsRef.current.geometry.getAttribute('position');
@@ -39,21 +65,21 @@ function Points() {
             // if (p) {
             for (let i = 0; i < positionAttribute.count; i++) {
 
-                if (positionAttribute.array[i * 3 + 2] === 10) {
-                    gsap.to([positionAttribute.array], {
-                        duration: 2,
-                        [i * 3 + 2]: 0, // Опустить частицу
-                    });
-                }
-                // console.log(positionAttribute.array[i * 3 + 2])
-                if (hovered === i) {
-                    if (positionAttribute.array[i * 3 + 2] === 0) {
-                        gsap.to([positionAttribute.array], {
-                            duration: 1,
-                            [i * 3 + 2]: 10, // Поднять частицу
-                        });
-                    }
-                }
+                // if (positionAttribute.array[i * 3 + 2] === 10) {
+                //     gsap.to([positionAttribute.array], {
+                //         duration: 2,
+                //         [i * 3 + 2]: 0, // Опустить частицу
+                //     });
+                // }
+                // // console.log(positionAttribute.array[i * 3 + 2])
+                // if (hovered === i) {
+                //     if (positionAttribute.array[i * 3 + 2] === 0) {
+                //         gsap.to([positionAttribute.array], {
+                //             duration: 1,
+                //             [i * 3 + 2]: 10, // Поднять частицу
+                //         });
+                //     }
+                // }
             }
             // for (let i = 0; i < positionAttribute.count; i++) {
             //     //     const x = positionAttribute.getX(i);
@@ -80,10 +106,8 @@ function Points() {
             // // colorAttribute.setXYZ(hovered || 0, new Color("red")); // Преобразуем 0-255 в 0-1
             //
             if (p) {
-                const color = new Color("red");
-                colors[p * 3] = color.r;
-                colors[p * 3 + 1] = color.g;
-                colors[p * 3 + 2] = color.b;
+                setColor(p, "red")
+                setAnimation(p)
             }
 
 
