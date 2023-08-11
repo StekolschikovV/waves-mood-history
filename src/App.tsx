@@ -68,6 +68,7 @@ function App() {
             <Promo onLoaded={onLoadedHandler}/>
             {/*{version === 1 && <MoodCanvasLazy data={data}/>}*/}
             {/*{version === 2 && <MoodCanvas2/>}*/}
+            {/*<MoodCanvas2/>*/}
             <MoodCanvas3/>
             <TopBurnersLazy data={data}/>
             <FAQLazy/>

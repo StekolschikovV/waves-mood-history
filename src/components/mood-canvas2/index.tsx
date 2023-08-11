@@ -7,7 +7,6 @@ import Moment from "react-moment";
 import Colors from "@components/mood-canvas2/colors";
 import MemoizedPixels from "@components/mood-canvas2/memoized-pixels";
 import Screenshot from "@components/mood-canvas2/screenshot";
-import {Perf} from "r3f-perf";
 
 window.app = {
     onMouseDown: false
@@ -107,7 +106,7 @@ export default observer(function MoodCanvas2() {
                                     fov: 75,
                                     position: [0, 0, 107],
                                 }}>
-                                <Perf/>
+                                {/*<Perf/>*/}
 
                                 {/*<ambientLight intensity={2.7}/>*/}
                                 {/*<pointLight intensity={10000} position={[-120, 0, 0]}/>*/}

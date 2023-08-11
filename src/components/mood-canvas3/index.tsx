@@ -1,9 +1,10 @@
-import React, {useMemo, useRef, useState} from 'react'
+import React, {useEffect, useMemo, useRef, useState} from 'react'
 import {Canvas as CANVAS, useFrame} from '@react-three/fiber'
 import {observer} from "mobx-react-lite";
 import styles from "@components/mood-canvas2/style.module.scss";
 import gsap from "gsap";
 import {Color} from "three";
+import {useRootStore} from "@/providers/RootStoreProvider";
 
 
 const selected: Map<number, string> = new Map()
@@ -12,6 +13,7 @@ const selected: Map<number, string> = new Map()
 const Points = ({isSelectMode, color}: { isSelectMode: boolean, color: string }) => {
 
     const pointsRef = useRef<any>();
+    const store = useRootStore();
 
     const createPositionsArray = (width: number, height: number, step: number) => {
         const positions: number[] = [];
@@ -44,15 +46,8 @@ const Points = ({isSelectMode, color}: { isSelectMode: boolean, color: string })
         if (positionAttribute.array[position * 3 + 2] === 0) {
             const tl = gsap.timeline()
             tl
-                .to([positionAttribute.array], {
-                    duration: 0.3,
-                    [position * 3 + 2]: 3,
-                })
-                .to([positionAttribute.array], {
-
-                    duration: 1,
-                    [position * 3 + 2]: 0,
-                })
+                .to([positionAttribute.array], {duration: 0.3, [position * 3 + 2]: 3,})
+                .to([positionAttribute.array], {duration: 1, [position * 3 + 2]: 0,})
         }
     }
 
@@ -71,6 +66,49 @@ const Points = ({isSelectMode, color}: { isSelectMode: boolean, color: string })
             setAnimation(position)
             selected.set(position, color)
         }
+    }
+
+    useEffect(() => {
+        setTimeout(() => {
+            console.log(store.pixelStore3.state.size)
+            store.pixelStore3.state.forEach((value, key) => {
+                // console.log(key)
+                //     const obj = key.split("-")
+                //     console.log(obj[0], obj[1], +obj[0] * +obj[1])
+            })
+
+            let i = 0
+            for (let y = 0; y < 100; y++) {
+                for (let x = 0; x < 100; x++) {
+                    const color = store.pixelStore3.state.get(`${y}-${x}`) || "white"
+                    // console.log((y + x) * 3, color)
+                    setColor(i, color)
+                    i++
+                }
+            }
+            setColor((0), "red")
+            setColor((99), "red")
+            setColor((100), "red")
+
+            console.log(store.pixelStore3.state.get(`${99}-${0}`))
+        }, 2000)
+
+        // if (store.pixelStore3.state) {
+        //     for (let y = 0; y < 100; y++) {
+        //         for (let x = 0; x < 100; x++) {
+        //             const color = store.pixelStore3.state.get(`${y}-${x}`) || "white"
+        //             console.log((y + x) * 3, color)
+        //             setColor((y + x) * 3, color)
+        //         }
+        //     }
+        // }
+        // console.log('+++store.pixelStore3.state', store.pixelStore3.state)
+        // console.log(store.pixelStore3.state.get("100-100"))
+        // console.log(store.pixelStore3.state.get("99-99"))
+    }, [])
+
+    const convertFromCoordinateToPosition = () => {
+        let result = 0
     }
 
     return (
