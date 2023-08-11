@@ -1,43 +1,92 @@
-import React, {useMemo} from 'react'
-import {Canvas as CANVAS} from '@react-three/fiber'
+import React, {useMemo, useRef, useState} from 'react'
+import {Canvas as CANVAS, useFrame} from '@react-three/fiber'
 import {observer} from "mobx-react-lite";
 import styles from "@components/mood-canvas2/style.module.scss";
 
 
 function Points() {
+    const [hovered, setHovered] = useState<number | null>(null);
+    const pointsRef = useRef<any>();
+    const timeRef = useRef(0);
+
 
     const createPositionsArray = (width: number, height: number, step: number) => {
-        const positions = [];
+        const positions: number[] = [];
         for (let y = 0; y < height; y += step) {
             for (let x = 0; x < width; x += step) {
                 positions.push(x - (height / 2), y - (width / 2), 0);
             }
         }
-        return new Float32Array(positions);
-    }
+        return positions;
+    };
 
-
-    let positions = useMemo(() => {
+    const positions = useMemo(() => {
         return new Float32Array(createPositionsArray(100, 100, 2));
     }, []);
 
 
+    const colors = useMemo(() => {
+        return new Float32Array(positions.length);
+    }, []);
+
+    useFrame(({mouse, clock}) => {
+        if (pointsRef.current) {
+            const positionAttribute = pointsRef.current.geometry.getAttribute('position');
+            const colorAttribute = pointsRef.current.geometry.getAttribute('color');
+            // for (let i = 0; i < positionAttribute.count; i++) {
+            //     const x = positionAttribute.getX(i);
+            //     const y = positionAttribute.getY(i);
+            //     positionAttribute.setXYZ(i, x, y, Math.sin(clock.elapsedTime + x * 0.1 + y * 0.1));
+            //
+            //     const t = (Math.sin(timeRef.current + x * 0.1 + y * 0.1) + 1) / 2; // Нормализуем от -1 до 1 к 0 до 1
+            //     const colorValue = (1 - t) * 0xff + t * 0x00; // Линейная интерполяция между красным и синим
+            //     colorAttribute.setXYZ(i, colorValue / 255, 0, (255 - colorValue) / 255); // Преобразуем 0-255 в 0-1
+            // }
+            // const colorAttribute = pointsRef.current.material.getAttribute('color');
+            // for (let i = 0; i < positionAttribute.count; i++) {
+            //     const x = positionAttribute.getX(i);
+            //     const y = positionAttribute.getY(i);
+            //     positionAttribute.setXYZ(i, x, y, 0);
+            // }
+            // positionAttribute[hovered || 0].setXYZ(10, 10, 10)
+            // const x = positionAttribute.getX(hovered || 0);
+            // const y = positionAttribute.getY(hovered || 0);
+            // positionAttribute.setXYZ(hovered || 0, x, y, 10)
+            // colorAttribute.set("red")
+            colorAttribute.setXYZ(hovered || 0, 255, 255, 255); // Преобразуем 0-255 в 0-1
+
+            colorAttribute.needsUpdate = true;
+            positionAttribute.needsUpdate = true;
+            // timeRef.current += clock.getDelta();
+        }
+    });
+
     return (
         <points
+            ref={pointsRef}
             onPointerOver={(event) => {
-                console.log(event)
-                console.log(event.index)
+                setHovered(event.index || 0)
             }}
+            onPointerOut={() => setHovered(null)}
         >
             <bufferGeometry attach="geometry">
                 <bufferAttribute
+                    needsUpdate
                     attach="attributes-position"
                     array={positions}
-                    count={positions.length / 3} //
+                    count={(positions?.length || 0) / 3} //
                     itemSize={3}
                 />
+                <bufferAttribute
+                    needsUpdate
+                    attach="attributes-color"
+                    array={colors}
+                    count={(positions?.length || 0) / 3} //
+                    itemSize={3}
+                    normalized/>
+
             </bufferGeometry>
-            <pointsMaterial size={1}/>
+            <pointsMaterial size={1} color={""} vertexColors={true}/>
         </points>
     );
 }
