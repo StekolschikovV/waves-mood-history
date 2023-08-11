@@ -50,7 +50,7 @@ function App() {
     const {data, error, isLoading, mutate} = useSWR(
         "https://nodes.wavesnodes.com/addresses/data/3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
         fetcher,
-        {refreshInterval: 50000}
+        {refreshInterval: 5000}
     );
 
     const onLoadedHandler = () => {
