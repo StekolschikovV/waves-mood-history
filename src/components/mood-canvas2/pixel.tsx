@@ -1,6 +1,6 @@
 import React, {forwardRef, useEffect, useRef, useState} from "react";
 
-import {BoxGeometry, Color, Mesh, MeshStandardMaterial} from "three";
+import {BoxGeometry, BufferGeometry, Color, Mesh, MeshStandardMaterial, NormalBufferAttributes} from "three";
 import gsap from "gsap";
 import {useRootStore} from "@/providers/RootStoreProvider";
 import {observer} from "mobx-react-lite";
@@ -11,6 +11,7 @@ interface IProps {
     x: number
     z: number
     isDrawMode: boolean
+    geometry: BufferGeometry<NormalBufferAttributes>
 }
 
 const Pixel = observer(forwardRef((
@@ -19,7 +20,8 @@ const Pixel = observer(forwardRef((
         name,
         y,
         x,
-        z = 0
+        z = 0,
+        geometry,
     }: IProps, ref) => {
 
     const store = useRootStore();
@@ -27,6 +29,7 @@ const Pixel = observer(forwardRef((
     const innerRef = useRef<Mesh<BoxGeometry, MeshStandardMaterial>>(null!);
     const [position, setPosition] =
         useState({x, y, z})
+    const [color, setColor] = useState("white")
 
     useEffect(() => {
         if (innerRef?.current) {
@@ -36,7 +39,8 @@ const Pixel = observer(forwardRef((
     }, [innerRef?.current])
 
     useEffect(() => {
-        innerRef.current.material.color.set(store.pixelStore.state.get(name) || "white")
+        setColor(store.pixelStore.state.get(name) || "white")
+        // innerRef.current.material.color.set(store.pixelStore.state.get(name) || "white")
     }, [store.pixelStore.state])
 
     const playPixelSound = (volume: number) => {
@@ -50,10 +54,12 @@ const Pixel = observer(forwardRef((
         return volume / 1000
     }
 
+
     const hoverAction = (isClick = false) => {
         if (store.pixelStore.mode === "draw" && (isDrawMode || isClick) && !innerRef?.current?.material?.color.equals(new Color(store.pixelStore.color))) {
             gsap.to(innerRef.current.position, {z: 3, duration: 0.5});
-            innerRef?.current?.material?.color.set(store.pixelStore.color)
+            setColor(store.pixelStore.color)
+            // innerRef?.current?.material?.color.set(store.pixelStore.color)
             gsap.to(innerRef.current.position, {z: 0, duration: 0.2, delay: 1});
             playPixelSound(getPixelVolume(innerRef.current.name))
             store.pixelStore.addNewPixel(name, store.pixelStore.color)
@@ -64,6 +70,8 @@ const Pixel = observer(forwardRef((
     }
     // console.log(isDrawMode)
     return <mesh
+        geometry={geometry}
+        material={store.pixelStore.getMaterialByName(color)}
         onClick={() => hoverAction(true)}
         name={name}
         ref={innerRef}
@@ -76,8 +84,9 @@ const Pixel = observer(forwardRef((
             hoverAction(false)
         }}
         position={[position.y, position.x, position.z]}>
-        <boxGeometry args={[1, 1, 2]}/>
-        <meshStandardMaterial opacity={0} transparent={true}/>
+        {/*<boxGeometry args={[1, 1, 2]}/>*/}
+        {/*<meshStandardMaterial opacity={0} transparent={true}/>*/}
+        {/*{store.pixelStore.getMaterialByName(color)}*/}
     </mesh>
 }))
 

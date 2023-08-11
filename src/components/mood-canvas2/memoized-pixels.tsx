@@ -1,5 +1,8 @@
 import React, {memo} from "react";
 import Pixel from "@components/mood-canvas2/pixel";
+import * as THREE from "three";
+
+const geometry = new THREE.SphereGeometry(1, 28, 28)
 
 const MemoizedPixels = memo((props: {
     pixels: { name: string, y: number, x: number }[]
@@ -14,6 +17,7 @@ const MemoizedPixels = memo((props: {
                     x={c.x}
                     y={c.y}
                     z={0}
+                    geometry={geometry}
                 />
             }
         )}

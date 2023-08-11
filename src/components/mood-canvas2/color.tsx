@@ -34,13 +34,15 @@ export default observer(function Color({color, i}: { color: string, i: number })
     return <>
         <mesh
             ref={innerRef}
+            geometry={store.pixelStore.geometryBig}
+            material={store.pixelStore.getMaterialByName(color)}
             onPointerDown={(e) => {
                 store.pixelStore.color = color
                 playPixelSound()
             }}
             position={[-80, ((8 * i) - 60), -2.5]}>
-            <boxGeometry args={[5, 5, 5]}/>
-            <meshStandardMaterial opacity={1} color={color} transparent={true}/>
+            {/*<boxGeometry args={[5, 5, 5]}/>*/}
+            {/*<meshStandardMaterial opacity={1} color={color} transparent={true}/>*/}
         </mesh>
     </>
 })

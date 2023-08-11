@@ -5,6 +5,8 @@ import {IBlockchainData, IPixelState} from "@/interface";
 import {InvokeArgs, Signer} from "@waves/signer";
 import {ProviderKeeper} from "@waves/provider-keeper";
 import _ from 'lodash';
+import * as THREE from "three";
+import {Material, MeshBasicMaterial} from "three";
 
 export class PixelStore {
 
@@ -24,8 +26,11 @@ export class PixelStore {
 
     mode: "draw" | "clean" = "draw"
 
-    // blockchainDataLimit = 60
     blockchainDataLimit = 60
+    colors = ['aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow']
+    materials: Map<string, MeshBasicMaterial> = new Map()
+    geometry = new THREE.BoxGeometry(1, 1, 2)
+    geometryBig = new THREE.BoxGeometry(5, 5, 5)
 
     debouncedAddNewPixel = _.debounce(() => {
         // console.log("+++his.stateNewTemp", this.stateNewTemp.size)
@@ -43,6 +48,10 @@ export class PixelStore {
 
         this.signer = new Signer({NODE_URL: 'https://nodes.wavesnodes.com'})
         this.signer.setProvider(new ProviderKeeper());
+
+        this.colors.forEach(c => {
+            this.materials.set(c, new THREE.MeshBasicMaterial({color: c}))
+        })
 
         // TODO: remove
         // @ts-ignore
@@ -176,6 +185,11 @@ export class PixelStore {
         this.implementNewData(date)
     }
 
+    public getMaterialByName = (name: string): Material => {
+        const m: any = this.materials.get(name)
+        return m
+    }
+
     private implementNewData = (date: IPixelState[]) => {
         const lastDateSize = this.data.length
         this.data = date
@@ -198,6 +212,5 @@ export class PixelStore {
         })
         return map
     }
-
 
 }
