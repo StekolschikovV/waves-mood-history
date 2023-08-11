@@ -3,26 +3,32 @@ import {Canvas as CANVAS} from '@react-three/fiber'
 import {observer} from "mobx-react-lite";
 import styles from "@components/mood-canvas2/style.module.scss";
 
-function createPositionsArray(width: number, height: number, step: number) {
-    const positions = [];
 
-    for (let y = 0; y < height; y += step) {
-        for (let x = 0; x < width; x += step) {
-            positions.push(x - (height / 2), y - (width / 2), 0);
+function Points() {
+
+    const createPositionsArray = (width: number, height: number, step: number) => {
+        const positions = [];
+        for (let y = 0; y < height; y += step) {
+            for (let x = 0; x < width; x += step) {
+                positions.push(x - (height / 2), y - (width / 2), 0);
+            }
         }
+        return new Float32Array(positions);
     }
 
-    return new Float32Array(positions);
-}
-
-function Point() {
 
     let positions = useMemo(() => {
         return new Float32Array(createPositionsArray(100, 100, 2));
     }, []);
 
+
     return (
-        <points>
+        <points
+            onPointerOver={(event) => {
+                console.log(event)
+                console.log(event.index)
+            }}
+        >
             <bufferGeometry attach="geometry">
                 <bufferAttribute
                     attach="attributes-position"
@@ -80,11 +86,11 @@ export default observer(function MoodCanvas3() {
                         cursor: "crosshair",
                         border: "1px solid black"
                     }}
-                    onMouseDown={() => window.app.onMouseDown = true}
-                    onMouseUp={() => window.app.onMouseDown = false}
+                    // onMouseDown={() => window.app.onMouseDown = true}
+                    // onMouseUp={() => window.app.onMouseDown = false}
                 >
                     <CANVAS camera={{fov: 75, position: [0, 0, 107],}}>
-                        <Point/>
+                        <Points/>
                     </CANVAS>
                 </div>
                 {/*            </div>*/}
