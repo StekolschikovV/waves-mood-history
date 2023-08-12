@@ -65,7 +65,7 @@ const Points = observer(({isSelectMode, color}: { isSelectMode: boolean, color: 
 
     const select = (position: number, type: "select" | "click"): void => {
         if ((isSelectMode || type === "click") && selected.get(position) !== color) {
-            setColor(position, "red")
+            setColor(position, store.pixelStore3.color)
             setAnimation(position)
             selected.set(position, color)
         }
