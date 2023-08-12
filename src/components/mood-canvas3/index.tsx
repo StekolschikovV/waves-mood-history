@@ -13,6 +13,7 @@ import {positionToCoordinates} from "@components/mood-canvas3/function";
 
 const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
 
+    const [isUseInteract, setIsUseInteract] = useState(false)
     const pointsRef = useRef<any>();
     const store = useRootStore();
 
@@ -20,6 +21,14 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
         const pixelSound = new Audio('./sound/ui-click.mp3')
         pixelSound.volume = volume
         pixelSound.play()
+    }
+
+    const playWarpSound = (volume: number) => {
+        if (isUseInteract) {
+            const pixelSound = new Audio('./sound/warp.mp3')
+            pixelSound.volume = volume
+            pixelSound.play()
+        }
     }
 
     const createPositionsArray = (width: number, height: number, step: number) => {
@@ -95,12 +104,62 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
         }
     }
 
+    const updateAllFromStateAnimation = (i: number, x: number, y: number) => {
+        const color = store.pixelStore3.state.get(`${x}-${y}`) || "white"
+        const colorObj = new Color(color);
+        const oldColor = {r: colors[i * 3], g: colors[i * 3 + 1], b: colors[i * 3 + 2]}
+
+        // console.log(colorObj, oldColor, oldColor.r !== colorObj.r || oldColor.g !== colorObj.g || oldColor.b !== colorObj.b)
+        // if (oldColor.r !== colorObj.r || oldColor.g !== colorObj.g || oldColor.b !== colorObj.b) {
+        setTimeout(() => {
+            colors[i * 3] = colorObj.r;
+            colors[i * 3 + 1] = colorObj.g;
+            colors[i * 3 + 2] = colorObj.b;
+        }, 4650)
+
+        const positionAttribute = pointsRef.current.geometry.getAttribute('position');
+        const tl = gsap.timeline()
+
+        const xOld = positionAttribute.array[i * 3 + 0]
+        const yOld = positionAttribute.array[i * 3 + 1]
+
+        tl
+            .to([positionAttribute.array], {duration: 1, [i * 3 + 2]: -(Math.random() * 500)})
+            .to([positionAttribute.array], {
+                duration: 3.8,
+                [i * 3 + 2]: (Math.random() * 100),
+                [i * 3]: 0,
+                [i * 3 + 1]: 0,
+            })
+
+            // .to([positionAttribute.array], {duration: 0, [i * 3 + 2]: (Math.random() * 100)})
+
+            // .to([positionAttribute.array], {duration: 3, [i * 3 + 2]: 0,})
+            .to([positionAttribute.array], {
+                duration: 2,
+                [i * 3 + 2]: 0,
+                [i * 3]: xOld,
+                [i * 3 + 1]: yOld,
+            })
+        // }
+
+    }
+
     const updateAllFromState = () => {
         let i = 0
+        playWarpSound(1)
         for (let y = 0; y < 100; y++) {
             for (let x = 0; x < 100; x++) {
-                const color = store.pixelStore3.state.get(`${x}-${y}`) || "white"
-                setColor(i, color)
+                // const color = store.pixelStore3.state.get(`${x}-${y}`) || "white"
+                // const colorObj = new Color(color);
+                //
+                // // const p = positionToCoordinates(i)
+                // colors[i * 3] = colorObj.r;
+                // colors[i * 3 + 1] = colorObj.g;
+                // colors[i * 3 + 2] = colorObj.b;
+                // console.log(new Color(colors[i], colors[i + 1], colors[i + 2]))
+                // setColor(i, color)
+                updateAllFromStateAnimation(i, x, y)
                 i++
             }
         }
@@ -108,11 +167,24 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
 
     useEffect(() => {
         updateAllFromState()
-    }, [store.pixelStore3.state.size])
+    }, [store.pixelStore3.state])
 
     useEffect(() => {
         if (store.pixelStore3.stateNew.size === 0) updateAllFromState()
-    }, [store.pixelStore3.stateNew.size])
+    }, [store.pixelStore3.stateNew])
+
+    useEffect(() => {
+        function clickDetector() {
+            document.body.addEventListener('click', () => {
+                if (!isUseInteract) {
+                    setIsUseInteract(true)
+                }
+            }, true);
+        }
+
+        window.addEventListener("click", clickDetector);
+        return () => window.removeEventListener("click", clickDetector);
+    }, [])
 
     return (
         <points
@@ -190,7 +262,7 @@ export default observer(function MoodCanvas3() {
                             onMouseDown={() => setIsSelectMode(true)}
                             onMouseUp={() => setIsSelectMode(false)}
                         >
-                            <CANVAS camera={{fov: 75, position: [0, 0, 100]}}>
+                            <CANVAS camera={{fov: 75, position: [0, 0, 100], far: 1000}}>
                                 {store.pixelStore3.isScreenshotMode && <color attach="background" args={['#0f141f']}/>}
                                 <Points isSelectMode={isSelectMode}/>
                                 <Colors/>
