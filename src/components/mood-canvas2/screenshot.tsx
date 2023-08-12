@@ -1,5 +1,6 @@
 import {useEffect} from "react";
 import {useThree} from "@react-three/fiber";
+import {useRootStore} from "@/providers/RootStoreProvider";
 
 const Screenshot = ({isNeedScreen}: { isNeedScreen: number }) => {
     const {
@@ -7,6 +8,7 @@ const Screenshot = ({isNeedScreen}: { isNeedScreen: number }) => {
         scene,                        // Default scene
         camera,                       // Default camera
     } = useThree();
+    const store = useRootStore();
 
     function renderToJPG() {
         gl.domElement.getContext('webgl', {preserveDrawingBuffer: true});
@@ -32,7 +34,11 @@ const Screenshot = ({isNeedScreen}: { isNeedScreen: number }) => {
 
     useEffect(() => {
         if (isNeedScreen > 0) {
-            renderToJPG()
+            store.pixelStore3.isScreenshotMode = true
+            setTimeout(() => {
+                renderToJPG()
+                store.pixelStore3.isScreenshotMode = false
+            }, 100)
         }
     }, [isNeedScreen])
     return <></>

@@ -21,7 +21,6 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 positions.push(((x - (height / 2)) * step) + 7.8, ((y - (width / 2)) * step) + step / 2, 0);
-                // positions.push(((x - (height / 2)) * step) + 195, (((y - (width / 2)) * step) + step / 2) + 190, 0);
             }
         }
         return positions;
@@ -29,7 +28,6 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
 
     const positions = useMemo(() => {
         return new Float32Array(createPositionsArray(100, 100, 1.5));
-        // return new Float32Array(createPositionsArray(100, 100, 5));
     }, []);
 
 
@@ -64,31 +62,18 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
     });
 
     const select = (position: number, type: "select" | "click"): void => {
-
-        if ((isSelectMode || type === "click")
-            // && selected.get(position) !== store.pixelStore3.color
+        if (
+            (isSelectMode || type === "click")
+            && store.pixelStore3.state.get(positionToCoordinates(position)) !== store.pixelStore3.color
         ) {
             setColor(position, store.pixelStore3.color)
             setAnimation(position)
-            // selected.set(position, store.pixelStore3.color)
-            // alert(positionToCoordinates(position))
             store.pixelStore3.addNewPixel(positionToCoordinates(position), store.pixelStore3.color)
         }
     }
 
     useEffect(() => {
-        // let i = 0
-        // for (let y = 0; y < 100; y++) {
-        //     for (let x = 0; x < 100; x++) {
-        //         const color = store.pixelStore3.state.get(`${y}-${x}`) || "white"
-        //         // console.log((y + x) * 3, color)
-        //         setColor(i, color)
-        //         i++
-        //     }
-        // }
-
         let i = 0
-        let coordinates: string = ""
         for (let y = 0; y < 100; y++) {
             for (let x = 0; x < 100; x++) {
                 const color = store.pixelStore3.state.get(`${x}-${y}`) || "white"
@@ -175,6 +160,7 @@ export default observer(function MoodCanvas3() {
                             onMouseUp={() => setIsSelectMode(false)}
                         >
                             <CANVAS camera={{fov: 75, position: [0, 0, 100]}}>
+                                {store.pixelStore3.isScreenshotMode && <color attach="background" args={['#0f141f']}/>}
                                 <Points isSelectMode={isSelectMode}/>
                                 <Colors/>
                                 <Screenshot isNeedScreen={isNeedScreen}/>
@@ -224,7 +210,7 @@ export default observer(function MoodCanvas3() {
                             </button>
                             <button className={styles.btn} onClick={e => {
                                 // TODO: !!!!
-                                // setIsNeedScreen(isNeedScreen + 1)
+                                setIsNeedScreen(isNeedScreen + 1)
                             }}>Take Screenshot
                             </button>
 

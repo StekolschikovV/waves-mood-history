@@ -25,6 +25,7 @@ export class PixelStore3 {
     selectedToken: "USDT" | "USDC" = "USDT"
 
     mode: "draw" | "clean" = "draw"
+    isScreenshotMode = false
 
     blockchainDataLimit = 60
     pixelCount = 100

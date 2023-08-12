@@ -66,7 +66,7 @@ function App() {
             <Preloader isShow={isShowPreloader}/>
             <Header onLoaded={onLoadedHandler}/>
             <Promo onLoaded={onLoadedHandler}/>
-            <MoodCanvasLazy data={data}/>
+            {/*<MoodCanvasLazy data={data}/>*/}
             {/*{version === 2 && <MoodCanvas2/>}*/}
             {/*<MoodCanvas2/>*/}
             <MoodCanvas3/>
