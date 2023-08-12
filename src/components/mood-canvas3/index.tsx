@@ -104,65 +104,59 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
         }
     }
 
-    const updateAllFromStateAnimation = (i: number, x: number, y: number) => {
+    const updateAllFromStateAnimation = (i: number, x: number, y: number, animation: boolean) => {
         const color = store.pixelStore3.state.get(`${x}-${y}`) || "white"
         const colorObj = new Color(color);
-        const oldColor = {r: colors[i * 3], g: colors[i * 3 + 1], b: colors[i * 3 + 2]}
-
-        // console.log(colorObj, oldColor, oldColor.r !== colorObj.r || oldColor.g !== colorObj.g || oldColor.b !== colorObj.b)
-        // if (oldColor.r !== colorObj.r || oldColor.g !== colorObj.g || oldColor.b !== colorObj.b) {
-        setTimeout(() => {
+        if (!animation) {
             colors[i * 3] = colorObj.r;
             colors[i * 3 + 1] = colorObj.g;
             colors[i * 3 + 2] = colorObj.b;
-        }, 4650)
-
-        const positionAttribute = pointsRef.current.geometry.getAttribute('position');
-        const tl = gsap.timeline()
-
-        const xOld = positionAttribute.array[i * 3 + 0]
-        const yOld = positionAttribute.array[i * 3 + 1]
-
-        tl
-            .to([positionAttribute.array], {duration: 1, [i * 3 + 2]: -(Math.random() * 500)})
-            .to([positionAttribute.array], {
-                duration: 3.8,
-                [i * 3 + 2]: (Math.random() * 100),
-                [i * 3]: 0,
-                [i * 3 + 1]: 0,
-            })
-
-            // .to([positionAttribute.array], {duration: 0, [i * 3 + 2]: (Math.random() * 100)})
-
-            // .to([positionAttribute.array], {duration: 3, [i * 3 + 2]: 0,})
-            .to([positionAttribute.array], {
-                duration: 2,
-                [i * 3 + 2]: 0,
-                [i * 3]: xOld,
-                [i * 3 + 1]: yOld,
-            })
-        // }
-
+        } else {
+            setTimeout(() => {
+                colors[i * 3] = colorObj.r;
+                colors[i * 3 + 1] = colorObj.g;
+                colors[i * 3 + 2] = colorObj.b;
+            }, 4650)
+            const positionAttribute = pointsRef.current.geometry.getAttribute('position');
+            const tl = gsap.timeline()
+            const xOld = positionAttribute.array[i * 3 + 0]
+            const yOld = positionAttribute.array[i * 3 + 1]
+            tl
+                .to([positionAttribute.array], {duration: 1, [i * 3 + 2]: -(Math.random() * 500)})
+                .to([positionAttribute.array], {
+                    duration: 3.8,
+                    [i * 3 + 2]: (Math.random() * 100),
+                    [i * 3]: 0,
+                    [i * 3 + 1]: 0,
+                })
+                .to([positionAttribute.array], {
+                    duration: 2,
+                    [i * 3 + 2]: 0,
+                    [i * 3]: xOld,
+                    [i * 3 + 1]: yOld,
+                })
+        }
     }
 
     const updateAllFromState = () => {
         let i = 0
-        playWarpSound(1)
-        for (let y = 0; y < 100; y++) {
-            for (let x = 0; x < 100; x++) {
-                // const color = store.pixelStore3.state.get(`${x}-${y}`) || "white"
-                // const colorObj = new Color(color);
-                //
-                // // const p = positionToCoordinates(i)
-                // colors[i * 3] = colorObj.r;
-                // colors[i * 3 + 1] = colorObj.g;
-                // colors[i * 3 + 2] = colorObj.b;
-                // console.log(new Color(colors[i], colors[i + 1], colors[i + 2]))
-                // setColor(i, color)
-                updateAllFromStateAnimation(i, x, y)
-                i++
+        if (store.pixelStore3.warpAnimationCount < 3) {
+            for (let y = 0; y < 100; y++) {
+                for (let x = 0; x < 100; x++) {
+                    updateAllFromStateAnimation(i, x, y, false)
+                    i++
+                }
+            }
+        } else {
+            playWarpSound(1)
+            for (let y = 0; y < 100; y++) {
+                for (let x = 0; x < 100; x++) {
+                    updateAllFromStateAnimation(i, x, y, true)
+                    i++
+                }
             }
         }
+        store.pixelStore3.warpAnimationCount = store.pixelStore3.warpAnimationCount + 1
     }
 
     useEffect(() => {

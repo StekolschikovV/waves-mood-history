@@ -34,6 +34,8 @@ export class PixelStore3 {
     geometry = new THREE.BoxGeometry(1, 1, 1)
     geometryBig = new THREE.BoxGeometry(5, 5, 5)
 
+    warpAnimationCount = 0
+
     debouncedAddNewPixel = _.debounce(() => {
         // console.log("+++his.stateNewTemp", this.stateNewTemp.size)
         this.stateNewTemp.forEach((value, key, map) => {
