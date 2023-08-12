@@ -123,6 +123,7 @@ export default function MoodCanvas({data}: { data: any }) {
     }
 
     const addNewPixelHandler = (pixel: IPixel) => {
+        console.log("+++ old pixel", pixel)
         if (selectedPixelNew.length < 60) {
             let oldPixels = selectedPixelNew.filter(p => !(p.height === pixel.height && p.width === pixel.width))
             setSelectedPixelNew([...oldPixels, pixel])

@@ -26,7 +26,7 @@ export class PixelStore3 {
 
     mode: "draw" | "clean" = "draw"
 
-    blockchainDataLimit = 60
+    blockchainDataLimit = 2
     pixelCount = 100
     colors = ['aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow']
     materials: Map<string, MeshBasicMaterial> = new Map()
@@ -153,8 +153,8 @@ export class PixelStore3 {
                         pixels: ee.value.split("|").map(eee => {
                             return {
                                 color: eee.split("-")[0],
-                                y: 99 - +eee.split("-")[1],
-                                x: +eee.split("-")[2]
+                                y: +eee.split("-")[2],
+                                x: 99 - +eee.split("-")[1]
                             }
                         })
                     }

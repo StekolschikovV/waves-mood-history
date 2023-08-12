@@ -50,7 +50,7 @@ function App() {
     const {data, error, isLoading, mutate} = useSWR(
         "https://nodes.wavesnodes.com/addresses/data/3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
         fetcher,
-        {refreshInterval: 50000}
+        {refreshInterval: 5000}
     );
 
     const onLoadedHandler = () => {
@@ -66,7 +66,7 @@ function App() {
             <Preloader isShow={isShowPreloader}/>
             <Header onLoaded={onLoadedHandler}/>
             <Promo onLoaded={onLoadedHandler}/>
-            {/*{version === 1 && <MoodCanvasLazy data={data}/>}*/}
+            <MoodCanvasLazy data={data}/>
             {/*{version === 2 && <MoodCanvas2/>}*/}
             {/*<MoodCanvas2/>*/}
             <MoodCanvas3/>

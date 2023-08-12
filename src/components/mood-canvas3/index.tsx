@@ -8,12 +8,10 @@ import {useRootStore} from "@/providers/RootStoreProvider";
 import Moment from "react-moment";
 import Colors from "@components/mood-canvas2/colors";
 import Screenshot from "@components/mood-canvas2/screenshot";
+import {positionToCoordinates} from "@components/mood-canvas3/function";
 
 
-const selected: Map<number, string> = new Map()
-
-
-const Points = observer(({isSelectMode, color}: { isSelectMode: boolean, color: string }) => {
+const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
 
     const pointsRef = useRef<any>();
     const store = useRootStore();
@@ -23,6 +21,7 @@ const Points = observer(({isSelectMode, color}: { isSelectMode: boolean, color: 
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 positions.push(((x - (height / 2)) * step) + 7.8, ((y - (width / 2)) * step) + step / 2, 0);
+                // positions.push(((x - (height / 2)) * step) + 195, (((y - (width / 2)) * step) + step / 2) + 190, 0);
             }
         }
         return positions;
@@ -30,6 +29,7 @@ const Points = observer(({isSelectMode, color}: { isSelectMode: boolean, color: 
 
     const positions = useMemo(() => {
         return new Float32Array(createPositionsArray(100, 100, 1.5));
+        // return new Float32Array(createPositionsArray(100, 100, 5));
     }, []);
 
 
@@ -64,28 +64,41 @@ const Points = observer(({isSelectMode, color}: { isSelectMode: boolean, color: 
     });
 
     const select = (position: number, type: "select" | "click"): void => {
-        if ((isSelectMode || type === "click") && selected.get(position) !== color) {
+        if (type === "click")
+            console.log("+++ new pixel", position, positionToCoordinates(position))
+
+        if ((isSelectMode || type === "click")
+            // && selected.get(position) !== store.pixelStore3.color
+        ) {
             setColor(position, store.pixelStore3.color)
             setAnimation(position)
-            selected.set(position, color)
+            // selected.set(position, store.pixelStore3.color)
+            // alert(positionToCoordinates(position))
+            store.pixelStore3.addNewPixel(positionToCoordinates(position), store.pixelStore3.color)
         }
     }
 
     useEffect(() => {
+        // let i = 0
+        // for (let y = 0; y < 100; y++) {
+        //     for (let x = 0; x < 100; x++) {
+        //         const color = store.pixelStore3.state.get(`${y}-${x}`) || "white"
+        //         // console.log((y + x) * 3, color)
+        //         setColor(i, color)
+        //         i++
+        //     }
+        // }
+
         let i = 0
+        let coordinates: string = ""
         for (let y = 0; y < 100; y++) {
             for (let x = 0; x < 100; x++) {
-                const color = store.pixelStore3.state.get(`${y}-${x}`) || "white"
-                // console.log((y + x) * 3, color)
+                const color = store.pixelStore3.state.get(`${x}-${y}`) || "white"
                 setColor(i, color)
                 i++
             }
         }
     }, [store.pixelStore3.state])
-
-    const convertFromCoordinateToPosition = () => {
-        let result = 0
-    }
 
     return (
         <points
@@ -108,6 +121,7 @@ const Points = observer(({isSelectMode, color}: { isSelectMode: boolean, color: 
 
             </bufferGeometry>
             <pointsMaterial size={1.5} color={""} vertexColors={true}/>
+            {/*<pointsMaterial size={2} color={""} vertexColors={true}/>*/}
         </points>
     );
 })
@@ -163,7 +177,7 @@ export default observer(function MoodCanvas3() {
                             onMouseUp={() => setIsSelectMode(false)}
                         >
                             <CANVAS camera={{fov: 75, position: [0, 0, 100]}}>
-                                <Points isSelectMode={isSelectMode} color={"red"}/>
+                                <Points isSelectMode={isSelectMode}/>
                                 <Colors/>
                                 <Screenshot isNeedScreen={isNeedScreen}/>
                             </CANVAS>
