@@ -62,17 +62,23 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
     });
 
     const select = (position: number, type: "select" | "click"): void => {
-        if (
-            (isSelectMode || type === "click")
-            && store.pixelStore3.state.get(positionToCoordinates(position)) !== store.pixelStore3.color
-        ) {
-            setColor(position, store.pixelStore3.color)
-            setAnimation(position)
-            store.pixelStore3.addNewPixel(positionToCoordinates(position), store.pixelStore3.color)
+        if ((isSelectMode || type === "click")) {
+            if (store.pixelStore3.mode === "clean") {
+                store.pixelStore3.cleanPixel(positionToCoordinates(position))
+                const oldColor = store.pixelStore3.state.get(positionToCoordinates(position)) || "white"
+                setColor(position, oldColor)
+            } else if (store.pixelStore3.mode === "draw"
+                && store.pixelStore3.state.get(positionToCoordinates(position)) !== store.pixelStore3.color
+                && store.pixelStore3.stateNew.get(positionToCoordinates(position)) !== store.pixelStore3.color
+            ) {
+                setColor(position, store.pixelStore3.color)
+                setAnimation(position)
+                store.pixelStore3.addNewPixel(positionToCoordinates(position), store.pixelStore3.color)
+            }
         }
     }
 
-    useEffect(() => {
+    const updateAllFromState = () => {
         let i = 0
         for (let y = 0; y < 100; y++) {
             for (let x = 0; x < 100; x++) {
@@ -81,7 +87,15 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
                 i++
             }
         }
-    }, [store.pixelStore3.state])
+    }
+
+    useEffect(() => {
+        updateAllFromState()
+    }, [store.pixelStore3.state.size])
+
+    useEffect(() => {
+        if (store.pixelStore3.stateNew.size === 0) updateAllFromState()
+    }, [store.pixelStore3.stateNew.size])
 
     return (
         <points
@@ -208,10 +222,8 @@ export default observer(function MoodCanvas3() {
                             <button disabled={store.pixelStore3.stateNew.size === 0} className={styles.btn}
                                     onClick={() => store.pixelStore3.clean()}>Clean
                             </button>
-                            <button className={styles.btn} onClick={e => {
-                                // TODO: !!!!
-                                setIsNeedScreen(isNeedScreen + 1)
-                            }}>Take Screenshot
+                            <button className={styles.btn} onClick={e => setIsNeedScreen(isNeedScreen + 1)}>Take
+                                Screenshot
                             </button>
 
                         </div>

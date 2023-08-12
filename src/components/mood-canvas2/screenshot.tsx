@@ -13,8 +13,6 @@ const Screenshot = ({isNeedScreen}: { isNeedScreen: number }) => {
     function renderToJPG() {
         gl.domElement.getContext('webgl', {preserveDrawingBuffer: true});
         gl.render(scene, camera);
-
-
         gl.domElement.toBlob(
             function (blob) {
                 var a = document.createElement('a');
@@ -28,7 +26,6 @@ const Screenshot = ({isNeedScreen}: { isNeedScreen: number }) => {
             'image/jpg',
             1.0
         )
-
         gl.domElement.getContext('webgl', {preserveDrawingBuffer: false});
     }
 

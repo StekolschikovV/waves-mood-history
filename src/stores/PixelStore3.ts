@@ -40,7 +40,7 @@ export class PixelStore3 {
             this.stateNew.set(key, value)
         })
         this.stateNewTemp = new Map()
-    }, 500);
+    }, 50);
 
     constructor(root: RootStore) {
         this.root = root;
