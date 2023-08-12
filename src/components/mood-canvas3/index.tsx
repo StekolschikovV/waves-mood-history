@@ -169,11 +169,9 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
 
     useEffect(() => {
         function clickDetector() {
-            document.body.addEventListener('click', () => {
-                if (!isUseInteract) {
-                    setIsUseInteract(true)
-                }
-            }, true);
+            if (!isUseInteract) {
+                setIsUseInteract(true)
+            }
         }
 
         window.addEventListener("click", clickDetector);
@@ -217,6 +215,18 @@ export default observer(function MoodCanvas3() {
     const width = window.innerWidth > 700 ? "660px" : "90vw"
     const height = window.innerWidth > 700 ? "600px" : "80vw"
 
+    const scrollRight = () => {
+        let element: any = document.querySelector(`.historyLine`)
+        if (element) {
+            element.scrollLeft = element?.scrollWidth
+        }
+    }
+
+    useEffect(() => {
+        scrollRight()
+    }, [store.pixelStore3.data])
+
+
     return <>
         <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
             <div className={`container ${styles.moodCanvas}`}>
@@ -251,7 +261,7 @@ export default observer(function MoodCanvas3() {
                                 width: width,
                                 height: height,
                                 cursor: "crosshair",
-                                border: "1px solid black"
+                                // border: "1px solid black"
                             }}
                             onMouseDown={() => setIsSelectMode(true)}
                             onMouseUp={() => setIsSelectMode(false)}
