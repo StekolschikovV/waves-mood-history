@@ -26,7 +26,7 @@ export class PixelStore3 {
 
     mode: "draw" | "clean" = "draw"
 
-    blockchainDataLimit = 2
+    blockchainDataLimit = 60
     pixelCount = 100
     colors = ['aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow']
     materials: Map<string, MeshBasicMaterial> = new Map()

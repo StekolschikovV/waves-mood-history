@@ -64,8 +64,6 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
     });
 
     const select = (position: number, type: "select" | "click"): void => {
-        if (type === "click")
-            console.log("+++ new pixel", position, positionToCoordinates(position))
 
         if ((isSelectMode || type === "click")
             // && selected.get(position) !== store.pixelStore3.color
