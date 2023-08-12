@@ -16,6 +16,12 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
     const pointsRef = useRef<any>();
     const store = useRootStore();
 
+    const playPixelSound = (volume: number) => {
+        const pixelSound = new Audio('./sound/ui-click.mp3')
+        pixelSound.volume = volume
+        pixelSound.play()
+    }
+
     const createPositionsArray = (width: number, height: number, step: number) => {
         const positions: number[] = [];
         for (let y = 0; y < height; y++) {
@@ -42,12 +48,19 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
         colors[position * 3 + 2] = colorObj.b;
     }
 
-    const setAnimation = (position: number) => {
+    const setAnimation = (position: number, type: "clean" | "select") => {
         const positionAttribute = pointsRef.current.geometry.getAttribute('position');
-        if (positionAttribute.array[position * 3 + 2] === 0) {
-            const tl = gsap.timeline()
+        const tl = gsap.timeline()
+        if (type === "select") {
             tl
-                .to([positionAttribute.array], {duration: 0.3, [position * 3 + 2]: 3,})
+                .to([positionAttribute.array], {duration: 0.5, [position * 3 + 2]: -0.7,})
+                .to([positionAttribute.array], {duration: 0.7, [position * 3 + 2]: 2,})
+                .to([positionAttribute.array], {duration: 0.1, [position * 3 + 2]: 0,})
+
+        } else if (type === "clean") {
+            tl
+                .to([positionAttribute.array], {duration: 0.3, [position * 3 + 2]: -2,})
+                .to([positionAttribute.array], {duration: 0.3, [position * 3 + 2]: 0.5,})
                 .to([positionAttribute.array], {duration: 1, [position * 3 + 2]: 0,})
         }
     }
@@ -62,18 +75,22 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
     });
 
     const select = (position: number, type: "select" | "click"): void => {
+        const coordinates = positionToCoordinates(position)
         if ((isSelectMode || type === "click")) {
-            if (store.pixelStore3.mode === "clean") {
-                store.pixelStore3.cleanPixel(positionToCoordinates(position))
-                const oldColor = store.pixelStore3.state.get(positionToCoordinates(position)) || "white"
+            if (store.pixelStore3.mode === "clean" && store.pixelStore3.stateNew.get(coordinates)) {
+                playPixelSound(position / 50000)
+                store.pixelStore3.cleanPixel(coordinates)
+                const oldColor = store.pixelStore3.state.get(coordinates) || "white"
                 setColor(position, oldColor)
+                setAnimation(position, "clean")
             } else if (store.pixelStore3.mode === "draw"
-                && store.pixelStore3.state.get(positionToCoordinates(position)) !== store.pixelStore3.color
-                && store.pixelStore3.stateNew.get(positionToCoordinates(position)) !== store.pixelStore3.color
+                && store.pixelStore3.state.get(coordinates) !== store.pixelStore3.color
+                && store.pixelStore3.stateNew.get(coordinates) !== store.pixelStore3.color
             ) {
+                playPixelSound(position / 50000)
                 setColor(position, store.pixelStore3.color)
-                setAnimation(position)
-                store.pixelStore3.addNewPixel(positionToCoordinates(position), store.pixelStore3.color)
+                setAnimation(position, "select")
+                store.pixelStore3.addNewPixel(coordinates, store.pixelStore3.color)
             }
         }
     }
