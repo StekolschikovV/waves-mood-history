@@ -7,10 +7,10 @@ import Promo from "@components/promo";
 import Header from "@components/header";
 import {Preloader} from "@components/preloader";
 import {ToastContainer} from "react-toastify";
-import MoodCanvas3 from "@components/mood-canvas3";
 import {observer} from "mobx-react-lite";
 import {useRootStore} from "@/providers/RootStoreProvider";
 import MoodCanvas from "@components/mood-canvas";
+import MoodCanvas3 from "@components/mood-canvas3";
 
 // const TRACKING_ID = "G-JNWMFZRRK5"; // OUR_TRACKING_ID
 // ReactGA.initialize(TRACKING_ID);

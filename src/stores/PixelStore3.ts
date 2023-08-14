@@ -90,7 +90,6 @@ export class PixelStore3 {
         // TODO: remove
         // window.xxx = this
         reaction(() => this.version, () => {
-            // console.log("!!!")
             if (this.version === 1)
                 this.load()
         })

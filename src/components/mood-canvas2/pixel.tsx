@@ -50,9 +50,6 @@ const Pixel = observer(forwardRef((
     }
 
     const hoverAction = (isClick = false) => {
-
-        if (isClick)
-            console.log(name, color)
         if (store.pixelStore.mode === "draw" && (window?.app?.onMouseDown || isClick)
             // && !innerRef?.current?.material?.color.equals(new Color(store.pixelStore.color))
         ) {
