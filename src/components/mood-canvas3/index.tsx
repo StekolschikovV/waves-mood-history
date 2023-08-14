@@ -6,10 +6,10 @@ import gsap from "gsap";
 import {Color} from "three";
 import {useRootStore} from "@/providers/RootStoreProvider";
 import Moment from "react-moment";
-import Colors from "@components/mood-canvas2/colors";
-import Screenshot from "@components/mood-canvas2/screenshot";
 import {positionToCoordinates} from "@components/mood-canvas3/function";
-
+import Screenshot from "@components/mood-canvas2/screenshot";
+import Colors from "@components/mood-canvas2/colors";
+import Timestamp from "@components/mood-canvas2/timestamp";
 
 const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
 
@@ -122,9 +122,13 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
             const xOld = positionAttribute.array[i * 3 + 0]
             const yOld = positionAttribute.array[i * 3 + 1]
             tl
-                .to([positionAttribute.array], {duration: 1, [i * 3 + 2]: -(Math.random() * 500)})
                 .to([positionAttribute.array], {
-                    duration: 3.8,
+                    [i * 3]: (Math.random() * 10),
+                    [i * 3 + 1]: (Math.random() * 10),
+                    duration: 2, [i * 3 + 2]: -(Math.random() * 500)
+                })
+                .to([positionAttribute.array], {
+                    duration: 2.5,
                     [i * 3 + 2]: (Math.random() * 100),
                     [i * 3]: 0,
                     [i * 3 + 1]: 0,
@@ -226,6 +230,19 @@ export default observer(function MoodCanvas3() {
         scrollRight()
     }, [store.pixelStore3.data])
 
+    // const data = useControls({
+    //     thickness: {value: 5, min: 0, max: 20},
+    //     roughness: {value: 0, min: 0, max: 1, step: 0.1},
+    //     clearcoat: {value: 1, min: 0, max: 1, step: 0.1},
+    //     clearcoatRoughness: {value: 0, min: 0, max: 1, step: 0.1},
+    //     transmission: {value: 1, min: 0.9, max: 1, step: 0.01},
+    //     ior: {value: 1.25, min: 1, max: 2.3, step: 0.05},
+    //     envMapIntensity: {value: 25, min: 0, max: 100, step: 1},
+    //     color: '#ffffff',
+    //     attenuationTint: '#ffe79e',
+    //     attenuationDistance: {value: 0, min: 0, max: 1},
+    //     z: 10
+    // })
 
     return <>
         <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
@@ -267,8 +284,44 @@ export default observer(function MoodCanvas3() {
                             onMouseUp={() => setIsSelectMode(false)}
                         >
                             <CANVAS camera={{fov: 75, position: [0, 0, 100], far: 1000}}>
+
+                                <ambientLight intensity={55}/>
+                                <spotLight position={[0, 10, 0]} intensity={30}/>
+                                <Timestamp position={[0, 0, 0]} size={[0, 0, 0]}/>
+
+                                {/*<mesh position={[0, 0, data.z]}*/}
+                                {/*      scale={[30, 30, 30]}*/}
+                                {/*    // material={store.pixelStore3.materials.get("red")}*/}
+                                {/*      geometry={store.pixelStore3.geometry}>*/}
+                                {/*    <MeshTransmissionMaterial samples={6} resolution={512} thickness={-1}*/}
+                                {/*                              anisotropy={22} distortionScale={2}*/}
+                                {/*                              temporalDistortion={22}/>*/}
+
+                                {/*    /!*<meshPhysicalMaterial {...data} />*!/*/}
+                                {/*</mesh>*/}
+                                {/*<mesh*/}
+                                {/*    position={[0, 0, 20]}*/}
+                                {/*    scale={[10, 10, 10]}*/}
+                                {/*    receiveShadow*/}
+                                {/*>*/}
+                                {/*    <planeGeometry args={[50, 50]}/>*/}
+                                {/*    */}
+                                {/*    /!*<meshReflectorMaterial*!/*/}
+                                {/*    /!*    // blur={[300, 50]}*!/*/}
+                                {/*    /!*    // resolution={1024}*!/*/}
+                                {/*    /!*    mixBlur={1}*!/*/}
+                                {/*    /!*    mixStrength={100}*!/*/}
+                                {/*    /!*    roughness={1}*!/*/}
+                                {/*    /!*    depthScale={1.2}*!/*/}
+                                {/*    /!*    minDepthThreshold={0.4}*!/*/}
+                                {/*    /!*    maxDepthThreshold={1.4}*!/*/}
+                                {/*    /!*    color="#202020"*!/*/}
+                                {/*    /!*    metalness={0.8}*!/*/}
+                                {/*    /!*    depthToBlurRatioBias={3}/>*!/*/}
+                                {/*</mesh>*/}
+                                {/*<Perf/>*/}
                                 {store.pixelStore3.isScreenshotMode && <color attach="background" args={['#0f141f']}/>}
-                                <Points isSelectMode={isSelectMode}/>
+                                {/*<Points isSelectMode={isSelectMode}/>*/}
                                 <Colors/>
                                 <Screenshot isNeedScreen={isNeedScreen}/>
                             </CANVAS>
