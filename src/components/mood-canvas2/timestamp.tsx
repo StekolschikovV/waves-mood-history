@@ -1,36 +1,87 @@
 import {observer} from "mobx-react-lite";
 import {useRootStore} from "@/providers/RootStoreProvider";
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import {MeshTransmissionMaterial, Text} from "@react-three/drei";
 import {useFrame} from "@react-three/fiber";
 import {Group} from "three";
 import {useControls} from "leva";
 
-export default observer(function Timestamp({position, size}: {
-    position: [number, number, number],
-    size: [number, number, number]
-}) {
+const TimestampText =
+    ({i, datePosition, timePosition, rotation}: {
+        i: number,
+        datePosition: [number, number, number],
+        timePosition: [number, number, number],
+        rotation: [number, number, number]
+    }) => {
+
+        const store = useRootStore();
+
+        return <>
+            <Text
+                onClick={() => store.pixelStore3.selectedTimestamp = i}
+                position={datePosition}
+                rotation={rotation}
+                color={store.pixelStore3.getRandomColor(i)}
+                scale={[6, 6, 10]}
+                anchorX="center"
+                anchorY="middle">
+                20/07/23
+            </Text>
+            <Text
+                onClick={() => store.pixelStore3.selectedTimestamp = i}
+                position={timePosition}
+                rotation={rotation}
+                scale={[10, 10, 10]}
+                color={store.pixelStore3.getRandomColor(i)}
+                anchorX="center" anchorY="middle">
+                {i}
+            </Text>
+        </>
+    }
+
+export default observer(function Timestamp({i}: { i: number }) {
+
     const store = useRootStore();
+    const [XYZ, setXYZ] = useState([0, 0, 0])
 
     // const store = useRootStore();
     // const ref = useRef<Mesh<BoxGeometry, MeshPhysicalMaterial>>(null!);
     const ref = useRef<Group>(null!);
     //
     useFrame(() => {
+
+        const speed = 5
+
+        let targetY = (i - store.pixelStore3.selectedTimestamp) * 30
+        let targetZ = -Math.abs((i - store.pixelStore3.selectedTimestamp) * 40)
+        // && ref.current.position.y !== targetY
         if (ref.current) {
-            // ref.current.rotation.x += 0.01;
-            ref.current.rotation.y += 0.01;
+
+            if (ref.current.position.y !== targetY) {
+
+                if (ref.current.position.y > targetY) {
+                    ref.current.position.y -= speed;
+                }
+
+                if (ref.current.position.y < targetY) {
+                    ref.current.position.y += speed;
+                }
+            }
+
+
+            if (ref.current.position.z > targetZ) {
+                ref.current.position.z -= speed * 2;
+            }
+
+            if (ref.current.position.z < targetZ) {
+                ref.current.position.z += speed * 2;
+            }
+            // console.log(ref.current.rotation.y)
+            // ref.current.rotation.x += 0.001;
+            // ref.current.rotation.y += 0.005;
         }
     });
-    // roughness: { value: 0, min: 0, max: 1, step: 0.1 },
-    // clearcoat: { value: 1, min: 0, max: 1, step: 0.1 },
-    // clearcoatRoughness: { value: 0, min: 0, max: 1, step: 0.1 },
-    // transmission: { value: 1, min: 0.9, max: 1, step: 0.01 },
-    // ior: { value: 1.25, min: 1, max: 2.3, step: 0.05 },
-    // envMapIntensity: { value: 25, min: 0, max: 100, step: 1 },
-    // color: '#ffffff',
-    // attenuationTint: '#ffe79e',
-    // attenuationDistance: { value: 0, min: 0, max: 1 }
+
 
     const data = useControls({
         groupX: {value: 0, min: -50, max: 50, step: 0.1},
@@ -41,76 +92,39 @@ export default observer(function Timestamp({position, size}: {
         groupRotationY: {value: 0, min: -50, max: 50, step: 0.01},
         groupRotationZ: {value: 0, min: -50, max: 50, step: 0.01},
     })
+    const textData:
+        {
+            datePosition: [number, number, number],
+            timePosition: [number, number, number],
+            rotation: [number, number, number]
+        }[]
+        = [
+        {datePosition: [-20.1, 5, 20], timePosition: [-20.1, -4, 20], rotation: [-Math.PI, (Math.PI * 1.5), Math.PI]},
+        {datePosition: [20.1, 5, 20], timePosition: [20.1, -4, 20], rotation: [Math.PI, (Math.PI / 2), Math.PI]},
+        {datePosition: [0, 5, -0.1], timePosition: [0, -4, -0.1], rotation: [-Math.PI * 3, Math.PI * 2, Math.PI]},
+        {datePosition: [0, 20.1, 26], timePosition: [0, 20.1, 16], rotation: [-Math.PI / 2, 0, 0]},
+        {datePosition: [0, -20.1, 16], timePosition: [0, -20.1, 26], rotation: [-Math.PI * 1.5, 0, 0]},
+        {datePosition: [0, 3, 40.1], timePosition: [0, -6, 40.1], rotation: [0, 0, 0]}
+    ]
+
     return <>
         <group
+            onClick={() => store.pixelStore3.selectedTimestamp = i}
+            scale={[0.5, 0.5, 0.5]}
             ref={ref}
-            position={[data.groupX, data.groupY, data.groupZ]}
+            // position={[-(110 + (Math.abs(i) * 180)), i * 60, -Math.abs(i) * 180]}
+            position={[XYZ[0], XYZ[1], XYZ[2]]}
             rotation={[data.groupRotationX, data.groupRotationY, data.groupRotationZ]}
         >
 
-            <Text position={[-20.1, 5, 20]} rotation={[Math.PI, (Math.PI * 1.5), Math.PI]} color="#2e4377"
-                  scale={[6, 6, 10]}
-                  anchorX="center"
-                  anchorY="middle">
-                20/07/23
-            </Text>
-            <Text position={[-20.1, -4, 20]} rotation={[-Math.PI, (Math.PI * 1.5), Math.PI]} scale={[10, 10, 10]}
-                  color="#2e4377"
-                  anchorX="center" anchorY="middle">
-                17:40
-            </Text>
-
-            <Text position={[20.1, 5, 20]} rotation={[Math.PI, (Math.PI / 2), Math.PI]} color="#2e4377"
-                  scale={[6, 6, 10]}
-                  anchorX="center"
-                  anchorY="middle">
-                20/07/23
-            </Text>
-            <Text position={[20.1, -4, 20]} rotation={[-Math.PI, (Math.PI / 2), Math.PI]} scale={[10, 10, 10]}
-                  color="#2e4377"
-                  anchorX="center" anchorY="middle">
-                17:40
-            </Text>
-
-
-            <Text position={[0, 5, -0.1]} rotation={[-Math.PI * 3, Math.PI * 2, Math.PI]} scale={[6, 6, 10]}
-                  color="#2e4377"
-                  anchorX="center"
-                  anchorY="middle">
-                20/07/23
-            </Text>
-            <Text position={[0, -4, -0.1]} rotation={[-Math.PI * 3, Math.PI * 2, Math.PI]} scale={[10, 10, 10]}
-                  color="#2e4377"
-                  anchorX="center" anchorY="middle">
-                17:40
-            </Text>
-
-            <Text position={[0, 20.1, 26]} rotation={[-Math.PI / 2, 0, 0]} scale={[6, 6, 10]} color="#2e4377"
-                  anchorX="center"
-                  anchorY="middle">
-                20/07/23
-            </Text>
-            <Text position={[0, 20.1, 16]} rotation={[-Math.PI / 2, 0, 0]} scale={[10, 10, 10]} color="#2e4377"
-                  anchorX="center" anchorY="middle">
-                17:40
-            </Text>
-
-            <Text position={[0, -20.1, 16]} rotation={[-Math.PI * 1.5, 0, 0]} scale={[6, 6, 10]} color="#2e4377"
-                  anchorX="center"
-                  anchorY="middle">
-                20/07/23
-            </Text>
-            <Text position={[0, -20.1, 26]} rotation={[-Math.PI * 1.5, 0, 0]} scale={[10, 10, 10]} color="#2e4377"
-                  anchorX="center" anchorY="middle">
-                17:40
-            </Text>
-
-            <Text position={[0, 3, 40.1]} scale={[6, 6, 10]} color="red" anchorX="center" anchorY="middle">
-                20/07/23
-            </Text>
-            <Text position={[0, -6, 40.1]} scale={[10, 10, 10]} color="red" anchorX="center" anchorY="middle">
-                17:40
-            </Text>
+            {textData.map((e, ii) =>
+                <TimestampText
+                    key={ii}
+                    i={i}
+                    datePosition={e.datePosition}
+                    timePosition={e.timePosition}
+                    rotation={e.rotation}/>
+            )}
 
 
             <mesh
@@ -120,12 +134,12 @@ export default observer(function Timestamp({position, size}: {
                 // material={store.pixelStore3.materials.get("red")}
                 geometry={store.pixelStore3.geometry}>
                 <MeshTransmissionMaterial
-                    samples={2}
-                    resolution={512}
-                    thickness={-1}
-                    anisotropy={10}
-                    distortionScale={22}
-                    temporalDistortion={22}/>
+                    samples={1}
+                    resolution={1}
+                    thickness={-10}
+                    anisotropy={1}
+                    distortionScale={1}
+                    temporalDistortion={1}/>
             </mesh>
         </group>
 

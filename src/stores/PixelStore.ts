@@ -191,6 +191,7 @@ export class PixelStore {
         return m
     }
 
+
     private implementNewData = (date: IPixelState[]) => {
         const lastDateSize = this.data.length
         this.data = date

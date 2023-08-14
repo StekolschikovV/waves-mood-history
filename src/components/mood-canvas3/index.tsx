@@ -216,7 +216,8 @@ export default observer(function MoodCanvas3() {
     const [isSelectMode, setIsSelectMode] = useState(false)
     const [isNeedScreen, setIsNeedScreen] = useState(0)
 
-    const width = window.innerWidth > 700 ? "660px" : "90vw"
+    // const width = window.innerWidth > 700 ? "660px" : "90vw"
+    const width = window.innerWidth > 700 ? "1200px" : "90vw"
     const height = window.innerWidth > 700 ? "600px" : "80vw"
 
     const scrollRight = () => {
@@ -287,7 +288,25 @@ export default observer(function MoodCanvas3() {
 
                                 <ambientLight intensity={55}/>
                                 <spotLight position={[0, 10, 0]} intensity={30}/>
-                                <Timestamp position={[0, 0, 0]} size={[0, 0, 0]}/>
+                                <Timestamp i={-9}/>
+                                <Timestamp i={-8}/>
+                                <Timestamp i={-7}/>
+                                <Timestamp i={-6}/>
+                                <Timestamp i={-5}/>
+                                <Timestamp i={-4}/>
+                                <Timestamp i={-3}/>
+                                <Timestamp i={-2}/>
+                                <Timestamp i={-1}/>
+                                <Timestamp i={0}/>
+                                <Timestamp i={1}/>
+                                <Timestamp i={2}/>
+                                <Timestamp i={3}/>
+                                <Timestamp i={4}/>
+                                <Timestamp i={5}/>
+                                <Timestamp i={6}/>
+                                <Timestamp i={7}/>
+                                <Timestamp i={8}/>
+                                <Timestamp i={9}/>
 
                                 {/*<mesh position={[0, 0, data.z]}*/}
                                 {/*      scale={[30, 30, 30]}*/}
@@ -321,7 +340,7 @@ export default observer(function MoodCanvas3() {
                                 {/*</mesh>*/}
                                 {/*<Perf/>*/}
                                 {store.pixelStore3.isScreenshotMode && <color attach="background" args={['#0f141f']}/>}
-                                {/*<Points isSelectMode={isSelectMode}/>*/}
+                                <Points isSelectMode={isSelectMode}/>
                                 <Colors/>
                                 <Screenshot isNeedScreen={isNeedScreen}/>
                             </CANVAS>

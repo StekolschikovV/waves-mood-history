@@ -36,6 +36,8 @@ export class PixelStore3 {
 
     warpAnimationCount = 0
 
+    selectedTimestamp = 0
+
     debouncedAddNewPixel = _.debounce(() => {
         // console.log("+++his.stateNewTemp", this.stateNewTemp.size)
         this.stateNewTemp.forEach((value, key, map) => {
@@ -192,6 +194,10 @@ export class PixelStore3 {
     public getMaterialByName = (name: string): Material => {
         const m: any = this.materials.get(name)
         return m
+    }
+
+    public getRandomColor = (i: number): string => {
+        return this.colors[i % this.colors.length]
     }
 
     private implementNewData = (date: IPixelState[]) => {
