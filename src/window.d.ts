@@ -3,6 +3,7 @@ declare global {
         app: {
             onMouseDown: boolean
         };
+        isAnimationFinish: boolean
     }
 }
 

@@ -8,6 +8,8 @@ import _ from 'lodash';
 import * as THREE from "three";
 import {Material, MeshBasicMaterial} from "three";
 
+window.isAnimationFinish = true
+
 export class PixelStore3 {
 
     root: RootStore;
@@ -31,6 +33,25 @@ export class PixelStore3 {
     pixelCount = 100
     colors = ['aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow']
     materials: Map<string, MeshBasicMaterial> = new Map()
+
+    isAnimationFinish = true
+    timestampMaterial = new THREE.MeshNormalMaterial();
+//     timestampMaterial = new THREE.MeshPhysicalMaterial({
+//         metalness: .9,
+//         roughness: .05,
+//         envMapIntensity: 0.9,
+//         clearcoat: 1,
+//         transparent: true,
+// // transmission: .95,
+//         opacity: .5,
+//         reflectivity: 0.2,
+//         ior: 0.9,
+//         side: THREE.BackSide,
+//     })
+//     timestampMaterial = new THREE.MeshPhongMaterial({
+//         color: 0x0095DD
+//     });
+
     geometry = new THREE.BoxGeometry(1, 1, 1)
     geometryBig = new THREE.BoxGeometry(5, 5, 5)
 
@@ -189,6 +210,8 @@ export class PixelStore3 {
                 this.stateNew.clear()
             })
         this.implementNewData(date)
+        console.log(date.length)
+        this.selectedTimestamp = date.length - 1
     }
 
     public getMaterialByName = (name: string): Material => {
