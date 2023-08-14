@@ -183,7 +183,7 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
         return () => window.removeEventListener("click", clickDetector);
     }, [])
 
- 
+
     return (
         <points
             ref={pointsRef}
