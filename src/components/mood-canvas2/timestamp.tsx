@@ -2,7 +2,6 @@ import {observer} from "mobx-react-lite";
 import {useRootStore} from "@/providers/RootStoreProvider";
 import React, {useEffect, useRef, useState} from "react";
 import {Text} from "@react-three/drei";
-import {useFrame} from "@react-three/fiber";
 import {Group} from "three";
 import gsap from "gsap";
 import moment from "moment";
@@ -46,24 +45,18 @@ export default observer(function Timestamp({i, time}: { i: number, time: number 
     const store = useRootStore();
     const ref = useRef<Group>(null!);
 
-    useFrame(() => {
-
-    });
-
     const [inInit, setIsInit] = useState(false)
+
+    const playPixelSound = () => {
+        const pixelSound = new Audio('./sound/clickselect.mp3')
+        pixelSound.volume = 0.8
+        pixelSound.play()
+    }
+
     useEffect(() => {
-
-
         let z = -Math.abs((i - store.pixelStore3.selectedTimestamp) * 20) / (10 / Math.abs((i - store.pixelStore3.selectedTimestamp)))
-        // let x = i + store.pixelStore3.selectedTimestamp
-        // let z = -Math.abs((i - store.pixelStore3.selectedTimestamp) * 20)
-        // let x = ((i - store.pixelStore3.selectedTimestamp) * 40)
-        let x = ((i - store.pixelStore3.selectedTimestamp) * 30)
-        // let y = ((i - store.pixelStore3.selectedTimestamp / 2) - i)
+        let x = ((i - store.pixelStore3.selectedTimestamp) * 40)
         let y = -75 + (Math.abs(z / 2) * 1)
-
-        console.log(z, Math.abs(z) / 100)
-
         if (store.pixelStore3.data.length > 0) {
             if (inInit) {
 
@@ -75,8 +68,6 @@ export default observer(function Timestamp({i, time}: { i: number, time: number 
                 ref.current.position.z = z
             }
         }
-
-
     }, [store.pixelStore3.selectedTimestamp])
 
 
@@ -102,6 +93,7 @@ export default observer(function Timestamp({i, time}: { i: number, time: number 
                     store.pixelStore3.isAnimationFinish = false
                     store.pixelStore3.selectedTimestamp = i
                     store.pixelStore3.travelToTime(time)
+                    playPixelSound()
                     setTimeout(() => {
                         store.pixelStore3.isAnimationFinish = true
                     }, 6000)
@@ -110,9 +102,7 @@ export default observer(function Timestamp({i, time}: { i: number, time: number 
             scale={[0.3, 0.3, 0.3]}
             ref={ref}
             position={[0, -50, 0]}
-
         >
-
             {textData.map((e, ii) =>
                 <TimestampText
                     key={ii}
@@ -122,49 +112,13 @@ export default observer(function Timestamp({i, time}: { i: number, time: number 
                     timePosition={e.timePosition}
                     rotation={e.rotation}/>
             )}
-
-
             <mesh
                 position={[0, 0, 20]}
                 scale={[40, 40, 40]}
-                material={store.pixelStore3.timestampMaterial}
+                material={i !== store.pixelStore3.selectedTimestamp ? store.pixelStore3.timestampMaterial : store.pixelStore3.timestampMaterialSelected}
                 geometry={store.pixelStore3.geometry}>
 
             </mesh>
         </group>
-
-
-        {/*<mesh*/}
-        {/*    ref={ref}*/}
-        {/*    // position={[0, 0, 80]}*/}
-
-        {/*    position={position}*/}
-        {/*>*/}
-        {/*    <boxGeometry*/}
-        {/*        // args={[10, 10, 12]}*/}
-        {/*        args={size}*/}
-        {/*    />*/}
-        {/*    <meshPhysicalMaterial*/}
-        {/*        color="white"*/}
-        {/*        transparent // Включение прозрачности*/}
-        {/*        opacity={0.4} // Уровень прозрачности (0 - полностью прозрачный, 1 - непрозрачный)*/}
-        {/*        side={DoubleSide} // Отображение материала с обеих сторон грани*/}
-        {/*        // color="white"*/}
-        {/*        // transmission={0.1} // Пропорция пропускания света через материал (0 - полное отражение, 1 - полное пропускание)*/}
-        {/*        clearcoat={1} // Количество покрытия (clearcoat) для добавления реалистичных отражений*/}
-        {/*        clearcoatRoughness={0.1} // "Шероховатость" покрытия*/}
-        {/*        roughness={0.1} // Шероховатость основного материала*/}
-        {/*        ior={1.25}*/}
-        {/*        envMapIntensity={25}*/}
-        {/*        thickness={20}*/}
-
-        {/*    />*/}
-        {/*<MeshTransmissionMaterial*/}
-        {/*    clearcoat={1} samples={3}*/}
-        {/*    thickness={40}*/}
-        {/*    chromaticAberration={0.25}*/}
-        {/*    anisotropy={0.4} distortionScale={0.2} temporalDistortion={0.2}/>*/}
-
-        {/*</mesh>*/}
     </>
 })

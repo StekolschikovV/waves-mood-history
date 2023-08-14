@@ -35,22 +35,24 @@ export class PixelStore3 {
     materials: Map<string, MeshBasicMaterial> = new Map()
 
     isAnimationFinish = true
-    timestampMaterial = new THREE.MeshNormalMaterial();
-//     timestampMaterial = new THREE.MeshPhysicalMaterial({
-//         metalness: .9,
-//         roughness: .05,
-//         envMapIntensity: 0.9,
-//         clearcoat: 1,
-//         transparent: true,
-// // transmission: .95,
-//         opacity: .5,
-//         reflectivity: 0.2,
-//         ior: 0.9,
-//         side: THREE.BackSide,
-//     })
-//     timestampMaterial = new THREE.MeshPhongMaterial({
-//         color: 0x0095DD
-//     });
+    // timestampMaterial = new THREE.MeshNormalMaterial();
+    timestampMaterial = new THREE.MeshPhysicalMaterial({
+        metalness: .9,
+        roughness: .05,
+        envMapIntensity: 0.9,
+        clearcoat: 1,
+        transparent: true,
+    });
+
+    timestampMaterialSelected = new THREE.MeshPhysicalMaterial({
+        metalness: .9,
+        roughness: .5,
+        envMapIntensity: 0.9,
+        clearcoat: 10,
+        transparent: true,
+        color: "blue"
+    });
+
 
     geometry = new THREE.BoxGeometry(1, 1, 1)
     geometryBig = new THREE.BoxGeometry(5, 5, 5)

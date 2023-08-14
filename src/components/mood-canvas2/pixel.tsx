@@ -49,7 +49,6 @@ const Pixel = observer(forwardRef((
         return volume / 1000
     }
 
-
     const hoverAction = (isClick = false) => {
 
         if (isClick)

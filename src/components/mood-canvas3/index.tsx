@@ -5,12 +5,10 @@ import styles from "@components/mood-canvas3/style.module.scss";
 import gsap from "gsap";
 import {Color} from "three";
 import {useRootStore} from "@/providers/RootStoreProvider";
-import Moment from "react-moment";
 import {positionToCoordinates} from "@components/mood-canvas3/function";
 import Screenshot from "@components/mood-canvas2/screenshot";
 import Colors from "@components/mood-canvas2/colors";
 import Timestamp from "@components/mood-canvas2/timestamp";
-import {Perf} from "r3f-perf";
 
 const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
 
@@ -143,8 +141,6 @@ const Points = observer(({isSelectMode}: { isSelectMode: boolean }) => {
                 })
         }
         window.isAnimationFinish = true
-
-
     }
 
     const updateAllFromState = () => {
@@ -232,6 +228,8 @@ export default observer(function MoodCanvas3() {
         scrollRight()
     }, [store.pixelStore3.data])
 
+    const h = window.innerWidth > 1200 ? 600 : 300
+
 
     return <>
         <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
@@ -241,34 +239,16 @@ export default observer(function MoodCanvas3() {
                     className={styles.canva2}
                     style={{
                         width: "100vw",
-                        height: 600,
+                        height: h,
                         cursor: "crosshair",
-                        border: "1px solid black"
+                        // border: "1px solid black"
                     }}
                     onMouseDown={() => setIsSelectMode(true)}
                     onMouseUp={() => setIsSelectMode(false)}
                 >
-                    <CANVAS camera={{fov: 75, position: [0, 0, 120], far: 1000}}>
-                        <Perf/>
-                        <ambientLight intensity={1}/>
-                        <spotLight position={[0, 10, 0]} intensity={30}/>
-                        {store.pixelStore3.data.length > 0 && store.pixelStore3.data.map((e, i) =>
-                            <Timestamp key={i} i={i} time={e.time}/>
-                        )}
-                        {store.pixelStore3.isScreenshotMode && <color attach="background" args={['#0f141f']}/>}
-                        <Points isSelectMode={isSelectMode}/>
-                        <Colors/>
-                        <Screenshot isNeedScreen={isNeedScreen}/>
-                    </CANVAS>
-                </div>
-            </div>
-
-            <div className={`container ${styles.moodCanvas}`}>
-                <div className={"title"}>
-                    Mood canvas
-                    {/*<div className={"subtitle"}>v2 - Kleon style | v2 - Old style </div>*/}
-                </div>
-                <div className={styles.innerContainer}>
+                    <div className={styles.title}>
+                        Mood canvas
+                    </div>
                     <div className={styles.text}>
                         This drawing will be permanently stored in the blockchain on behalf of your account. Try to
                         express your emotions by answering the following questions:
@@ -287,10 +267,6 @@ export default observer(function MoodCanvas3() {
                             </li>
                         </ul>
                     </div>
-                    <div className={styles.canvaWrapper}>
-
-                    </div>
-
                     <div className={styles.controls}>
                         <div className={styles.selectedToken}>
                             <div className={styles.selectedTokenTitle}>Payment in token:</div>
@@ -306,16 +282,16 @@ export default observer(function MoodCanvas3() {
                         <div className={styles.selectedToken}>
                             <div className={styles.selectedTokenTitle}>Mode:</div>
                             <div className={styles.selectedTokenWrapper}>
-                                            <span
-                                                onClick={e => store.pixelStore3.mode = "draw"}
-                                                className={store.pixelStore3.mode === "draw" ? styles.selectedTokenSelected : ""}>
-                                                Draw
-                                            </span>
+                                <span
+                                    onClick={e => store.pixelStore3.mode = "draw"}
+                                    className={store.pixelStore3.mode === "draw" ? styles.selectedTokenSelected : ""}>
+                                    Draw
+                                </span>
                                 <span
                                     onClick={e => store.pixelStore3.mode = "clean"}
                                     className={store.pixelStore3.mode === "clean" ? styles.selectedTokenSelected : ""}>
-                                                Clean
-                                            </span>
+                                    Clean
+                                </span>
                             </div>
                         </div>
                         <div className={styles.pixelUsed}>
@@ -337,29 +313,22 @@ export default observer(function MoodCanvas3() {
 
                         </div>
                     </div>
+                    <CANVAS camera={{fov: 75, position: [0, 0, 120], far: 10000}}>
+                        {/*<Perf/>*/}
+                        <ambientLight intensity={1}/>
+                        <spotLight position={[0, 10, 0]} intensity={30}/>
+                        {store.pixelStore3.data.length > 0 && store.pixelStore3.data.map((e, i) =>
+                            <Timestamp key={i} i={i} time={e.time}/>
+                        )}
+                        {store.pixelStore3.isScreenshotMode && <color attach="background" args={['#0f141f']}/>}
+                        <Points isSelectMode={isSelectMode}/>
+                        <Colors/>
+                        <Screenshot isNeedScreen={isNeedScreen}/>
+                    </CANVAS>
                 </div>
             </div>
 
-            <div className="container-full">
-                <ul className={`historyLine ${styles.historyLine}`}>
-                    {store.pixelStore3.data.map((p, i) =>
-                        <li key={`${p.time}-${i}`}
-                            className={`${styles.historyStep} ${p.time == (store.pixelStore3.selectedDataTime || store.pixelStore3.lastDataTime) && styles.historyStepSelected}`}
-                            onClick={() => store.pixelStore3.travelToTime(p.time)}
-                        >
-                            <div>
-                                <Moment format="YYYY/MM/DD">
-                                    {p.time}
-                                </Moment>
-                            </div>
-                            <span>
-                             <Moment format="HH:mm">
-                                 {p.time}
-                             </Moment>
-                         </span>
-                        </li>)}
-                </ul>
-            </div>
+
         </div>
     </>
 
