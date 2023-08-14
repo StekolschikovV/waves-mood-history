@@ -61,6 +61,12 @@ body {
     position: relative;
   }
 
+  #canvaBlock2 {
+    //@media (max-width: 600px) {
+    margin-bottom: 100px;
+    //}
+  }
+
   .title {
     min-width: 100%;
     font-size: 36px;

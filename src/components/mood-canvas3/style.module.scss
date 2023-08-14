@@ -33,6 +33,15 @@
   }
 }
 
+.titleSubSelected {
+  cursor: pointer;
+}
+
+.titleElNotSelected {
+  opacity: 0.4;
+  cursor: pointer;
+}
+
 .innerContainer {
   display: flex;
   justify-content: space-between;
@@ -172,12 +181,14 @@
   //}
 }
 
+
 .canvaElement {
   width: 5px;
   height: 5px;
   @media (max-width: 600px) {
     width: 3px;
     height: 3px;
+    margin-bottom: 200px;
   }
 }
 

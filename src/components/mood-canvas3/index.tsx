@@ -235,7 +235,7 @@ export default observer(function MoodCanvas3() {
         <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
             <div className="container-full">
                 <div
-                    id={"canvaBlock"}
+                    id={"canvaBlock2"}
                     className={styles.canva2}
                     style={{
                         width: "100vw",
@@ -248,6 +248,17 @@ export default observer(function MoodCanvas3() {
                 >
                     <div className={styles.title}>
                         Mood canvas
+                        (
+                        <span onClick={() => store.pixelStore3.version = 1}
+                              className={store.pixelStore3.version === 1 ? styles.titleSubSelected : styles.titleElNotSelected}>
+                            v1 old
+                        </span>
+                        |
+                        <span onClick={() => store.pixelStore3.version = 2}
+                              className={store.pixelStore3.version === 2 ? styles.titleSubSelected : styles.titleElNotSelected}>
+                            v2 3D
+                        </span>
+                        )
                     </div>
                     <div className={styles.text}>
                         This drawing will be permanently stored in the blockchain on behalf of your account. Try to

@@ -6,6 +6,8 @@ import {toast} from 'react-toastify';
 import html2canvas from "html2canvas";
 import styles from "./style.module.scss"
 import {IBlockchainData, ILogData, IPixel} from "../../interface";
+import {useRootStore} from "@/providers/RootStoreProvider";
+import {observer} from "mobx-react-lite";
 
 const toastWrapper = (text: string) => {
     toast(text, {
@@ -20,7 +22,10 @@ const toastWrapper = (text: string) => {
     });
 }
 
-export default function MoodCanvas({data}: { data: any }) {
+const MoodCanvas = observer(({data}: { data: any }) => {
+
+
+    const store = useRootStore();
 
     const width = 100
     const height = 100
@@ -141,7 +146,7 @@ export default function MoodCanvas({data}: { data: any }) {
     }
 
     useEffect(() => {
-        if (data) {
+        if (data && data.length > 0) {
             let logData = data
                 .filter((e: IBlockchainData) => e?.key?.includes("log_"))
                 .map((e: IBlockchainData) => {
@@ -254,7 +259,20 @@ export default function MoodCanvas({data}: { data: any }) {
 
     return <div className={styles.moodCanvasWrapper} id={"mood-canvas"}>
         <div className={`container ${styles.moodCanvas}`}>
-            <div className={"title"}>Mood canvas</div>
+            <div className={"title"}>
+                Mood canvas
+                (
+                <span onClick={() => store.pixelStore3.version = 1}
+                      className={store.pixelStore3.version === 1 ? styles.titleSubSelected : styles.titleElNotSelected}>
+                            v1 old
+                        </span>
+                |
+                <span onClick={() => store.pixelStore3.version = 2}
+                      className={store.pixelStore3.version === 2 ? styles.titleSubSelected : styles.titleElNotSelected}>
+                            v2 3D
+                        </span>
+                )
+            </div>
             <div className={styles.innerContainer}>
                 <div className={styles.text}>
                     This drawing will be permanently stored in the blockchain on behalf of your account. Try to express
@@ -380,4 +398,6 @@ export default function MoodCanvas({data}: { data: any }) {
         </div>
     </div>
 
-}
+})
+
+export default MoodCanvas

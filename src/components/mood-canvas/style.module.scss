@@ -108,6 +108,15 @@
 
 }
 
+.titleSubSelected {
+  cursor: pointer;
+}
+
+.titleElNotSelected {
+  opacity: 0.4;
+  cursor: pointer;
+}
+
 .canvaRow {
   display: flex;
 }

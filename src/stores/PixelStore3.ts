@@ -1,4 +1,4 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, reaction} from "mobx";
 import {RootStore} from "@/stores/RootStore";
 import axios from "axios";
 import {IBlockchainData, IPixelState} from "@/interface";
@@ -42,6 +42,8 @@ export class PixelStore3 {
         envMapIntensity: 0.9,
         clearcoat: 1,
         transparent: true,
+        opacity: 0.4
+
     });
 
     timestampMaterialSelected = new THREE.MeshPhysicalMaterial({
@@ -50,8 +52,11 @@ export class PixelStore3 {
         envMapIntensity: 0.9,
         clearcoat: 10,
         transparent: true,
-        color: "blue"
+        // opacity: 0.4
+        // color: "blue"
     });
+
+    version: 1 | 2 = 2
 
 
     geometry = new THREE.BoxGeometry(1, 1, 1)
@@ -83,8 +88,12 @@ export class PixelStore3 {
         })
 
         // TODO: remove
-        // @ts-ignore
-        window.xxx = this
+        // window.xxx = this
+        reaction(() => this.version, () => {
+            // console.log("!!!")
+            if (this.version === 1)
+                this.load()
+        })
     }
 
     public addNewPixel = (name: string, color: string) => {
