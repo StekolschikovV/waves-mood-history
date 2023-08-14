@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {Canvas as CANVAS} from '@react-three/fiber'
 import {useRootStore} from "@/providers/RootStoreProvider";
 import {observer} from "mobx-react-lite";
@@ -8,13 +8,17 @@ import Colors from "@components/mood-canvas2/colors";
 import MemoizedPixels from "@components/mood-canvas2/memoized-pixels";
 import Screenshot from "@components/mood-canvas2/screenshot";
 
+window.app = {
+    onMouseDown: false
+}
+
 
 export default observer(function MoodCanvas2() {
 
-    const [isDrawMode, setIsDrawMode] = useState(false)
     const [isNeedScreen, setIsNeedScreen] = useState(0)
-    const [pixels, setPixels] = useState<{ name: string, y: number, x: number }[]>([])
+    // const [pixels, setPixels] = useState<{ name: string, y: number, x: number }[]>([])
     const store = useRootStore();
+    const [dpr, setDpr] = useState(0.5)
 
     const scrollRight = () => {
         let element: any = document.querySelector(`.historyLine`)
@@ -23,18 +27,32 @@ export default observer(function MoodCanvas2() {
         }
     }
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     let result: { name: string, y: number, x: number }[] = []
+    //     Array.from({length: 100}).forEach((_, xI) => {
+    //         Array.from({length: 100}).forEach((_, yI) => {
+    //             const currentSize = (0.1 + 1.5)
+    //             const y = (yI * currentSize) - (100 / 2 * currentSize) + (currentSize / 2) + 8
+    //             const x = (xI * currentSize) - (100 / 2 * currentSize) + (currentSize / 2)
+    //             result.push({name: `${yI}-${xI}`, y, x})
+    //         })
+    //     })
+    //     setPixels(result)
+    // }, [])
+    // TS2322: Type '() => { name: string; y: number; x: number; }[]' is not assignable to type '{ name: string; y: number; x: number; }[]'.
+    const pixels: { name: string, y: number, x: number }[] = useMemo(() => {
         let result: { name: string, y: number, x: number }[] = []
-        Array.from({length: 100}).forEach((_, xI) => {
-            Array.from({length: 100}).forEach((_, yI) => {
+        Array.from({length: store.pixelStore.pixelCount}).forEach((_, xI) => {
+            Array.from({length: store.pixelStore.pixelCount}).forEach((_, yI) => {
                 const currentSize = (0.1 + 1.5)
-                const y = (yI * currentSize) - (100 / 2 * currentSize) + (currentSize / 2) + 8
-                const x = (xI * currentSize) - (100 / 2 * currentSize) + (currentSize / 2)
+                const y = (yI * currentSize) - (store.pixelStore.pixelCount / 2 * currentSize) + (currentSize / 2) + 8
+                const x = (xI * currentSize) - (store.pixelStore.pixelCount / 2 * currentSize) + (currentSize / 2)
                 result.push({name: `${yI}-${xI}`, y, x})
             })
         })
-        setPixels(result)
-    }, [])
+        return result
+    }, []);
+
 
     useEffect(() => {
         scrollRight()
@@ -79,21 +97,24 @@ export default observer(function MoodCanvas2() {
                                 height: height,
                                 cursor: "crosshair"
                             }}
-                            onMouseDown={() => setIsDrawMode(true)}
-                            onMouseUp={() => setIsDrawMode(false)}
+                            onMouseDown={() => window.app.onMouseDown = true}
+                            onMouseUp={() => window.app.onMouseDown = false}
                         >
                             <CANVAS
+                                dpr={dpr}
                                 camera={{
                                     fov: 75,
                                     position: [0, 0, 107],
                                 }}>
+                                {/*<Perf/>*/}
+
                                 {/*<ambientLight intensity={2.7}/>*/}
                                 {/*<pointLight intensity={10000} position={[-120, 0, 0]}/>*/}
-                                <MemoizedPixels pixels={pixels} isDrawMode={isDrawMode}/>
-                                <mesh scale={[((0.1 + 1.5) * 102), ((0.1 + 1.5) * 102), 1]} position={[8, 0, -1]}>
-                                    <planeGeometry/>
-                                    <meshStandardMaterial color={"#ababab"}/>
-                                </mesh>
+                                <MemoizedPixels pixels={pixels}/>
+                                {/*<mesh scale={[((0.1 + 1.5) * 102), ((0.1 + 1.5) * 102), 1]} position={[8, 0, -1]}>*/}
+                                {/*    <planeGeometry/>*/}
+                                {/*    <meshStandardMaterial color={"#ababab"}/>*/}
+                                {/*</mesh>*/}
                                 <Colors/>
                                 <Screenshot isNeedScreen={isNeedScreen}/>
                             </CANVAS>

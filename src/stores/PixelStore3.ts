@@ -1,4 +1,4 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, reaction} from "mobx";
 import {RootStore} from "@/stores/RootStore";
 import axios from "axios";
 import {IBlockchainData, IPixelState} from "@/interface";
@@ -8,7 +8,9 @@ import _ from 'lodash';
 import * as THREE from "three";
 import {Material, MeshBasicMaterial} from "three";
 
-export class PixelStore {
+window.isAnimationFinish = true
+
+export class PixelStore3 {
 
     root: RootStore;
     data: IPixelState[] = []
@@ -25,13 +27,44 @@ export class PixelStore {
     selectedToken: "USDT" | "USDC" = "USDT"
 
     mode: "draw" | "clean" = "draw"
+    isScreenshotMode = false
 
     blockchainDataLimit = 60
     pixelCount = 100
     colors = ['aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow']
     materials: Map<string, MeshBasicMaterial> = new Map()
+
+    isAnimationFinish = true
+    // timestampMaterial = new THREE.MeshNormalMaterial();
+    timestampMaterial = new THREE.MeshPhysicalMaterial({
+        metalness: .9,
+        roughness: .05,
+        envMapIntensity: 0.9,
+        clearcoat: 1,
+        transparent: true,
+        opacity: 0.4
+
+    });
+
+    timestampMaterialSelected = new THREE.MeshPhysicalMaterial({
+        metalness: .9,
+        roughness: .5,
+        envMapIntensity: 0.9,
+        clearcoat: 10,
+        transparent: true,
+        // opacity: 0.4
+        // color: "blue"
+    });
+
+    version: 1 | 2 = 2
+
+
     geometry = new THREE.BoxGeometry(1, 1, 1)
     geometryBig = new THREE.BoxGeometry(5, 5, 5)
+
+    warpAnimationCount = 0
+
+    selectedTimestamp = 0
 
     debouncedAddNewPixel = _.debounce(() => {
         // console.log("+++his.stateNewTemp", this.stateNewTemp.size)
@@ -39,7 +72,7 @@ export class PixelStore {
             this.stateNew.set(key, value)
         })
         this.stateNewTemp = new Map()
-    }, 500);
+    }, 50);
 
     constructor(root: RootStore) {
         this.root = root;
@@ -55,8 +88,12 @@ export class PixelStore {
         })
 
         // TODO: remove
-        // @ts-ignore
-        window.xxx = this
+        // window.xxx = this
+        reaction(() => this.version, () => {
+            // console.log("!!!")
+            if (this.version === 1)
+                this.load()
+        })
     }
 
     public addNewPixel = (name: string, color: string) => {
@@ -184,6 +221,8 @@ export class PixelStore {
                 this.stateNew.clear()
             })
         this.implementNewData(date)
+        console.log(date.length)
+        this.selectedTimestamp = date.length - 1
     }
 
     public getMaterialByName = (name: string): Material => {
@@ -191,6 +230,9 @@ export class PixelStore {
         return m
     }
 
+    public getRandomColor = (i: number): string => {
+        return this.colors[i % this.colors.length]
+    }
 
     private implementNewData = (date: IPixelState[]) => {
         const lastDateSize = this.data.length

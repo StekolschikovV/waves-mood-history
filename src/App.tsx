@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import * as Sentry from "@sentry/react";
 import 'react-toastify/dist/ReactToastify.css';
 import '@/App.scss';
@@ -6,8 +6,11 @@ import useSWR from "swr";
 import Promo from "@components/promo";
 import Header from "@components/header";
 import {Preloader} from "@components/preloader";
-import MoodCanvas2 from "@components/mood-canvas2";
 import {ToastContainer} from "react-toastify";
+import MoodCanvas3 from "@components/mood-canvas3";
+import {observer} from "mobx-react-lite";
+import {useRootStore} from "@/providers/RootStoreProvider";
+import MoodCanvas from "@components/mood-canvas";
 
 // const TRACKING_ID = "G-JNWMFZRRK5"; // OUR_TRACKING_ID
 // ReactGA.initialize(TRACKING_ID);
@@ -38,8 +41,9 @@ const fetcher = (url: string) => fetch(url)
     .then((res) => res.json())
 
 let loadedCount = 0
+const App = observer(() => {
 
-function App() {
+    const store = useRootStore();
 
     const hash = window.location.hash.replace("#", "")
     const hashNum = hash.length > 0 ? +hash : null
@@ -47,11 +51,16 @@ function App() {
     const [isShowPreloader, setIsShowPreloader] = useState(true)
     const [version, setVersion] = useState<number>(hashNum || 1)
 
+    const [dataCache, setDataCache] = useState([])
+
     const {data, error, isLoading, mutate} = useSWR(
         "https://nodes.wavesnodes.com/addresses/data/3PAmW4yzC5W9paLoBUN1K5CZU4dfMM4fkWE",
         fetcher,
         {refreshInterval: 5000}
     );
+    useEffect(() => {
+        setDataCache(data)
+    }, [data])
 
     const onLoadedHandler = () => {
         loadedCount = loadedCount + 1
@@ -66,8 +75,11 @@ function App() {
             <Preloader isShow={isShowPreloader}/>
             <Header onLoaded={onLoadedHandler}/>
             <Promo onLoaded={onLoadedHandler}/>
-            {version === 1 && <MoodCanvasLazy data={data}/>}
-            {version === 2 && <MoodCanvas2/>}
+            {/*<MoodCanvasLazy data={data}/>*/}
+            {/*{version === 2 && <MoodCanvas2/>}*/}
+            {/*<MoodCanvas2/>*/}
+            {store.pixelStore3.version === 2 && <MoodCanvas3/>}
+            {store.pixelStore3.version === 1 && <MoodCanvas data={dataCache}/>}
             <TopBurnersLazy data={data}/>
             <FAQLazy/>
             <SashaPanelLazy data={data}/>
@@ -75,6 +87,6 @@ function App() {
             <ToastContainer/>
         </>
     )
-}
+})
 
 export default App;

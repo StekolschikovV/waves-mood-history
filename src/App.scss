@@ -58,6 +58,13 @@ body {
   .container-full {
     max-width: 100vw;
     min-width: 100vw;
+    position: relative;
+  }
+
+  #canvaBlock2 {
+    //@media (max-width: 600px) {
+    margin-bottom: 100px;
+    //}
   }
 
   .title {

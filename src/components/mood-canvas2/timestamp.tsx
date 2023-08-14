@@ -1,64 +1,124 @@
 import {observer} from "mobx-react-lite";
 import {useRootStore} from "@/providers/RootStoreProvider";
-import React, {useRef} from "react";
-import {BoxGeometry, DoubleSide, Mesh, MeshPhysicalMaterial} from "three";
-import {useFrame} from "@react-three/fiber";
+import React, {useEffect, useRef, useState} from "react";
+import {Text} from "@react-three/drei";
+import {Group} from "three";
+import gsap from "gsap";
+import moment from "moment";
 
-export default observer(function Timestamp({position, size}: {
-    position: [number, number, number],
-    size: [number, number, number]
-}) {
+const TimestampText =
+    ({i, datePosition, timePosition, rotation, time}: {
+        i: number,
+        datePosition: [number, number, number],
+        timePosition: [number, number, number],
+        rotation: [number, number, number],
+        time: number
+    }) => {
+
+        const store = useRootStore();
+        const hhMM = moment(new Date(time)).format('hh:mm');
+        const ddMM = moment(new Date(time)).format('DD/MM/YY');
+
+        return <>
+            <Text
+                position={datePosition}
+                rotation={rotation}
+                color={store.pixelStore3.getRandomColor(i)}
+                scale={[6, 6, 10]}
+                anchorX="center"
+                anchorY="middle">
+                {ddMM}
+            </Text>
+            <Text
+                position={timePosition}
+                rotation={rotation}
+                scale={[10, 10, 10]}
+                color={store.pixelStore3.getRandomColor(i)}
+                anchorX="center" anchorY="middle">
+                {hhMM}
+            </Text>
+        </>
+    }
+
+export default observer(function Timestamp({i, time}: { i: number, time: number }) {
 
     const store = useRootStore();
-    const ref = useRef<Mesh<BoxGeometry, MeshPhysicalMaterial>>(null!);
+    const ref = useRef<Group>(null!);
 
-    useFrame(() => {
-        if (ref.current) {
-            ref.current.rotation.x += 0.01;
-            ref.current.rotation.y += 0.01;
+    const [inInit, setIsInit] = useState(false)
+
+    const playPixelSound = () => {
+        const pixelSound = new Audio('./sound/clickselect.mp3')
+        pixelSound.volume = 0.8
+        pixelSound.play()
+    }
+
+    useEffect(() => {
+        let z = -Math.abs((i - store.pixelStore3.selectedTimestamp) * 20) / (10 / Math.abs((i - store.pixelStore3.selectedTimestamp)))
+        let x = ((i - store.pixelStore3.selectedTimestamp) * 40)
+        let y = -75 + (Math.abs(z / 2) * 1)
+        if (store.pixelStore3.data.length > 0) {
+            if (inInit) {
+
+                gsap.to(ref.current.position, {y, z, x, duration: 5});
+            } else {
+                setIsInit(true)
+                ref.current.position.x = x
+                ref.current.position.y = y
+                ref.current.position.z = z
+            }
         }
-    });
-    // roughness: { value: 0, min: 0, max: 1, step: 0.1 },
-    // clearcoat: { value: 1, min: 0, max: 1, step: 0.1 },
-    // clearcoatRoughness: { value: 0, min: 0, max: 1, step: 0.1 },
-    // transmission: { value: 1, min: 0.9, max: 1, step: 0.01 },
-    // ior: { value: 1.25, min: 1, max: 2.3, step: 0.05 },
-    // envMapIntensity: { value: 25, min: 0, max: 100, step: 1 },
-    // color: '#ffffff',
-    // attenuationTint: '#ffe79e',
-    // attenuationDistance: { value: 0, min: 0, max: 1 }
+    }, [store.pixelStore3.selectedTimestamp])
+
+
+    const textData:
+        {
+            datePosition: [number, number, number],
+            timePosition: [number, number, number],
+            rotation: [number, number, number]
+        }[]
+        = [
+        // {datePosition: [-20.1, 5, 20], timePosition: [-20.1, -4, 20], rotation: [-Math.PI, (Math.PI * 1.5), Math.PI]},
+        // {datePosition: [20.1, 5, 20], timePosition: [20.1, -4, 20], rotation: [Math.PI, (Math.PI / 2), Math.PI]},
+        // {datePosition: [0, 5, -0.1], timePosition: [0, -4, -0.1], rotation: [-Math.PI * 3, Math.PI * 2, Math.PI]},
+        // {datePosition: [0, 20.1, 26], timePosition: [0, 20.1, 16], rotation: [-Math.PI / 2, 0, 0]},
+        // {datePosition: [0, -20.1, 16], timePosition: [0, -20.1, 26], rotation: [-Math.PI * 1.5, 0, 0]},
+        {datePosition: [0, 3, 40.1], timePosition: [0, -6, 40.1], rotation: [0, 0, 0]}
+    ]
+
     return <>
-        <mesh
+        <group
+            onClick={() => {
+                if (store.pixelStore3.isAnimationFinish === true) {
+                    store.pixelStore3.isAnimationFinish = false
+                    store.pixelStore3.selectedTimestamp = i
+                    store.pixelStore3.travelToTime(time)
+                    playPixelSound()
+                    setTimeout(() => {
+                        store.pixelStore3.isAnimationFinish = true
+                    }, 6000)
+                }
+            }}
+            scale={[0.3, 0.3, 0.3]}
             ref={ref}
-            // position={[0, 0, 80]}
-
-            position={position}
+            position={[0, -50, 0]}
         >
-            <boxGeometry
-                // args={[10, 10, 12]}
-                args={size}
-            />
-            <meshPhysicalMaterial
-                color="white"
-                transparent // Включение прозрачности
-                opacity={0.4} // Уровень прозрачности (0 - полностью прозрачный, 1 - непрозрачный)
-                side={DoubleSide} // Отображение материала с обеих сторон грани
-                // color="white"
-                // transmission={0.1} // Пропорция пропускания света через материал (0 - полное отражение, 1 - полное пропускание)
-                clearcoat={1} // Количество покрытия (clearcoat) для добавления реалистичных отражений
-                clearcoatRoughness={0.1} // "Шероховатость" покрытия
-                roughness={0.1} // Шероховатость основного материала
-                ior={1.25}
-                envMapIntensity={25}
-                thickness={20}
+            {textData.map((e, ii) =>
+                <TimestampText
+                    key={ii}
+                    i={i}
+                    time={time}
+                    datePosition={e.datePosition}
+                    timePosition={e.timePosition}
+                    rotation={e.rotation}/>
+            )}
+            <mesh
+                position={[0, 0, 20]}
+                scale={[40, 40, 40]}
+                material={i !== store.pixelStore3.selectedTimestamp ? store.pixelStore3.timestampMaterial : store.pixelStore3.timestampMaterialSelected}
+                geometry={store.pixelStore3.geometry}>
 
-            />
-            {/*<MeshTransmissionMaterial*/}
-            {/*    clearcoat={1} samples={3}*/}
-            {/*    thickness={40}*/}
-            {/*    chromaticAberration={0.25}*/}
-            {/*    anisotropy={0.4} distortionScale={0.2} temporalDistortion={0.2}/>*/}
-
-        </mesh>
+            </mesh>
+        </group>
     </>
 })
